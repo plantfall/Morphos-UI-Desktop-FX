@@ -1,0 +1,11 @@
+cryxie_libs
+sources.txt
+build
+bin
+.java_fx
+installer
+target
+dist
+*.log
+app_base/app.txt
+*.db

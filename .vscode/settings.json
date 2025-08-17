@@ -1,0 +1,29 @@
+{
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": [
+    ".java_fx/lib/**/*.jar",
+    "cryxie_libs/**/*.jar"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#21cf83",
+    "activityBar.background": "#21cf83",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#9a3fe0",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#21cf83",
+    "statusBar.background": "#1aa367",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#21cf83",
+    "statusBarItem.remoteBackground": "#1aa367",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#1aa367",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#1aa36799",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#1aa367"
+}

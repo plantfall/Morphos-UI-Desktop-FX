@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="libraryTable">
+  <library name="cryxie_libs">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/cryxie_libs" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/cryxie_libs" recursive="false" />
+  </library>
+</component>
