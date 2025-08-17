@@ -137,6 +137,56 @@ public class RightSide extends VBox {
         getChildren().add(fontColorItem);
 
         // Atualiza UI quando muda de seleção
+
+        selectedNode.addListener((obs, old, node) -> {
+            // Limpa UI antiga
+            getChildren().removeIf(n -> n.getUserData() != null && n.getUserData().equals("bgControls"));
+
+            if (node instanceof Canva canva) {
+                // Cria controles de Background
+                VBox bgControls = new VBox(10);
+                bgControls.setUserData("bgControls");
+
+                Text title = new Text("Background Settings");
+
+                // Color Picker
+                ColorPicker bgColorPicker = new ColorPicker(Color.WHITE);
+                bgColorPicker.setOnAction(e -> {
+                    Color c = bgColorPicker.getValue();
+                    canva.setBackground(new Background(new BackgroundFill(c, CornerRadii.EMPTY, Insets.EMPTY)));
+                });
+
+                // Botão para escolher imagem do sistema
+                Button chooseImgBtn = new Button("Escolher Imagem...");
+                chooseImgBtn.setOnAction(e -> {
+                    javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+                    fc.getExtensionFilters().addAll(
+                            new javafx.stage.FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
+                    var file = fc.showOpenDialog(null);
+                    if (file != null) {
+                        canva.setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
+                                "-fx-background-size: cover; -fx-background-position: center;");
+                    }
+                });
+
+                // Campo para URL
+                TextField urlField = new TextField();
+                urlField.setPromptText("Cole a URL da imagem");
+                Button applyUrl = new Button("Aplicar URL");
+                applyUrl.setOnAction(e -> {
+                    String url = urlField.getText();
+                    if (url != null && !url.isBlank()) {
+                        canva.setStyle("-fx-background-image: url('" + url + "'); " +
+                                "-fx-background-size: cover; -fx-background-position: center;");
+                    }
+                });
+
+                bgControls.getChildren().addAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
+
+                getChildren().add(bgControls);
+            }
+        });
+
         selectedNode.addListener((obs, old, node) -> {
             if (node instanceof Button b) {
                 tf.setText(b.getText());

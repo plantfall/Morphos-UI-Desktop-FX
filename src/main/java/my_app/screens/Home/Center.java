@@ -1,7 +1,6 @@
 package my_app.screens.Home;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -70,25 +69,32 @@ class Canva extends Pane {
 
             optionSelected.set("");
         });
+
+        setOnMouseClicked(e -> {
+            if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
+                selectedNode.set(this);
+                System.out.println("Canva selecionado");
+            }
+        });
+
     }
 
     private void addElementDragable(Node node) {
-        node.setLayoutX(getWidth() / 2);
-        node.setLayoutY(getHeight() / 2);
+        // posição inicial centralizada
+        double relX = 0.5;
+        double relY = 0.5;
+
+        node.setLayoutX(getWidth() * relX);
+        node.setLayoutY(getHeight() * relY);
 
         // clique = seleciona
         node.setOnMouseClicked(e -> selectNode(node));
 
-        enableDrag(node);
+        enableDrag(node, relX, relY);
         getChildren().add(node);
     }
 
-    private void selectNode(Node node) {
-        selectedNode.set(node);
-        System.out.println("Selecionado: " + node);
-    }
-
-    private void enableDrag(Node node) {
+    private void enableDrag(Node node, double relX, double relY) {
         final double[] offsetX = new double[1];
         final double[] offsetY = new double[1];
 
@@ -98,8 +104,35 @@ class Canva extends Pane {
         });
 
         node.setOnMouseDragged(e -> {
-            node.setLayoutX(e.getSceneX() - offsetX[0]);
-            node.setLayoutY(e.getSceneY() - offsetY[0]);
+            double x = e.getSceneX() - offsetX[0];
+            double y = e.getSceneY() - offsetY[0];
+
+            node.setLayoutX(x);
+            node.setLayoutY(y);
+
+            // salva posição relativa
+            node.getProperties().put("relX", x / getWidth());
+            node.getProperties().put("relY", y / getHeight());
         });
+
+        // quando o canva for redimensionado, reposiciona proporcionalmente
+        widthProperty().addListener((obs, oldW, newW) -> updateRelativePosition(node));
+        heightProperty().addListener((obs, oldH, newH) -> updateRelativePosition(node));
     }
+
+    private void updateRelativePosition(Node node) {
+        Object relX = node.getProperties().get("relX");
+        Object relY = node.getProperties().get("relY");
+
+        if (relX instanceof Double && relY instanceof Double) {
+            node.setLayoutX((Double) relX * getWidth());
+            node.setLayoutY((Double) relY * getHeight());
+        }
+    }
+
+    private void selectNode(Node node) {
+        selectedNode.set(node);
+        System.out.println("Selecionado: " + node);
+    }
+
 }
