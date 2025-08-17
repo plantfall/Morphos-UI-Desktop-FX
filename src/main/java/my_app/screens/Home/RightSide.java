@@ -1,11 +1,13 @@
 package my_app.screens.Home;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
@@ -94,19 +96,13 @@ public class RightSide extends VBox {
         var fontWeightItem = new HBox(text, combo);
         fontWeightItem.setSpacing(10);
 
-        combo.getItems().addAll("normal", "bold", "thin", "light", "medium", "black");
+        combo.getItems().addAll(FONT_WEIGHT_MAP.keySet());
         combo.setValue("normal"); // valor inicial
 
+        // Listener: String -> FontWeight
         combo.valueProperty().addListener((obs, old, v) -> {
             Node node = selectedNode.get();
-            FontWeight fw = switch (v.toLowerCase()) {
-                case "bold" -> FontWeight.BOLD;
-                case "thin" -> FontWeight.THIN;
-                case "light" -> FontWeight.LIGHT;
-                case "medium" -> FontWeight.MEDIUM;
-                case "black" -> FontWeight.BLACK;
-                default -> FontWeight.NORMAL;
-            };
+            FontWeight fw = FONT_WEIGHT_MAP.getOrDefault(v.toLowerCase(), FontWeight.NORMAL);
 
             if (node instanceof Button b) {
                 b.setFont(Font.font(b.getFont().getFamily(), fw, b.getFont().getSize()));
@@ -119,9 +115,24 @@ public class RightSide extends VBox {
 
         getChildren().add(fontWeightItem);
 
-        var fontColorItem = itemRow("Font color", "#fff",
-                (v) -> {
-                });
+        var fontColorText = new Text("Font Color");
+        var colorPicker = new ColorPicker(Color.WHITE);
+
+        var fontColorItem = new HBox(fontColorText, colorPicker);
+        fontColorItem.setSpacing(10);
+
+        colorPicker.setOnAction(e -> {
+            Node node = selectedNode.get();
+            Color color = colorPicker.getValue();
+
+            if (node instanceof Button b) {
+                b.setTextFill(color);
+            } else if (node instanceof TextField t) {
+                t.setStyle("-fx-text-fill: " + toRgbString(color) + ";");
+            } else if (node instanceof Text txt) {
+                txt.setFill(color);
+            }
+        });
 
         getChildren().add(fontColorItem);
 
@@ -129,14 +140,56 @@ public class RightSide extends VBox {
         selectedNode.addListener((obs, old, node) -> {
             if (node instanceof Button b) {
                 tf.setText(b.getText());
+                combo.setValue(getFontWeightName(FontWeight.findByName(b.getFont().getStyle())));
+                colorPicker.setValue((Color) b.getTextFill());
             } else if (node instanceof TextField t) {
                 tf.setText(t.getText());
+                combo.setValue(getFontWeightName(FontWeight.findByName(t.getFont().getStyle())));
+                colorPicker.setValue(extractColorFromStyle(t.getStyle()));
             } else if (node instanceof Text txt) {
                 tf.setText(txt.getText());
+                combo.setValue(getFontWeightName(FontWeight.findByName(txt.getFont().getStyle())));
+                colorPicker.setValue((Color) txt.getFill());
             } else {
                 tf.setText("");
             }
         });
+    }
+
+    private static Color extractColorFromStyle(String style) {
+        if (style != null && style.contains("-fx-text-fill")) {
+            try {
+                String rgb = style.substring(style.indexOf("#")).trim(); // pega o hex
+                return Color.web(rgb);
+            } catch (Exception ignored) {
+            }
+        }
+        return Color.BLACK; // fallback
+    }
+
+    // Map centralizado para conversão
+    private static final Map<String, FontWeight> FONT_WEIGHT_MAP = Map.of(
+            "normal", FontWeight.NORMAL,
+            "bold", FontWeight.BOLD,
+            "thin", FontWeight.THIN,
+            "light", FontWeight.LIGHT,
+            "medium", FontWeight.MEDIUM,
+            "black", FontWeight.BLACK);
+
+    private static String getFontWeightName(FontWeight fw) {
+        return FONT_WEIGHT_MAP.entrySet().stream()
+                .filter(e -> e.getValue() == fw)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse("normal");
+    }
+
+    // Função auxiliar para converter Color -> CSS rgb()
+    private String toRgbString(Color c) {
+        return "rgb("
+                + (int) (c.getRed() * 255) + ","
+                + (int) (c.getGreen() * 255) + ","
+                + (int) (c.getBlue() * 255) + ")";
     }
 
     HBox itemRow(String name, String defaultValue, Consumer<String> callback) {
