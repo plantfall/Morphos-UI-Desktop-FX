@@ -108,8 +108,8 @@ public class VisibilityRowComponent extends VBox {
 
         Node node = selectedNode.get();
         if (node != null) {
-            // registra o node e pega o BooleanProperty
-            BooleanProperty nodeVisibility = NodeVisibilityManager.getInstance().registerNode(node);
+            // registra o node
+            NodeVisibilityManager.getInstance().registerNode(node);
 
             // agora pega a config, que nunca será null
             NodeVisibilityManager.VisibilityConfig cfg = NodeVisibilityManager.getInstance().getConfig(node);
