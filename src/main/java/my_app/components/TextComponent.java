@@ -38,6 +38,8 @@ public class TextComponent extends Text {
 
     public void renderRightSideContainer(Pane father) {
 
+        // ------------------ Font Size ------------------
+
         var tf = new TextField();
         tf.setPromptText("Change text...");
 
@@ -55,6 +57,7 @@ public class TextComponent extends Text {
 
         father.getChildren().add(tf);
 
+        // ------------------ Font Size ------------------
         var fontSizeItem = itemRow("Font size", "12",
                 (v) -> {
                     Node node = selectedNode.get();
@@ -69,7 +72,7 @@ public class TextComponent extends Text {
 
         father.getChildren().add(fontSizeItem);
 
-        // ---------------------------------------------------------------
+        // ------------------ Font Weight ------------------
         var text = new Text("Font Weight");
         var combo = new ComboBox<String>();
 
@@ -95,6 +98,8 @@ public class TextComponent extends Text {
 
         father.getChildren().add(fontWeightItem);
 
+        // ------------------ Font Color ------------------
+
         var fontColorText = new Text("Font Color");
         var colorPicker = new ColorPicker(Color.WHITE);
 
@@ -116,6 +121,10 @@ public class TextComponent extends Text {
 
         father.getChildren().add(fontColorItem);
 
+        // ==================== VISIBILITY ROW ====================
+        father.getChildren().add(new VisibilityRowComponent(selectedNode));
+        // ==================== FIM VISIBILITY ROW ====================
+
         // atualizando a ui
         selectedNode.addListener((obs, old, node) -> {
             if (node instanceof ButtonComponent b) {
@@ -133,97 +142,6 @@ public class TextComponent extends Text {
                 tf.setText("");
             }
         });
-
-        // ==================== VISIBILITY ROW ====================
-        var visibleText = new Text("Visible");
-        var visibleSelect = new ComboBox<String>();
-        visibleSelect.getItems().addAll("always", "when");
-
-        // Registrar o node selecionado
-        Node node = selectedNode.get();
-        BooleanProperty nodeVisibility = NodeVisibilityManager.getInstance().registerNode(node);
-
-        // Recupera config armazenada
-        NodeVisibilityManager.VisibilityConfig cfg = NodeVisibilityManager.getInstance().getConfig(node);
-        visibleSelect.setValue(cfg.mode != null ? cfg.mode : "always"); // "always" ou "when"
-
-        VBox visibilityContainer = new VBox(5); // container da row + opções when
-        HBox visibleRow = new HBox(10, visibleText, visibleSelect);
-        visibilityContainer.getChildren().add(visibleRow);
-
-        // Container onde aparecem os boolean options quando 'when' é selecionado
-        VBox booleanOptionsContainer = new VBox(5);
-        visibilityContainer.getChildren().add(booleanOptionsContainer);
-
-        // Função para reconstruir as opções booleanas
-        Runnable buildBooleanOptions = () -> {
-            booleanOptionsContainer.getChildren().clear();
-            for (DataStore.DataItem item : DataStore.getInstance().getDataList()) {
-                if ("boolean".equals(item.type)) {
-                    ToggleGroup tg = new ToggleGroup();
-                    RadioButton rbTrue = new RadioButton(item.name + " is True");
-                    RadioButton rbFalse = new RadioButton(item.name + " is False");
-                    rbTrue.setToggleGroup(tg);
-                    rbFalse.setToggleGroup(tg);
-
-                    // Seleciona automaticamente se esta for a configuração salva
-                    if (cfg.dataName != null && cfg.dataName.equals(item.name)) {
-                        if ("True".equals(cfg.expectedValue))
-                            tg.selectToggle(rbTrue);
-                        else
-                            tg.selectToggle(rbFalse);
-                    }
-
-                    // Atualiza visibilidade ao selecionar radio
-                    tg.selectedToggleProperty().addListener((obsSel, oldSel, newSel) -> {
-                        if (newSel != null) {
-                            RadioButton rb = (RadioButton) newSel;
-                            cfg.mode = "when";
-                            cfg.dataName = item.name;
-                            cfg.expectedValue = rb.getText().endsWith("True") ? "True" : "False";
-                            nodeVisibility.set(cfg.expectedValue.equals(item.value.get()));
-                        }
-                    });
-
-                    // Listener para valor do DataItem: atualiza visibilidade automaticamente
-                    item.value.addListener((obsV, oldV, newV) -> {
-                        if ("when".equals(cfg.mode) && item.name.equals(cfg.dataName)) {
-                            nodeVisibility.set(cfg.expectedValue.equals(newV));
-                        }
-                    });
-
-                    booleanOptionsContainer.getChildren().addAll(rbTrue, rbFalse);
-                }
-            }
-        };
-
-        // Listener do combo visibleSelect
-        visibleSelect.setOnAction(e -> {
-            cfg.mode = visibleSelect.getValue();
-            if ("always".equals(cfg.mode)) {
-                nodeVisibility.set(true);
-                booleanOptionsContainer.getChildren().clear();
-                cfg.dataName = null;
-                cfg.expectedValue = null;
-            } else if ("when".equals(cfg.mode)) {
-                buildBooleanOptions.run();
-            }
-        });
-
-        // Inicializa opções caso o modo seja "when"
-        if ("when".equals(cfg.mode))
-            buildBooleanOptions.run();
-
-        // Ao trocar de selectedNode, reseta visibilidade
-        selectedNode.addListener((obs, oldNode, newNode) -> {
-            if (newNode != null) {
-                BooleanProperty visProp = NodeVisibilityManager.getInstance().registerNode(newNode);
-                visProp.set(true);
-            }
-        });
-
-        father.getChildren().add(visibilityContainer);
-        // ==================== FIM VISIBILITY ROW ====================
 
     }
 
