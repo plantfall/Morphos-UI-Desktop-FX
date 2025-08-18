@@ -1,11 +1,12 @@
 package my_app.screens.scenes.DataScene;
 
 import javafx.collections.FXCollections;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import my_app.data.DataStore;
 
 public class DataScene extends Scene {
 
@@ -36,6 +37,7 @@ public class DataScene extends Scene {
         root.getChildren().add(dataListContainer);
 
         btnCreateData.setOnAction(e -> addNewDataRow(createDataContainer));
+
     }
 
     // Adiciona uma nova Row para criação de dado
@@ -108,15 +110,31 @@ public class DataScene extends Scene {
 
     // Adiciona o dado criado no container principal
     private void addDataToList(String type, String name, String value) {
+        // Cria e salva no DataStore
+        DataStore.DataItem item = new DataStore.DataItem(type, name, value);
+        DataStore.getInstance().addData(item);
+
+        // Row visual
         HBox dataRow = new HBox(10);
         dataRow.setStyle(
                 "-fx-padding: 8; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #d9edf7;");
 
         Label lblType = new Label("Type: " + type);
         Label lblName = new Label("Name: " + name);
-        Label lblValue = new Label("Value: " + value);
 
-        dataRow.getChildren().addAll(lblType, lblName, lblValue);
+        Node valueNode;
+        if ("boolean".equals(type)) {
+            ComboBox<String> valueSelect = new ComboBox<>(FXCollections.observableArrayList("True", "False"));
+            valueSelect.valueProperty().bindBidirectional(item.value); // ligação bidirecional
+            valueNode = valueSelect;
+        } else {
+            TextField valueField = new TextField();
+            valueField.textProperty().bindBidirectional(item.value); // ligação bidirecional
+            valueNode = valueField;
+        }
+
+        dataRow.getChildren().addAll(lblType, lblName, valueNode);
         dataListContainer.getChildren().add(dataRow);
     }
+
 }

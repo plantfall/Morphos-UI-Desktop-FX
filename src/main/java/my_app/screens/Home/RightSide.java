@@ -25,6 +25,7 @@ import my_app.components.TextComponent;
 
 public class RightSide extends VBox {
 
+    final double width = 250;
     final ObjectProperty<Node> selectedNode;
     private VBox dynamicContainer; // container que será substituído
 
@@ -35,9 +36,9 @@ public class RightSide extends VBox {
         setBackground(new Background(
                 new BackgroundFill(Color.web("#4F4646"), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        setPrefWidth(250);
-        setMinWidth(250);
-        setMaxWidth(250);
+        setPrefWidth(width);
+        setMinWidth(width);
+        setMaxWidth(width);
 
         setPadding(new Insets(20));
 
