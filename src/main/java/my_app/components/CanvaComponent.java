@@ -36,6 +36,9 @@ public class CanvaComponent extends Pane {
         setHeight(600);
         setMaxHeight(600);
 
+        setPrefWidth(700); // largura padrão
+        setMaxWidth(Double.MAX_VALUE); // pode expandir
+
         optionSelected.addListener((obs, old, v) -> {
             if (v == null || v.isBlank())
                 return;

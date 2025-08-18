@@ -2,26 +2,14 @@ package my_app;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import my_app.screens.Home.Home;
-import toolkit.Component;
-import toolkit.declarative_components.Button_;
-import toolkit.declarative_components.Column;
-import toolkit.declarative_components.ImageView_;
-import toolkit.declarative_components.ImageView_.Shape;
-import toolkit.declarative_components.Image_;
-import toolkit.declarative_components.Text_;
+import my_app.screens.scenes.DataScene.DataScene;
 import toolkit.theme.MaterialTheme;
-import java.awt.Desktop;
-import java.net.URI;
 
 public class App extends Application {
 
@@ -32,11 +20,23 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
-        StackPane root = new StackPane(new Home());
+        // Botão para ir para outra scene
+        var btnData = new Button("Data");
 
-        Scene scene = new Scene(root, 1200, 700);
-        setup(scene);
+        // Cena principal
+        HBox mainView = new HBox(btnData, new Home());
+        HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
+        mainView.setStyle("-fx-background-color:brown");
 
+        Scene mainScene = new Scene(mainView, 1200, 650);
+
+        // Cria a DataScene passando a referência da mainScene e do primaryStage
+        DataScene dataScene = new DataScene(primaryStage, mainScene);
+
+        // Botão muda para DataScene
+        btnData.setOnAction(e -> primaryStage.setScene(dataScene));
+
+        setup(mainScene); // seta ícone, título etc.
         this.primaryStage.show();
     }
 

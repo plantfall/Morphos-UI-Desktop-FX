@@ -35,6 +35,10 @@ public class RightSide extends VBox {
         setBackground(new Background(
                 new BackgroundFill(Color.web("#4F4646"), CornerRadii.EMPTY, Insets.EMPTY)));
 
+        setPrefWidth(250);
+        setMinWidth(250);
+        setMaxWidth(250);
+
         setPadding(new Insets(20));
 
         Button btnAppearence = new Button("Appearence");

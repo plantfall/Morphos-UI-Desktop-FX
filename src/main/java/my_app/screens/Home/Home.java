@@ -17,5 +17,7 @@ public class Home extends BorderPane {
         setCenter(center);
         setRight(new RightSide(selectedNode));
 
+        setStyle("-fx-background-color:red");
+
     }
 }
