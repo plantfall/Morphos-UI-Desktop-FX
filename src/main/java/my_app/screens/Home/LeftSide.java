@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 
 public class LeftSide extends VBox {
 
-    List<String> items = List.of("Text", "Button", "Input");
+    List<String> items = List.of("Text", "Button", "Input", "Image");
 
     public LeftSide(SimpleStringProperty optionSelected) {
         // Faz com que o LeftSide ocupe a altura toda

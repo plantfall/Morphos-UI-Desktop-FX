@@ -52,6 +52,8 @@ public class CanvaComponent extends Pane {
                 node = new TextField(content);
             } else if (v.equalsIgnoreCase("text")) {
                 node = new TextComponent(content);
+            } else if (v.equalsIgnoreCase("image")) {
+                node = new ImageComponent(getClass().getResourceAsStream("/assets/images/mago.jpg"));
             }
 
             if (node != null) {
