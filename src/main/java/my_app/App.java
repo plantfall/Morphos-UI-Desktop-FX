@@ -26,7 +26,7 @@ public class App extends Application {
         // Cena principal
         HBox mainView = new HBox(btnData, new Home());
         HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
-        mainView.setStyle("-fx-background-color:brown");
+        // mainView.setStyle("-fx-background-color:brown");
 
         Scene mainScene = new Scene(mainView, 1200, 650);
 

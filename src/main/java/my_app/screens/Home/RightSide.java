@@ -1,16 +1,12 @@
 package my_app.screens.Home;
 
-import java.util.function.Consumer;
-
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -41,7 +37,7 @@ public class RightSide extends VBox {
 
         setMaxHeight(Double.MAX_VALUE);
         setBackground(new Background(
-                new BackgroundFill(Color.web("#4F4646"), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#17153B"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         setPrefWidth(width);
         setMinWidth(width);
@@ -74,13 +70,6 @@ public class RightSide extends VBox {
         spacer.setPrefHeight(10);
         getChildren().add(spacer);
 
-        setBorder(new Border(
-                new BorderStroke(
-                        Color.BLACK,
-                        BorderStrokeStyle.SOLID,
-                        null,
-                        new BorderWidths(1))));
-
         // Atualiza UI quando muda de seleção
 
         selectedNode.addListener((obs, old, node) -> {
@@ -89,16 +78,17 @@ public class RightSide extends VBox {
             dynamicContainer.getChildren().clear(); // limpa só o container dinâmico
 
             if (node instanceof CanvaComponent n) {
-                n.renderRightSideContainer(dynamicContainer);
+                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
             }
 
             if (node instanceof ButtonComponent n) {
-                n.renderRightSideContainer(dynamicContainer);
+                n.renderRightSideContainer(
+                        dynamicContainer, appearenceIsSelected);
             }
 
             if (node instanceof TextComponent n) {
                 n.activeNode(selectedNode);
-                n.renderRightSideContainer(dynamicContainer);
+                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
             }
 
             if (node instanceof ImageComponent n) {
@@ -106,17 +96,5 @@ public class RightSide extends VBox {
             }
         });
 
-    }
-
-    HBox itemRow(String name, String defaultValue, Consumer<String> callback) {
-        var text = new Text(name);
-        var tf = new TextField(defaultValue);
-
-        tf.textProperty().addListener((obs, old, val) -> {
-            callback.accept(val);
-        });
-
-        var container = new HBox(text, tf);
-        return container;
     }
 }

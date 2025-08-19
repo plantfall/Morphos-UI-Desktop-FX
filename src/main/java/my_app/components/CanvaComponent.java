@@ -1,5 +1,6 @@
 package my_app.components;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
@@ -19,9 +20,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class CanvaComponent extends Pane {
+public class CanvaComponent extends Pane implements ViewContract {
 
     private final ObjectProperty<Node> selectedNode;
+
+    VBox appearenceContainer = new VBox();
+    VBox settingsContainer = new VBox();
 
     public CanvaComponent(SimpleStringProperty optionSelected, ObjectProperty<Node> selectedNode) {
         this.selectedNode = selectedNode;
@@ -132,11 +136,29 @@ public class CanvaComponent extends Pane {
         System.out.println("Selecionado: " + node);
     }
 
-    public void renderRightSideContainer(Pane father) {
-        // father.getChildren().
-        // Cria controles de Background
-        VBox bgControls = new VBox(10);
-        bgControls.setUserData("bgControls");
+    public void renderRightSideContainer(Pane father,
+            BooleanProperty appearenceIsSelected) {
+
+        // render inicial baseado no valor atual
+        if (appearenceIsSelected.get()) {
+            appearance(father);
+        } else {
+            settings(father);
+        }
+
+        appearenceIsSelected.addListener((o, old, v) -> {
+            if (v)
+                appearance(father);
+            else
+                settings(father);
+        });
+
+    }
+
+    @Override
+    public void appearance(Pane father) {
+
+        father.getChildren().clear(); // limpa o container
 
         Text title = new Text("Background Settings");
 
@@ -172,9 +194,15 @@ public class CanvaComponent extends Pane {
             }
         });
 
-        bgControls.getChildren().addAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
+        appearenceContainer.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
 
-        getChildren().add(bgControls);
+        father.getChildren().add(appearenceContainer);
+
+    }
+
+    @Override
+    public void settings(Pane father) {
+
     }
 
 }
