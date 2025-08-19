@@ -2,7 +2,11 @@ package my_app.screens.Home;
 
 import java.util.function.Consumer;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -21,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.components.ButtonComponent;
 import my_app.components.CanvaComponent;
+import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 
 public class RightSide extends VBox {
@@ -28,6 +33,8 @@ public class RightSide extends VBox {
     final double width = 250;
     final ObjectProperty<Node> selectedNode;
     private VBox dynamicContainer; // container que será substituído
+
+    BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public RightSide(ObjectProperty<Node> selectedNode) {
         this.selectedNode = selectedNode;
@@ -45,10 +52,17 @@ public class RightSide extends VBox {
         Button btnAppearence = new Button("Appearence");
         Button btnLayout = new Button("Layout");
 
+        btnAppearence.setOnAction(ev -> appearenceIsSelected.set(true));
+        btnLayout.setOnAction(ev -> appearenceIsSelected.set(false));
+
         HBox top = new HBox(btnAppearence, btnLayout);
         getChildren().add(top);
 
-        var aps = new Text("Appearence Settings");
+        var aps = new Text();
+        aps.textProperty().bind(Bindings
+                .createStringBinding(() -> appearenceIsSelected.get() ? "Appearence Settings" : "Layout Settings",
+                        appearenceIsSelected));
+
         getChildren().add(aps);
 
         // ---- Container dinâmico (será trocado conforme o node selecionado) ----
@@ -70,9 +84,6 @@ public class RightSide extends VBox {
         // Atualiza UI quando muda de seleção
 
         selectedNode.addListener((obs, old, node) -> {
-            // limpa controles antigos
-            // getChildren().removeIf(n -> n.getUserData() != null &&
-            // n.getUserData().equals("bgControls"));
 
             // ---- Container dinâmico (será trocado conforme o node selecionado) ----
             dynamicContainer.getChildren().clear(); // limpa só o container dinâmico
@@ -88,6 +99,10 @@ public class RightSide extends VBox {
             if (node instanceof TextComponent n) {
                 n.activeNode(selectedNode);
                 n.renderRightSideContainer(dynamicContainer);
+            }
+
+            if (node instanceof ImageComponent n) {
+                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
             }
         });
 
