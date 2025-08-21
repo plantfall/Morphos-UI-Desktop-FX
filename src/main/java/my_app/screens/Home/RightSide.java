@@ -24,6 +24,14 @@ public class RightSide extends VBox {
 
     final double width = 250;
     final ObjectProperty<Node> selectedNode;
+
+    Button btnAppearence = new Button("Appearence");
+    Button btnLayout = new Button("Layout");
+
+    HBox top = new HBox(btnAppearence, btnLayout);
+
+    Text title = new Text();
+
     private VBox dynamicContainer; // container que será substituído
 
     BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
@@ -31,31 +39,16 @@ public class RightSide extends VBox {
     public RightSide(ObjectProperty<Node> selectedNode) {
         this.selectedNode = selectedNode;
 
-        setMaxHeight(Double.MAX_VALUE);
-        setBackground(new Background(
-                new BackgroundFill(Color.web("#17153B"), CornerRadii.EMPTY, Insets.EMPTY)));
-
-        setPrefWidth(width);
-        setMinWidth(width);
-        setMaxWidth(width);
-
-        setPadding(new Insets(20));
-
-        Button btnAppearence = new Button("Appearence");
-        Button btnLayout = new Button("Layout");
-
         btnAppearence.setOnAction(ev -> appearenceIsSelected.set(true));
         btnLayout.setOnAction(ev -> appearenceIsSelected.set(false));
 
-        HBox top = new HBox(btnAppearence, btnLayout);
         getChildren().add(top);
 
-        var aps = new Text();
-        aps.textProperty().bind(Bindings
+        title.textProperty().bind(Bindings
                 .createStringBinding(() -> appearenceIsSelected.get() ? "Appearence Settings" : "Layout Settings",
                         appearenceIsSelected));
 
-        getChildren().add(aps);
+        getChildren().add(title);
 
         // ---- Container dinâmico (será trocado conforme o node selecionado) ----
         dynamicContainer = new VBox();
@@ -92,5 +85,21 @@ public class RightSide extends VBox {
             }
         });
 
+        config();
+    }
+
+    void config() {
+
+        setMaxHeight(Double.MAX_VALUE);
+        setBackground(new Background(
+                new BackgroundFill(Color.web("#17153B"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        setPrefWidth(width);
+        setMinWidth(width);
+        setMaxWidth(width);
+
+        setPadding(new Insets(20));
+
+        title.setFill(Color.WHITE);
     }
 }
