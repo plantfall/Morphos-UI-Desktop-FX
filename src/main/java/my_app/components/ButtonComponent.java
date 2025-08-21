@@ -48,12 +48,13 @@ public class ButtonComponent extends Button {
         father.getChildren().clear(); // limpa o container
 
         var nodes = AppearanceFactory.renderComponentes(this,
-                selectedNode, "bg-picker", "padding-field",
+                selectedNode, "bg-picker",
                 "border-width-field", "border-radius-field");
 
         appearenceContainer.getChildren().setAll(nodes);
 
         appearenceContainer.getChildren().addAll(
+                new ButtonPaddingComponent(selectedNode),
                 new ButtonBorderColorPicker(selectedNode),
                 new FontWeightComponent(selectedNode),
                 new FontColorPicker(selectedNode),

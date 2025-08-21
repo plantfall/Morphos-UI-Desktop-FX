@@ -46,21 +46,6 @@ public class AppearanceFactory {
                     controls.add(new HBox(text, bgPicker));
                 }
 
-                case "padding-field" -> {
-                    Insets pad = optionalButton.getPadding();
-                    double padValue = pad != null ? pad.getTop() : 0;
-                    var paddingItem = new ItemRowComponent("Padding:", String.valueOf(padValue), newVal -> {
-                        if (!newVal.isBlank()) {
-                            try {
-                                double v = Double.parseDouble(newVal);
-                                optionalButton.setPadding(new Insets(v));
-                            } catch (NumberFormatException ignored) {
-                            }
-                        }
-                    });
-                    controls.add(paddingItem);
-                }
-
                 case "border-width-field" -> {
                     Color borderColor = getBorderColor(optionalButton);
                     ColorPicker borderColorPicker = new ColorPicker(borderColor);

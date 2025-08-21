@@ -4,51 +4,46 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ButtonBorderColorPicker extends HBox {
+public class ButtonPaddingComponent extends HBox {
 
-    ColorPicker colorPicker = new ColorPicker(Color.WHITE);
-    Text fontColorText = new Text("Border Color:");
+    Text title = new Text("Paddings:");
+    TextField tf = new TextField();
 
-    public ButtonBorderColorPicker(ObjectProperty<Node> selectedNode) {
+    public ButtonPaddingComponent(ObjectProperty<Node> selectedNode) {
 
         config();
 
         ButtonComponent node = (ButtonComponent) selectedNode.get();
 
-        Color borderColor = getBorderColor(node);
-        colorPicker.setValue(borderColor);
+        Insets pad = node.getPadding();
+        double padValue = pad != null ? pad.getTop() : 0;
 
-        colorPicker.setOnAction(e -> {
-            Color c = colorPicker.getValue();
-            BorderStroke stroke = new BorderStroke(
-                    c,
-                    BorderStrokeStyle.SOLID,
-                    new CornerRadii(getRadius(node)),
-                    new BorderWidths(getBorderWidth(node)));
+        tf.setText(String.valueOf(padValue));
 
-            node.setBorder(new Border(stroke));
+        tf.textProperty().addListener((o, old, newVal) -> {
+            if (!newVal.isBlank()) {
+                try {
+                    double v = Double.parseDouble(newVal);
+                    node.setPadding(new Insets(v));
+                } catch (NumberFormatException ignored) {
+                }
+            }
         });
 
-        getChildren().addAll(fontColorText, colorPicker);
+        getChildren().addAll(title, tf);
 
     }
 
     void config() {
-        fontColorText.setFont(Font.font(14));
-        fontColorText.setFill(Color.WHITE);
+        title.setFont(Font.font(14));
+        title.setFill(Color.WHITE);
 
         setSpacing(10);
     }
