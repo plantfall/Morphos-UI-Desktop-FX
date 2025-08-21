@@ -7,7 +7,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -24,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import my_app.components.ItemRowComponent;
-
 public class AppearanceFactory {
 
     public static List<Node> renderComponentes(ButtonComponent optionalButton,
@@ -34,25 +31,6 @@ public class AppearanceFactory {
 
         for (String item : items) {
             switch (item) {
-
-                case "node-value-field" -> {
-                    var tf = new TextField();
-                    tf.setPromptText("Change text...");
-
-                    // Se digitar, muda o conteúdo do node selecionado
-                    tf.textProperty().addListener((obs, old, val) -> {
-                        Node node = selectedNode.get();
-                        if (node instanceof Button b) {
-                            b.setText(val);
-                        } else if (node instanceof TextField t) {
-                            t.setText(val);
-                        } else if (node instanceof Text txt) {
-                            txt.setText(val);
-                        }
-                    });
-
-                    controls.add(tf);
-                }
 
                 case "bg-picker" -> {
                     ColorPicker bgPicker = new ColorPicker(Color.LIGHTGRAY);
@@ -81,26 +59,6 @@ public class AppearanceFactory {
                         }
                     });
                     controls.add(paddingItem);
-                }
-
-                case "border-color-picker" -> {
-                    Color borderColor = getBorderColor(optionalButton);
-                    ColorPicker borderColorPicker = new ColorPicker(borderColor);
-                    borderColorPicker.setOnAction(e -> {
-                        Color c = borderColorPicker.getValue();
-                        BorderStroke stroke = new BorderStroke(
-                                c,
-                                BorderStrokeStyle.SOLID,
-                                new CornerRadii(getRadius(optionalButton)),
-                                new BorderWidths(getBorderWidth(optionalButton)));
-                        optionalButton.setBorder(new Border(stroke));
-                    });
-
-                    var text = new Text("Border Color:");
-                    text.setFont(Font.font(14));
-                    text.setFill(Color.WHITE);
-
-                    controls.add(new HBox(text, borderColorPicker));
                 }
 
                 case "border-width-field" -> {
@@ -164,73 +122,6 @@ public class AppearanceFactory {
                     controls.add(borderRadiusItem);
                 }
 
-                case "font-weight-field" -> {
-                    var text = new Text("Font Weight");
-                    var combo = new ComboBox<String>();
-
-                    text.setFont(Font.font(14));
-                    text.setFill(Color.WHITE);
-
-                    var fontWeightItem = new HBox(text, combo);
-                    fontWeightItem.setSpacing(10);
-
-                    combo.getItems().addAll(FONT_WEIGHT_MAP.keySet());
-                    combo.setValue("normal"); // valor inicial
-
-                    // Listener: String -> FontWeight
-                    combo.valueProperty().addListener((obs, old, v) -> {
-                        Node node = selectedNode.get();
-                        FontWeight fw = FONT_WEIGHT_MAP.getOrDefault(v.toLowerCase(), FontWeight.NORMAL);
-
-                        if (node instanceof ButtonComponent b) {
-                            b.setFont(Font.font(b.getFont().getFamily(), fw, b.getFont().getSize()));
-                        } else if (node instanceof TextField t) {
-                            t.setFont(Font.font(t.getFont().getFamily(), fw, t.getFont().getSize()));
-                        } else if (node instanceof Text txt) {
-                            txt.setFont(Font.font(txt.getFont().getFamily(), fw, txt.getFont().getSize()));
-                        }
-                    });
-
-                    controls.add(fontWeightItem);
-                }
-
-                case "font-color-field" -> {
-
-                    var colorPicker = new ColorPicker(Color.WHITE);
-
-                    var fontColorText = new Text("Border Color:");
-                    fontColorText.setFont(Font.font(14));
-                    fontColorText.setFill(Color.WHITE);
-
-                    var fontColorItem = new HBox(fontColorText, colorPicker);
-                    fontColorItem.setSpacing(10);
-
-                    colorPicker.setOnAction(e -> {
-                        Node node = selectedNode.get();
-                        Color color = colorPicker.getValue();
-
-                        if (node instanceof Button b) {
-                            b.setTextFill(color);
-                        } else if (node instanceof TextField t) {
-                            t.setStyle("-fx-text-fill: " + toRgbString(color) + ";");
-                        } else if (node instanceof Text txt) {
-                            txt.setFill(color);
-                        }
-                    });
-
-                    controls.add(fontColorItem);
-                }
-
-                case "font-color-size" -> {
-                    var fontSizeItem = new ItemRowComponent("Font size", "12",
-                            (newFontSize) -> {
-                                Node node = selectedNode.get();
-                                loadNodeFontSize(node, newFontSize);
-                            });
-
-                    controls.add(fontSizeItem);
-                }
-
                 case "visibility-row-component" -> {
                     controls.add(new VisibilityRowComponent(selectedNode));
                 }
@@ -238,18 +129,6 @@ public class AppearanceFactory {
         }
 
         return controls;
-    }
-
-    private static void loadNodeFontSize(Node node, String v) {
-
-        if (node instanceof ButtonComponent b) {
-            b.setFont(new Font(Double.valueOf(v)));
-        } else if (node instanceof TextField t) {
-            t.setFont(new Font(Double.valueOf(v)));
-        } else if (node instanceof Text txt) {
-            txt.setFont(new Font(Double.valueOf(v)));
-        }
-
     }
 
     // Função auxiliar para converter Color -> CSS rgb()
