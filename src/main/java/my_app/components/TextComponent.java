@@ -38,46 +38,17 @@ public class TextComponent extends Text implements ViewContract {
                 settings(father);
         });
 
-        // colorPicker.setValue(extractColorFromStyle(this.getStyle()));
-        // } else if (node instanceof Text txt) {
-        // tf.setText(txt.getText());
-        // combo.setValue(getFontWeightName(FontWeight.findByName(txt.getFont().getStyle())));
-        // colorPicker.setValue((Color) txt.getFill());
-        // }
-
-        // atualizando a ui
-        // selectedNode.addListener((obs, old, node) -> {
-        // if (node instanceof ButtonComponent b) {
-        // tf.setText(b.getText());
-        // combo.setValue(getFontWeightName(FontWeight.findByName(b.getFont().getStyle())));
-        // } else if (node instanceof TextField t) {
-        // tf.setText(t.getText());
-        // combo.setValue(getFontWeightName(FontWeight.findByName(t.getFont().getStyle())));
-        // colorPicker.setValue(extractColorFromStyle(t.getStyle()));
-        // } else if (node instanceof Text txt) {
-        // tf.setText(txt.getText());
-        // combo.setValue(getFontWeightName(FontWeight.findByName(txt.getFont().getStyle())));
-        // colorPicker.setValue((Color) txt.getFill());
-        // } else {
-        // tf.setText("");
-        // }
-        // });
-
     }
 
     @Override
     public void appearance(Pane father) {
         father.getChildren().clear(); // limpa o container
 
-        var nodes = AppearanceFactory.renderComponentes(null,
-                selectedNode,
-                "node-value-field",
-                "font-color-size");
-
-        appearenceContainer.getChildren().setAll(nodes);
-        appearenceContainer.getChildren().addAll(
+        appearenceContainer.getChildren().setAll(
                 new FontWeightComponent(selectedNode),
-                new FontColorPicker(selectedNode)
+                new FontColorPicker(selectedNode),
+                new TextContentComponent(selectedNode),
+                new FontSizeComponent(selectedNode)
 
         );
 
