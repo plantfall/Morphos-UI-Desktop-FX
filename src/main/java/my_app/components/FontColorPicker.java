@@ -1,46 +1,62 @@
 package my_app.components;
 
-import static my_app.components.AppearanceFactory.FONT_WEIGHT_MAP;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class FontColorPicker extends HBox {
 
-    public FontColorPicker(ObjectProperty<Node> selectedNode) {
-        var text = new Text("Font Weight");
-        var combo = new ComboBox<String>();
+    ColorPicker colorPicker = new ColorPicker(Color.WHITE);
+    Text fontColorText = new Text("Font Color:");
 
-        text.setFont(Font.font(14));
-        text.setFill(Color.WHITE);
+    public FontColorPicker(ObjectProperty<Node> selectedNode) {
+
+        fontColorText.setFont(Font.font(14));
+        fontColorText.setFill(Color.WHITE);
 
         setSpacing(10);
 
-        combo.getItems().addAll(FONT_WEIGHT_MAP.keySet());
-        combo.setValue("normal"); // valor inicial
+        Node node = selectedNode.get();
 
-        // Listener: String -> FontWeight
-        combo.valueProperty().addListener((obs, old, v) -> {
-            Node node = selectedNode.get();
-            FontWeight fw = FONT_WEIGHT_MAP.getOrDefault(v.toLowerCase(), FontWeight.NORMAL);
+        if (node instanceof ButtonComponent b) {
+            colorPicker.setValue((Color) b.getTextFill());
+        }
 
-            if (node instanceof ButtonComponent b) {
-                b.setFont(Font.font(b.getFont().getFamily(), fw, b.getFont().getSize()));
-            } else if (node instanceof TextField t) {
-                t.setFont(Font.font(t.getFont().getFamily(), fw, t.getFont().getSize()));
-            } else if (node instanceof Text txt) {
-                txt.setFont(Font.font(txt.getFont().getFamily(), fw, txt.getFont().getSize()));
+        else if (node instanceof TextField t) {
+            // TextField não tem getter, tenta pegar do CSS
+            String style = t.getStyle();
+            Color currentColor = Color.BLACK;
+            if (style != null && style.contains("-fx-text-fill:")) {
+                String colorStr = style.substring(style.indexOf("-fx-text-fill:") + 14).replace(";", "").trim();
+                currentColor = Color.web(colorStr);
+            }
+            colorPicker.setValue(currentColor);
+
+        } else if (node instanceof TextComponent txt) {
+
+            colorPicker.setValue((Color) txt.getFill());
+        }
+
+        colorPicker.setOnAction(e -> {
+            Node n = selectedNode.get();
+            Color color = colorPicker.getValue();
+
+            if (n instanceof ButtonComponent b) {
+                b.setTextFill(color);
+            } else if (n instanceof TextField t) {
+                t.setStyle("-fx-text-fill: " + AppearanceFactory.toRgbString(color) + ";");
+            } else if (n instanceof TextComponent txt) {
+                txt.setFill(color);
             }
         });
 
-        getChildren().addAll(text, combo);
+        getChildren().addAll(fontColorText, colorPicker);
 
     }
 }

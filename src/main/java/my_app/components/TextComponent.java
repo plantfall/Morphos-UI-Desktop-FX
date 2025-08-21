@@ -70,11 +70,16 @@ public class TextComponent extends Text implements ViewContract {
         father.getChildren().clear(); // limpa o container
 
         var nodes = AppearanceFactory.renderComponentes(null,
-                selectedNode, "node-value-field", "font-color-size");
+                selectedNode,
+                "node-value-field",
+                "font-color-size");
 
         appearenceContainer.getChildren().setAll(nodes);
-        appearenceContainer.getChildren().add(
-                new FontWeightComponent(selectedNode));
+        appearenceContainer.getChildren().addAll(
+                new FontWeightComponent(selectedNode),
+                new FontColorPicker(selectedNode)
+
+        );
 
         father.getChildren().add(appearenceContainer);
     }

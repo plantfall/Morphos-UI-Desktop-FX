@@ -253,7 +253,7 @@ public class AppearanceFactory {
     }
 
     // Função auxiliar para converter Color -> CSS rgb()
-    private static String toRgbString(Color c) {
+    public static String toRgbString(Color c) {
         return "rgb("
                 + (int) (c.getRed() * 255) + ","
                 + (int) (c.getGreen() * 255) + ","
