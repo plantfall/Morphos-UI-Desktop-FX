@@ -261,7 +261,7 @@ public class AppearanceFactory {
     }
 
     // Map centralizado para conversão
-    private static final Map<String, FontWeight> FONT_WEIGHT_MAP = Map.of(
+    public static final Map<String, FontWeight> FONT_WEIGHT_MAP = Map.of(
             "normal", FontWeight.NORMAL,
             "bold", FontWeight.BOLD,
             "thin", FontWeight.THIN,

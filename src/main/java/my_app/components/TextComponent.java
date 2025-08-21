@@ -3,8 +3,6 @@ package my_app.components;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -40,6 +38,13 @@ public class TextComponent extends Text implements ViewContract {
                 settings(father);
         });
 
+        // colorPicker.setValue(extractColorFromStyle(this.getStyle()));
+        // } else if (node instanceof Text txt) {
+        // tf.setText(txt.getText());
+        // combo.setValue(getFontWeightName(FontWeight.findByName(txt.getFont().getStyle())));
+        // colorPicker.setValue((Color) txt.getFill());
+        // }
+
         // atualizando a ui
         // selectedNode.addListener((obs, old, node) -> {
         // if (node instanceof ButtonComponent b) {
@@ -65,9 +70,11 @@ public class TextComponent extends Text implements ViewContract {
         father.getChildren().clear(); // limpa o container
 
         var nodes = AppearanceFactory.renderComponentes(null,
-                selectedNode, "node-value-field", "font-color-size", "font-color-field", "font-weight-field");
+                selectedNode, "node-value-field", "font-color-size");
 
         appearenceContainer.getChildren().setAll(nodes);
+        appearenceContainer.getChildren().add(
+                new FontWeightComponent(selectedNode));
 
         father.getChildren().add(appearenceContainer);
     }
