@@ -4,12 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.control.Button;
@@ -31,20 +26,6 @@ public class AppearanceFactory {
 
         for (String item : items) {
             switch (item) {
-
-                case "bg-picker" -> {
-                    ColorPicker bgPicker = new ColorPicker(Color.LIGHTGRAY);
-                    bgPicker.setOnAction(e -> {
-                        Color c = bgPicker.getValue();
-                        updateBackground(optionalButton, c, getRadius(optionalButton));
-                    });
-
-                    var text = new Text("Background:");
-                    text.setFont(Font.font(14));
-                    text.setFill(Color.WHITE);
-
-                    controls.add(new HBox(text, bgPicker));
-                }
 
                 case "border-width-field" -> {
                     Color borderColor = getBorderColor(optionalButton);
