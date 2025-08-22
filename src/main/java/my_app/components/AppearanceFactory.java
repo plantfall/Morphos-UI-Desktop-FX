@@ -27,67 +27,6 @@ public class AppearanceFactory {
         for (String item : items) {
             switch (item) {
 
-                case "border-width-field" -> {
-                    Color borderColor = getBorderColor(optionalButton);
-                    ColorPicker borderColorPicker = new ColorPicker(borderColor);
-                    double borderWidth = getBorderWidth(optionalButton);
-
-                    var borderWidthItem = new ItemRowComponent("Border Width:", String.valueOf(borderWidth), newVal -> {
-                        if (!newVal.isBlank()) {
-                            try {
-                                double v = Double.parseDouble(newVal);
-                                BorderStroke stroke = new BorderStroke(
-                                        borderColorPicker.getValue(),
-                                        BorderStrokeStyle.SOLID,
-                                        new CornerRadii(getRadius(optionalButton)),
-                                        new BorderWidths(v));
-                                optionalButton.setBorder(new Border(stroke));
-                            } catch (NumberFormatException ignored) {
-                            }
-                        }
-                    });
-
-                    controls.add(borderWidthItem);
-                }
-
-                case "border-radius-field" -> {
-                    Color borderColor = getBorderColor(optionalButton);
-                    ColorPicker borderColorPicker = new ColorPicker(borderColor);
-
-                    double borderRadius = getRadius(optionalButton);
-                    var borderRadiusItem = new ItemRowComponent("Border Radius:", String.valueOf(borderRadius),
-                            newVal -> {
-                                if (!newVal.isBlank()) {
-                                    try {
-                                        double v = Double.parseDouble(newVal);
-
-                                        // border
-                                        BorderStroke stroke = new BorderStroke(
-                                                borderColorPicker.getValue(),
-                                                BorderStrokeStyle.SOLID,
-                                                new CornerRadii(v),
-                                                new BorderWidths(getBorderWidth(optionalButton)));
-                                        optionalButton.setBorder(new Border(stroke));
-
-                                        var bg = optionalButton.getBackground();
-                                        // background (reaproveita cor atual)
-                                        Color currentBg = Color.TRANSPARENT;
-                                        if (optionalButton.getBackground() != null && !bg.getFills().isEmpty()) {
-                                            Paint fill = bg.getFills().get(0).getFill();
-                                            if (fill instanceof Color c) {
-                                                currentBg = c;
-                                            }
-                                        }
-                                        updateBackground(optionalButton, currentBg, v);
-
-                                    } catch (NumberFormatException ignored) {
-                                    }
-                                }
-                            });
-
-                    controls.add(borderRadiusItem);
-                }
-
                 case "visibility-row-component" -> {
                     controls.add(new VisibilityRowComponent(selectedNode));
                 }
