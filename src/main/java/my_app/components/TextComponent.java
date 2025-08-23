@@ -1,68 +1,36 @@
 package my_app.components;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import my_app.data.ViewContract;
 
 public class TextComponent extends Text implements ViewContract {
-
-    VBox appearenceContainer = new VBox();
-    VBox settingsContainer = new VBox();
-
-    private ObjectProperty<Node> selectedNode;
+    ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
     public TextComponent(String content) {
         super(content);
-    }
-
-    public void activeNode(ObjectProperty<Node> selectedNode) {
-        this.selectedNode = selectedNode;
-    }
-
-    public void renderRightSideContainer(Pane father, BooleanProperty appearenceIsSelected) {
-
-        // render inicial baseado no valor atual
-        if (appearenceIsSelected.get()) {
-            appearance(father);
-        } else {
-            settings(father);
-        }
-
-        appearenceIsSelected.addListener((o, old, v) -> {
-            if (v)
-                appearance(father);
-            else
-                settings(father);
-        });
-
+        currentState.set(this);
     }
 
     @Override
     public void appearance(Pane father) {
-        father.getChildren().clear(); // limpa o container
-
-        appearenceContainer.getChildren().setAll(
-                new FontWeightComponent(selectedNode),
-                new FontColorPicker(selectedNode),
-                new TextContentComponent(selectedNode),
-                new FontSizeComponent(selectedNode)
+        father.getChildren().setAll(
+                new FontWeightComponent(currentState),
+                new FontColorPicker(currentState),
+                new TextContentComponent(currentState),
+                new FontSizeComponent(currentState)
 
         );
-
-        father.getChildren().add(appearenceContainer);
     }
 
     @Override
     public void settings(Pane father) {
-        father.getChildren().clear(); // limpa o container
 
         Text title = new Text("Text Settings");
 
-        settingsContainer.getChildren().setAll(title);
-
-        father.getChildren().add(settingsContainer);
+        father.getChildren().setAll(title);
     }
 }

@@ -1,7 +1,7 @@
 package my_app.components;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -16,19 +16,16 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import my_app.data.ViewContract;
+import my_app.screens.Home.Home.VisualNodeCallback;
 
 public class CanvaComponent extends Pane implements ViewContract {
 
-    private final ObjectProperty<Node> selectedNode;
+    ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
-    VBox appearenceContainer = new VBox();
-    VBox settingsContainer = new VBox();
-
-    public CanvaComponent(SimpleStringProperty optionSelected, ObjectProperty<Node> selectedNode) {
-        this.selectedNode = selectedNode;
+    public CanvaComponent(SimpleStringProperty optionSelected, VisualNodeCallback callback) {
 
         setBorder(new Border(
                 new BorderStroke(
@@ -61,8 +58,8 @@ public class CanvaComponent extends Pane implements ViewContract {
             }
 
             if (node != null) {
-                addElementDragable(node);
-                selectNode(node);
+                addElementDragable(node, callback);
+                callback.set(node);
             }
 
             optionSelected.set("");
@@ -70,14 +67,14 @@ public class CanvaComponent extends Pane implements ViewContract {
 
         setOnMouseClicked(e -> {
             if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
-                selectedNode.set(this);
+                callback.set(this);
                 System.out.println("Canva selecionado");
             }
         });
 
     }
 
-    private void addElementDragable(Node node) {
+    private void addElementDragable(Node node, VisualNodeCallback callback) {
         // posição inicial centralizada
         double relX = 0.5;
         double relY = 0.5;
@@ -86,7 +83,7 @@ public class CanvaComponent extends Pane implements ViewContract {
         node.setLayoutY(getHeight() * relY);
 
         // clique = seleciona
-        node.setOnMouseClicked(e -> selectNode(node));
+        node.setOnMouseClicked(e -> callback.set(node));
 
         enableDrag(node, relX, relY);
 
@@ -131,34 +128,8 @@ public class CanvaComponent extends Pane implements ViewContract {
         }
     }
 
-    private void selectNode(Node node) {
-        selectedNode.set(node);
-        System.out.println("Selecionado: " + node);
-    }
-
-    public void renderRightSideContainer(Pane father,
-            BooleanProperty appearenceIsSelected) {
-
-        // render inicial baseado no valor atual
-        if (appearenceIsSelected.get()) {
-            appearance(father);
-        } else {
-            settings(father);
-        }
-
-        appearenceIsSelected.addListener((o, old, v) -> {
-            if (v)
-                appearance(father);
-            else
-                settings(father);
-        });
-
-    }
-
     @Override
     public void appearance(Pane father) {
-
-        father.getChildren().clear(); // limpa o container
 
         Text title = new Text("Background Settings");
 
@@ -194,9 +165,7 @@ public class CanvaComponent extends Pane implements ViewContract {
             }
         });
 
-        appearenceContainer.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
-
-        father.getChildren().add(appearenceContainer);
+        father.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
 
     }
 

@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.data;
 
 import javafx.scene.layout.Pane;
 

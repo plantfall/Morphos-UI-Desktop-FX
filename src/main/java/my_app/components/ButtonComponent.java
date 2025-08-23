@@ -1,73 +1,47 @@
 package my_app.components;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import my_app.data.ViewContract;
 
-public class ButtonComponent extends Button {
+public class ButtonComponent extends Button implements ViewContract {
 
-    VBox appearenceContainer = new VBox();
-    VBox settingsContainer = new VBox();
-
-    ObjectProperty<Node> selectedNode = new SimpleObjectProperty<>();
+    ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
     public ButtonComponent() {
         super();
-        selectedNode.set(this); // 👈 sempre aponta para o próprio botão
+        currentState.set(this); // 👈 sempre aponta para o próprio botão
     }
 
     public ButtonComponent(String content) {
         super(content);
-        selectedNode.set(this);
+        currentState.set(this);
     }
 
-    public void renderRightSideContainer(Pane father, BooleanProperty appearenceIsSelected) {
-
-        // render inicial baseado no valor atual
-        if (appearenceIsSelected.get()) {
-            appearance(father);
-        } else {
-            settings(father);
-        }
-
-        appearenceIsSelected.addListener((o, old, v) -> {
-            if (v)
-                appearance(father);
-            else
-                settings(father);
-        });
-
+    @Override
+    public void appearance(Pane father) {
+        father.getChildren().setAll(
+                new ButtonBgColorPicker(currentState),
+                new ButtonPaddingComponent(currentState),
+                new ButtonBorderRadius(currentState),
+                new ButtonBorderWidth(currentState),
+                new ButtonBorderColorPicker(currentState),
+                new FontWeightComponent(currentState),
+                new FontColorPicker(currentState),
+                new TextContentComponent(currentState),
+                new FontSizeComponent(currentState));
     }
 
-    void appearance(Pane father) {
-        father.getChildren().clear(); // limpa o container
-
-        appearenceContainer.getChildren().setAll(
-                new ButtonBgColorPicker(selectedNode),
-                new ButtonPaddingComponent(selectedNode),
-                new ButtonBorderRadius(selectedNode),
-                new ButtonBorderWidth(selectedNode),
-                new ButtonBorderColorPicker(selectedNode),
-                new FontWeightComponent(selectedNode),
-                new FontColorPicker(selectedNode),
-                new TextContentComponent(selectedNode),
-                new FontSizeComponent(selectedNode));
-
-        father.getChildren().add(appearenceContainer);
-    }
-
-    void settings(Pane father) {
-        father.getChildren().clear(); // limpa o container
+    @Override
+    public void settings(Pane father) {
 
         Text title = new Text("Button Settings");
 
-        settingsContainer.getChildren().setAll(title);
+        father.getChildren().setAll(title);
 
-        father.getChildren().add(settingsContainer);
     }
 }

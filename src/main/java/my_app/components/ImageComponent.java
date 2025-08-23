@@ -6,18 +6,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import my_app.data.ViewContract;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
-public class ImageComponent extends ImageView {
+public class ImageComponent extends ImageView implements ViewContract {
 
     final int size = 100;
 
     // BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
-    VBox appearenceContainer = new VBox();
-    VBox settingsContainer = new VBox();
 
     public ImageComponent() {
     }
@@ -30,42 +29,16 @@ public class ImageComponent extends ImageView {
         setPreserveRatio(true);
     }
 
-    public void renderRightSideContainer(Pane father, BooleanProperty appearenceIsSelected) {
-
-        // render inicial baseado no valor atual
-        if (appearenceIsSelected.get()) {
-            appearance(father);
-        } else {
-            settings(father);
-        }
-
-        appearenceIsSelected.addListener((o, old, v) -> {
-            if (v)
-                appearance(father);
-            else
-                settings(father);
-        });
-
-        VBox btnControls = new VBox(10);
-        btnControls.setUserData("bgControls");
-
-        father.getChildren().add(btnControls);
-    }
-
-    void appearance(Pane father) {
-        father.getChildren().clear(); // limpa o container
+    @Override
+    public void appearance(Pane father) {
 
         Text title = new Text("Image Appearance");
 
-        // exemplo: controles de cor, borda, etc.
-        // aqui poderia entrar um ColorPicker, por exemplo
-        appearenceContainer.getChildren().setAll(title);
-
-        father.getChildren().add(appearenceContainer);
+        father.getChildren().setAll(title);
     }
 
-    void settings(Pane father) {
-        father.getChildren().clear(); // limpa o container
+    @Override
+    public void settings(Pane father) {
 
         Text title = new Text("Image Settings");
 
@@ -89,9 +62,7 @@ public class ImageComponent extends ImageView {
             }
         });
 
-        settingsContainer.getChildren().setAll(title, widthRow, heightRow);
-        father.getChildren().add(settingsContainer);
-
+        father.getChildren().setAll(title, widthRow, heightRow);
     }
 
 }

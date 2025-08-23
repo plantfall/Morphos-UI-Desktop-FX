@@ -15,10 +15,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import my_app.components.ButtonComponent;
-import my_app.components.CanvaComponent;
-import my_app.components.ImageComponent;
-import my_app.components.TextComponent;
+import my_app.components.NodeWrapper;
+import my_app.data.ViewContract;
 
 public class RightSide extends VBox {
 
@@ -61,27 +59,23 @@ public class RightSide extends VBox {
 
         // Atualiza UI quando muda de seleção
 
-        selectedNode.addListener((obs, old, node) -> {
-
-            // ---- Container dinâmico (será trocado conforme o node selecionado) ----
-            dynamicContainer.getChildren().clear(); // limpa só o container dinâmico
-
-            if (node instanceof CanvaComponent n) {
-                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+        appearenceIsSelected.addListener((obs, old, node) -> {
+            Node currentNode = selectedNode.get();
+            if (currentNode instanceof ViewContract renderable) {
+                NodeWrapper nw = new NodeWrapper(renderable);
+                nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+            } else {
+                dynamicContainer.getChildren().setAll(new Text("Nenhuma configuração disponível"));
             }
+        });
+        // NodeWrapper
 
-            if (node instanceof ButtonComponent n) {
-                n.renderRightSideContainer(
-                        dynamicContainer, appearenceIsSelected);
-            }
-
-            if (node instanceof TextComponent n) {
-                n.activeNode(selectedNode);
-                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
-            }
-
-            if (node instanceof ImageComponent n) {
-                n.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+        selectedNode.addListener((obs, oldNode, newNode) -> {
+            if (newNode instanceof ViewContract renderable) {
+                NodeWrapper nw = new NodeWrapper(renderable);
+                nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+            } else {
+                dynamicContainer.getChildren().setAll(new Text("Nenhuma configuração disponível"));
             }
         });
 
