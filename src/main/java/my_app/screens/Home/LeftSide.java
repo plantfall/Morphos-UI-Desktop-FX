@@ -1,7 +1,9 @@
 package my_app.screens.Home;
 
+import java.util.ArrayList;
 import java.util.List;
-
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -21,9 +23,35 @@ import javafx.scene.text.Text;
 
 public class LeftSide extends VBox {
 
-    List<String> items = List.of("Text", "Button", "Input", "Image");
+    Text title = new Text("Visual Elements");
+    List<String> titles = List.of("Text", "Button", "Input", "Image");
+    IntegerProperty indexSelecionado = new SimpleIntegerProperty(-1);
+
+    List<Item> nodes = new ArrayList<>();
 
     public LeftSide(SimpleStringProperty optionSelected) {
+        config();
+
+        getChildren().add(title);
+
+        var spacer = new Region();
+        spacer.setMaxHeight(10);
+        spacer.setPrefHeight(10);
+
+        getChildren().add(spacer);
+
+        titles.forEach(title -> {
+            nodes.add(new Item(title, () -> {
+                optionSelected.set(title);
+                indexSelecionado.set(titles.indexOf(title));
+            }));
+        });
+
+        getChildren().addAll(nodes);
+
+    }
+
+    void config() {
         // Faz com que o LeftSide ocupe a altura toda
         setMaxHeight(Double.MAX_VALUE);
 
@@ -42,35 +70,43 @@ public class LeftSide extends VBox {
         // Espaçamento horizontal entre conteúdo e borda
         setPadding(new Insets(0, 10, 0, 10)); // top, right, bottom, left
 
-        var title = new Text("Visual Elements");
-
         title.setFont(Font.font(19));
         title.setFill(Color.web("#BCCCDC"));
+    }
 
-        getChildren().add(title);
-
-        var spacer = new Region();
-        spacer.setMaxHeight(10);
-        spacer.setPrefHeight(10);
-
-        getChildren().add(spacer);
-
-        items.forEach(it -> {
-
-            var label = new Label(it);
+    class Item extends HBox {
+        public Item(String name, Runnable function) {
+            var label = new Label(name);
             label.setFont(Font.font(18));
             label.setStyle("-fx-text-fill: #F8FAFC;");
 
-            var itemContainer = new HBox(label);
+            getChildren().add(label);
 
-            itemContainer.setOnMouseEntered(e -> itemContainer.setStyle("-fx-background-color: lightblue;"));
-            itemContainer.setOnMouseExited(e -> itemContainer.setStyle("-fx-background-color: transparent;"));
-            itemContainer.setOnMouseClicked(ev -> optionSelected.set(it));
+            setOnMouseClicked(ev -> {
+                // limpa todos
+                nodes.forEach(n -> n.setStyle("-fx-background-color: transparent;"));
 
-            itemContainer.setPadding(new Insets(5));
+                // pinta o atual imediatamente
+                setStyle("-fx-background-color:#3B38A0;");
 
-            getChildren().add(itemContainer);
-        });
+                // notifica a lógica externa
+                function.run();
+            });
 
+            setOnMouseEntered(e -> {
+                if (indexSelecionado.get() != nodes.indexOf(this)) {
+                    setStyle("-fx-background-color: lightblue;");
+                }
+            });
+
+            setOnMouseExited(e -> {
+                if (indexSelecionado.get() != nodes.indexOf(this)) {
+                    setStyle("-fx-background-color: transparent;");
+                }
+            });
+
+            setPadding(new Insets(5));
+        }
     }
+
 }

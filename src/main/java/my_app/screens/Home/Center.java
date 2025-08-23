@@ -1,9 +1,7 @@
 package my_app.screens.Home;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import my_app.components.CanvaComponent;
 import my_app.screens.Home.Home.VisualNodeCallback;

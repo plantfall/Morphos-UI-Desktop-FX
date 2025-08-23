@@ -50,11 +50,13 @@ public class App extends Application {
         }
 
         // Botão para ir para outra scene
-        var btnData = new Button("Data");
+        // var btnData = new Button("Data");
 
         // Cena principal
-        HBox mainView = new HBox(btnData, new Home());
-        HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
+        // HBox mainView = new HBox(btnData, new Home());
+        // HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
+        HBox mainView = new HBox(new Home());
+        // HBox.setHgrow(mainView.getChildren().get(0), Priority.ALWAYS);
 
         Scene mainScene = new Scene(mainView, 1200, 650);
 
@@ -62,7 +64,7 @@ public class App extends Application {
         DataScene dataScene = new DataScene(primaryStage, mainScene);
 
         // Botão muda para DataScene
-        btnData.setOnAction(e -> primaryStage.setScene(dataScene));
+        // btnData.setOnAction(e -> primaryStage.setScene(dataScene));
 
         setup(mainScene); // seta ícone, título etc.
         this.primaryStage.show();
