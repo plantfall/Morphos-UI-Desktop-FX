@@ -1,0 +1,26 @@
+.button {
+  -fx-background-radius: 7px;
+  -fx-padding: 5 12 5 12;
+  -fx-text-fill: white;
+  -fx-cursor: hand;
+}
+
+.button:hover {
+  -fx-opacity: 0.85;
+}
+
+#btnAppearence {
+  -fx-background-color: #3b38a0;
+}
+
+#btnLayout {
+  -fx-background-color: #003161;
+}
+
+/* #btnAppearence:hover {
+  -fx-background-color: #001070;
+}
+
+#btnLayout:hover {
+  -fx-background-color: #004080;
+} */

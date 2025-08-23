@@ -11,10 +11,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import my_app.App;
 import my_app.components.NodeWrapper;
 import my_app.data.ViewContract;
 
@@ -27,6 +29,7 @@ public class RightSide extends VBox {
     Button btnLayout = new Button("Layout");
 
     HBox top = new HBox(btnAppearence, btnLayout);
+    HBox topWrapper = new HBox(top); // wrapper só para não se esticar
 
     Text title = new Text();
 
@@ -40,7 +43,7 @@ public class RightSide extends VBox {
         btnAppearence.setOnAction(ev -> appearenceIsSelected.set(true));
         btnLayout.setOnAction(ev -> appearenceIsSelected.set(false));
 
-        getChildren().add(top);
+        getChildren().add(topWrapper);
 
         title.textProperty().bind(Bindings
                 .createStringBinding(() -> appearenceIsSelected.get() ? "Appearence Settings" : "Layout Settings",
@@ -84,9 +87,24 @@ public class RightSide extends VBox {
 
     void config() {
 
+        top.setSpacing(0);
+
+        HBox.setHgrow(top, Priority.NEVER);
+        top.setMaxWidth(Region.USE_COMPUTED_SIZE); // largura baseada nos filhos
+
+        top.setStyle("-fx-background-color:#003161;  -fx-background-radius: 7px");
+
+        appearenceIsSelected.addListener((obs, old, newVal) -> {
+            if (newVal) {
+                top.setStyle("-fx-background-color:#003161;  -fx-background-radius: 7px");
+            } else {
+                top.setStyle("-fx-background-color:#3B38A0;  -fx-background-radius: 7px");
+            }
+        });
+
         setMaxHeight(Double.MAX_VALUE);
         setBackground(new Background(
-                new BackgroundFill(Color.web("#17153B"), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#232C33"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         setPrefWidth(width);
         setMinWidth(width);
@@ -95,5 +113,11 @@ public class RightSide extends VBox {
         setPadding(new Insets(20));
 
         title.setFill(Color.WHITE);
+
+        btnAppearence.setId("btnAppearence");
+        btnLayout.setId("btnLayout");
+
+        btnAppearence.setFont(App.FONT_BOLD);
+        btnLayout.setFont(App.FONT_BOLD);
     }
 }

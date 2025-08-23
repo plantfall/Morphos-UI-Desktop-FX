@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import my_app.components.CanvaComponent;
 
 public class Home extends BorderPane {
     SimpleStringProperty selectedOption = new SimpleStringProperty("");
@@ -23,7 +24,7 @@ public class Home extends BorderPane {
     {
         setLeft(new LeftSide(selectedOption));
 
-        var center = new Center(selectedOption, currentNode -> selectNode(currentNode));
+        var center = new CanvaComponent(selectedOption, currentNode -> selectNode(currentNode));
 
         setCenter(center);
         setRight(new RightSide(visualNodeSelected));

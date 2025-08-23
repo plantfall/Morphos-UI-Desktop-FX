@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import my_app.App;
 
 public class LeftSide extends VBox {
 
@@ -68,9 +69,9 @@ public class LeftSide extends VBox {
                 )));
 
         // Espaçamento horizontal entre conteúdo e borda
-        setPadding(new Insets(0, 10, 0, 10)); // top, right, bottom, left
+        setPadding(new Insets(10, 10, 0, 10)); // top, right, bottom, left
 
-        title.setFont(Font.font(19));
+        title.setFont(App.FONT_BOLD);
         title.setFill(Color.web("#BCCCDC"));
     }
 
@@ -79,6 +80,8 @@ public class LeftSide extends VBox {
             var label = new Label(name);
             label.setFont(Font.font(18));
             label.setStyle("-fx-text-fill: #F8FAFC;");
+
+            label.setFont(App.FONT_BOLD);
 
             getChildren().add(label);
 

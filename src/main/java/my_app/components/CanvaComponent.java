@@ -34,11 +34,8 @@ public class CanvaComponent extends Pane implements ViewContract {
                         null,
                         new BorderWidths(1))));
 
-        setHeight(600);
-        setMaxHeight(600);
-
-        setPrefWidth(700); // largura padrão
-        setMaxWidth(Double.MAX_VALUE); // pode expandir
+        setMaxHeight(Double.MAX_VALUE);
+        setMaxWidth(Double.MAX_VALUE);
 
         optionSelected.addListener((obs, old, v) -> {
             if (v == null || v.isBlank())

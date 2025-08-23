@@ -9,20 +9,31 @@ import java.util.Map;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import my_app.screens.Home.Home;
 import my_app.screens.scenes.DataScene.DataScene;
-import toolkit.theme.MaterialTheme;
 
 public class App extends Application {
 
     Stage primaryStage;
-    MaterialTheme theme = MaterialTheme.getInstance();
+
+    public static Font FONT_REGULAR;
+    public static Font FONT_MEDIUM;
+    public static Font FONT_SEMIBOLD;
+    public static Font FONT_BOLD;
+
+    @Override
+    public void init() {
+        FONT_REGULAR = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Regular.ttf"), 14);
+        FONT_MEDIUM = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Medium.ttf"), 14);
+        FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);
+        FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,7 +67,7 @@ public class App extends Application {
         // HBox mainView = new HBox(btnData, new Home());
         // HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
         HBox mainView = new HBox(new Home());
-        // HBox.setHgrow(mainView.getChildren().get(0), Priority.ALWAYS);
+        HBox.setHgrow(mainView.getChildren().get(0), Priority.ALWAYS);
 
         Scene mainScene = new Scene(mainView, 1200, 650);
 
@@ -93,8 +104,10 @@ public class App extends Application {
         primaryStage.getIcons().add(new Image(
                 getClass().getResourceAsStream("/assets/app_ico_window_32_32.png")));
 
-        // load fonts
-        theme.loadAllFonts();
+        // styles
+        scene.getStylesheets().add(
+                getClass().getResource("/global_styles.css")
+                        .toExternalForm());
 
         this.primaryStage.setTitle("Basic Desktop Builder");
         this.primaryStage.setScene(scene);
