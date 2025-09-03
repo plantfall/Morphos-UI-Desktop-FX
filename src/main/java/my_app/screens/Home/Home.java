@@ -2,6 +2,7 @@ package my_app.screens.Home;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import my_app.components.CanvaComponent;
@@ -10,6 +11,8 @@ public class Home extends BorderPane {
     SimpleStringProperty selectedOption = new SimpleStringProperty("");
 
     SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
+
+    private CanvaComponent canva;
 
     @FunctionalInterface
     public interface VisualNodeCallback {
@@ -24,12 +27,16 @@ public class Home extends BorderPane {
     {
         setLeft(new LeftSide(selectedOption));
 
-        var center = new CanvaComponent(selectedOption, currentNode -> selectNode(currentNode));
+        this.canva = new CanvaComponent(selectedOption, currentNode -> selectNode(currentNode));
 
-        setCenter(center);
+        setCenter(this.canva);
         setRight(new RightSide(visualNodeSelected));
 
         // setStyle("-fx-background-color:red");
 
+    }
+
+    public ObservableList<Node> canvaChildren() {
+        return canva.getChildren();
     }
 }

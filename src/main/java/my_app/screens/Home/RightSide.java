@@ -104,7 +104,7 @@ public class RightSide extends VBox {
 
         setMaxHeight(Double.MAX_VALUE);
         setBackground(new Background(
-                new BackgroundFill(Color.web("#232C33"), CornerRadii.EMPTY, Insets.EMPTY)));
+                new BackgroundFill(Color.web("#18122B"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         setPrefWidth(width);
         setMinWidth(width);

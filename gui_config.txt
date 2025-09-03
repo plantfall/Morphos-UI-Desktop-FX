@@ -1,4 +1,4 @@
-monitor=1
+monitor=0
 x=50
 y=10
 width=1200
