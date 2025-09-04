@@ -1,12 +1,10 @@
 package my_app.components;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -20,7 +18,6 @@ import javafx.scene.text.Text;
 
 public class ButtonBorderWidth extends HBox {
 
-    ColorPicker colorPicker = new ColorPicker(Color.WHITE);
     Text title = new Text("Border width:");
     TextField tf = new TextField();
 
@@ -52,11 +49,6 @@ public class ButtonBorderWidth extends HBox {
             }
         });
 
-        colorPicker.setOnAction(e -> {
-            Color c = colorPicker.getValue();
-            updateBackground(node, c, getRadius(node));
-        });
-
         getChildren().addAll(title, tf);
 
     }
@@ -82,18 +74,6 @@ public class ButtonBorderWidth extends HBox {
             return b.getBorder().getStrokes().get(0).getWidths().getTop();
         }
         return 0;
-    }
-
-    // Se mudar só a cor → mantém o radius.
-    // Se mudar só o radius → mantém a cor.
-    // Se mudar os dois → funciona direitinho.
-    // Função utilitária para recriar o background do botão
-    private void updateBackground(Button b, Color color, double radius) {
-        b.setBackground(new javafx.scene.layout.Background(
-                new javafx.scene.layout.BackgroundFill(
-                        color != null ? color : Color.TRANSPARENT,
-                        new CornerRadii(radius),
-                        Insets.EMPTY)));
     }
 
     private double getRadius(Button b) {

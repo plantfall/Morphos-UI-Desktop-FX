@@ -32,7 +32,7 @@ public class ButtonBorderRadius extends HBox {
         ColorPicker borderColorPicker = new ColorPicker(borderColor);
         double borderRadius = getRadius(node);
 
-        // // inicializa borderRadius do Button no texfield
+        // Inicializa borderRadius do Button no TextField
         tf.setText(String.valueOf(borderRadius));
 
         tf.textProperty().addListener((obs, old, newVal) -> {
@@ -40,7 +40,7 @@ public class ButtonBorderRadius extends HBox {
                 try {
                     double v = Double.parseDouble(newVal);
 
-                    // border
+                    // Atualiza a borda
                     BorderStroke stroke = new BorderStroke(
                             borderColorPicker.getValue(),
                             BorderStrokeStyle.SOLID,
@@ -48,8 +48,8 @@ public class ButtonBorderRadius extends HBox {
                             new BorderWidths(getBorderWidth(node)));
                     node.setBorder(new Border(stroke));
 
+                    // Atualiza o fundo, reaproveitando a cor atual
                     var bg = node.getBackground();
-                    // background (reaproveita cor atual)
                     Color currentBg = Color.TRANSPARENT;
                     if (node.getBackground() != null && !bg.getFills().isEmpty()) {
                         Paint fill = bg.getFills().get(0).getFill();
@@ -70,7 +70,6 @@ public class ButtonBorderRadius extends HBox {
         });
 
         getChildren().addAll(title, tf);
-
     }
 
     void config() {
@@ -96,16 +95,38 @@ public class ButtonBorderRadius extends HBox {
         return 0;
     }
 
-    // Se mudar só a cor → mantém o radius.
-    // Se mudar só o radius → mantém a cor.
-    // Se mudar os dois → funciona direitinho.
-    // Função utilitária para recriar o background do botão
+    // Função para atualizar tanto o background quanto a borda
     private void updateBackground(Button b, Color color, double radius) {
-        b.setBackground(new javafx.scene.layout.Background(
-                new javafx.scene.layout.BackgroundFill(
-                        color != null ? color : Color.TRANSPARENT,
-                        new CornerRadii(radius),
-                        Insets.EMPTY)));
+        // Preserva o padding atual
+        Insets currentPadding = b.getPadding();
+
+        // Atualiza o estilo (background)
+        String existingStyle = b.getStyle();
+        String colorStyle = "-fx-background-color: " + String.format("#%02x%02x%02x",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+        String radiusStyle = "-fx-background-radius: " + radius + ";";
+
+        // Se já houver a cor de fundo no estilo, substitui
+        if (existingStyle.contains("-fx-background-color")) {
+            existingStyle = existingStyle.replaceFirst("(-fx-background-color: [^;]+);", colorStyle + ";");
+        } else {
+            existingStyle += " " + colorStyle + ";";
+        }
+
+        // Se já houver o raio de borda no estilo, substitui
+        if (existingStyle.contains("-fx-background-radius")) {
+            existingStyle = existingStyle.replaceFirst("(-fx-background-radius: [^;]+);", radiusStyle);
+        } else {
+            existingStyle += " " + radiusStyle;
+        }
+
+        // Aplique o estilo com a cor e o raio
+        b.setStyle(existingStyle);
+
+        // Restaure o padding após alterar o estilo
+        b.setPadding(currentPadding);
     }
 
     private double getRadius(Button b) {
@@ -114,5 +135,4 @@ public class ButtonBorderRadius extends HBox {
         }
         return 0;
     }
-
 }

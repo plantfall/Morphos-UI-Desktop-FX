@@ -1,14 +1,9 @@
 package my_app.components;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.text.FontWeight;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.control.Button;
-import javafx.scene.layout.CornerRadii;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -14,11 +14,14 @@ public class ButtonComponent extends Button implements ViewContract {
 
     public ButtonComponent() {
         super();
+
+        setStyle("-fx-background-color:#664db3;-fx-padding: 10px");
         currentState.set(this); // 👈 sempre aponta para o próprio botão
     }
 
     public ButtonComponent(String content) {
         super(content);
+        setStyle("-fx-background-color:#664db3;-fx-padding: 10px");
         currentState.set(this);
     }
 

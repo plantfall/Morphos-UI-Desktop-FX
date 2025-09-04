@@ -1,6 +1,6 @@
 .button {
-  -fx-background-radius: 7px;
-  -fx-padding: 5 12 5 12;
+  /* -fx-background-radius: 7px; */
+  /* -fx-padding: 5 12 5 12; */
   -fx-text-fill: white;
   -fx-cursor: hand;
 }

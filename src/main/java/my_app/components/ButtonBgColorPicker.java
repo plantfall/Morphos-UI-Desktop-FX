@@ -64,11 +64,36 @@ public class ButtonBgColorPicker extends HBox {
     // Se mudar os dois → funciona direitinho.
     // Função utilitária para recriar o background do botão
     private void updateBackground(Button b, Color color, double radius) {
-        b.setBackground(new javafx.scene.layout.Background(
-                new javafx.scene.layout.BackgroundFill(
-                        color != null ? color : Color.TRANSPARENT,
-                        new CornerRadii(radius),
-                        Insets.EMPTY)));
+        // Preserva o padding atual
+        Insets currentPadding = b.getPadding();
+
+        // Atualiza o estilo (background)
+        String existingStyle = b.getStyle();
+        String colorStyle = "-fx-background-color: " + String.format("#%02x%02x%02x",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+        String radiusStyle = "-fx-background-radius: " + radius + ";";
+
+        // Se já houver a cor de fundo no estilo, substitui
+        if (existingStyle.contains("-fx-background-color")) {
+            existingStyle = existingStyle.replaceFirst("(-fx-background-color: [^;]+);", colorStyle + ";");
+        } else {
+            existingStyle += " " + colorStyle + ";";
+        }
+
+        // Se já houver o raio de borda no estilo, substitui
+        if (existingStyle.contains("-fx-background-radius")) {
+            existingStyle = existingStyle.replaceFirst("(-fx-background-radius: [^;]+);", radiusStyle);
+        } else {
+            existingStyle += " " + radiusStyle;
+        }
+
+        // Aplique o estilo com a cor e o raio
+        b.setStyle(existingStyle);
+
+        // Restaure o padding após alterar o estilo
+        b.setPadding(currentPadding);
     }
 
     private double getRadius(Button b) {
