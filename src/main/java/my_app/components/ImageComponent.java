@@ -21,8 +21,8 @@ public class ImageComponent extends ImageView implements ViewContract {
     public ImageComponent() {
     }
 
-    public ImageComponent(InputStream content) {
-        super(new Image(content));
+    public ImageComponent(String sourcePath) {
+        super(new Image(sourcePath));
 
         setFitWidth(size);
         setFitHeight(size);

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,6 +21,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -91,7 +96,7 @@ public class App extends Application {
                 .append("import javafx.scene.Scene;\n")
                 .append("import javafx.scene.control.*;\n")
                 .append("import javafx.scene.text.*;\n")
-                .append("import javafx.scene.image.ImageView;\n")
+                .append("import javafx.scene.image.*;\n")
                 .append("import javafx.scene.layout.*;\n")
                 .append("import javafx.scene.paint.Color;\n")
                 .append("import javafx.stage.Stage;\n\n")
@@ -105,16 +110,50 @@ public class App extends Application {
             if (node instanceof Button) {
                 var component = (Button) node;
 
+                String text = component.getText();
+                Font font = component.getFont();
+                Background bg = component.getBackground();
+                Border border = component.getBorder();
+                Insets padding = component.getPadding();
+
+                // fundo
+                double borderRadius = 0;
+                Color fill = Color.WHEAT;
+
+                if (!bg.getFills().isEmpty()) {
+                    BackgroundFill fill_ = bg.getFills().get(0);
+                    fill = (Color) fill_.getFill();
+                    borderRadius = fill_.getRadii().getTopLeftHorizontalRadius();
+                }
+
+                // borda
+                double borderWidth = 0;
+                if (border != null && border.getStrokes() != null && !border.getStrokes().isEmpty()) {
+                    BorderStroke stroke = border.getStrokes().get(0);
+                    borderWidth = stroke.getWidths().getTop();
+                }
+
                 String nodeCode = "        Button item_#d = new Button(\"#content\");\n" +
                         "        item_#d.setLayoutX(#lx);\n" +
                         "        item_#d.setLayoutY(#ly);\n" +
+                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL;\");\n"
+                        +
                         "        root.getChildren().add(item_#d);\n";
 
                 nodeCode = nodeCode
-                        .replace("#content", component.getText())
+                        .replace("#content", text)
                         .replace("#d", String.valueOf(i))
                         .replace("#lx", String.valueOf(component.getLayoutX()))
-                        .replace("#ly", String.valueOf(component.getLayoutY()));
+                        .replace("#ly", String.valueOf(component.getLayoutY()))
+                        .replace("#hex", String.valueOf(toHex(fill)))
+                        .replace("#radius", String.valueOf(borderRadius))
+                        .replace("#borderWidth", String.valueOf(borderWidth))
+                        .replace("#paddingT", String.valueOf(padding.getTop()))
+                        .replace("#paddingR", String.valueOf(padding.getRight()))
+                        .replace("#paddingB", String.valueOf(padding.getBottom()))
+                        .replace("#paddingL", String.valueOf(padding.getLeft()))
+
+                ;
 
                 code.append(nodeCode);
             }
@@ -152,16 +191,33 @@ public class App extends Application {
 
             if (node instanceof ImageView) {
                 var component = (ImageView) node;
+                Image img = component.getImage();
 
-                String nodeCode = "        ImageView item_#d = new ImageView();\n" +
-                        "        item_#d.setLayoutX(#lx);\n" +
-                        "        item_#d.setLayoutY(#ly);\n" +
-                        "        root.getChildren().add(item_#d);\n";
+                String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
+                double fw = component.getFitWidth();
+                double fh = component.getFitHeight();
+
+                String nodeCode = """
+                        ImageView item_#d = new ImageView();
+                        item_#d.setLayoutX(#lx);
+                        item_#d.setLayoutY(#ly);
+                        item_#d.setFitWidth(#fw);
+                        item_#d.setFitHeight(#fh);
+                        item_#d.setPreserveRatio(%s);
+                        item_#d.setSmooth(%s);
+                        %s
+                        root.getChildren().add(item_#d);
+                        """.formatted(
+                        component.isPreserveRatio(),
+                        component.isSmooth(),
+                        url.isEmpty() ? "" : "item_" + i + ".setImage(new Image(\"" + url + "\"));");
 
                 nodeCode = nodeCode
                         .replace("#d", String.valueOf(i))
                         .replace("#lx", String.valueOf(component.getLayoutX()))
-                        .replace("#ly", String.valueOf(component.getLayoutY()));
+                        .replace("#ly", String.valueOf(component.getLayoutY()))
+                        .replace("#fw", String.valueOf(fw))
+                        .replace("#fh", String.valueOf(fh));
 
                 code.append(nodeCode);
             }
@@ -187,6 +243,13 @@ public class App extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    private String toHex(Color color) {
+        return String.format("#%02x%02x%02x",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
     private void definirJanelaFromArquivo() {

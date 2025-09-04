@@ -51,7 +51,7 @@ public class CanvaComponent extends Pane implements ViewContract {
             } else if (v.equalsIgnoreCase("text")) {
                 node = new TextComponent(content);
             } else if (v.equalsIgnoreCase("image")) {
-                node = new ImageComponent(getClass().getResourceAsStream("/assets/images/mago.jpg"));
+                node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
             }
 
             if (node != null) {
