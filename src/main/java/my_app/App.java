@@ -34,6 +34,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import my_app.data.Commons;
 import my_app.screens.Home.Home;
 import my_app.screens.scenes.DataScene.DataScene;
 
@@ -116,6 +117,11 @@ public class App extends Application {
                 Border border = component.getBorder();
                 Insets padding = component.getPadding();
 
+                // Extraindo informações sobre a fonte
+                String fontFamily = font.getFamily();
+                double fontSize = font.getSize();
+                String fontStyle = font.getStyle();
+
                 // fundo
                 double borderRadius = 0;
                 Color fill = Color.WHEAT;
@@ -136,7 +142,7 @@ public class App extends Application {
                 String nodeCode = "        Button item_#d = new Button(\"#content\");\n" +
                         "        item_#d.setLayoutX(#lx);\n" +
                         "        item_#d.setLayoutY(#ly);\n" +
-                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL;\");\n"
+                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL; -fx-font-family: '#fontFamily'; -fx-font-size: #fontSize; -fx-font-style: #fontStyle;\");\n"
                         +
                         "        root.getChildren().add(item_#d);\n";
 
@@ -145,13 +151,16 @@ public class App extends Application {
                         .replace("#d", String.valueOf(i))
                         .replace("#lx", String.valueOf(component.getLayoutX()))
                         .replace("#ly", String.valueOf(component.getLayoutY()))
-                        .replace("#hex", String.valueOf(toHex(fill)))
+                        .replace("#hex", String.valueOf(Commons.ColortoHex(fill)))
                         .replace("#radius", String.valueOf(borderRadius))
                         .replace("#borderWidth", String.valueOf(borderWidth))
                         .replace("#paddingT", String.valueOf(padding.getTop()))
                         .replace("#paddingR", String.valueOf(padding.getRight()))
                         .replace("#paddingB", String.valueOf(padding.getBottom()))
                         .replace("#paddingL", String.valueOf(padding.getLeft()))
+                        .replace("#fontFamily", fontFamily)
+                        .replace("#fontSize", String.valueOf(fontSize))
+                        .replace("#fontStyle", fontStyle)
 
                 ;
 
@@ -243,13 +252,6 @@ public class App extends Application {
             e.printStackTrace();
         }
 
-    }
-
-    private String toHex(Color color) {
-        return String.format("#%02x%02x%02x",
-                (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
     }
 
     private void definirJanelaFromArquivo() {

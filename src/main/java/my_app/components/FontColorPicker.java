@@ -2,13 +2,14 @@ package my_app.components;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import my_app.components.buttonComponent.ButtonComponent;
+import my_app.data.Commons;
 
 public class FontColorPicker extends HBox {
 
@@ -24,8 +25,15 @@ public class FontColorPicker extends HBox {
 
         Node node = selectedNode.get();
 
-        if (node instanceof ButtonComponent b) {
-            colorPicker.setValue((Color) b.getTextFill());
+        if (node instanceof ButtonComponent) {
+
+            String textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-text-fill");
+
+            if (textFill.isEmpty()) {
+                textFill = "white";
+            }
+
+            colorPicker.setValue(Color.web(textFill));
         }
 
         else if (node instanceof TextField t) {
@@ -45,15 +53,26 @@ public class FontColorPicker extends HBox {
 
         colorPicker.setOnAction(e -> {
             Node n = selectedNode.get();
+            String existingStyle = node.getStyle();
+
             Color color = colorPicker.getValue();
 
-            if (n instanceof ButtonComponent b) {
-                b.setTextFill(color);
-            } else if (n instanceof TextField t) {
-                t.setStyle("-fx-text-fill: " + AppearanceFactory.toRgbString(color) + ";");
-            } else if (n instanceof TextComponent txt) {
-                txt.setFill(color);
+            if (n instanceof ButtonComponent) {
+
+                String newStyle = Commons.UpdateEspecificStyle(existingStyle, "-fx-text-fill",
+                        Commons.ColortoHex(color));
+
+                n.setStyle(newStyle);
+
+            } else if (n instanceof TextField) {
+                n.setStyle("-fx-text-fill: " + AppearanceFactory.toRgbString(color) + ";");
+            } else if (n instanceof TextComponent) {
+                String newStyle = Commons.UpdateEspecificStyle(existingStyle, "-fx-fill",
+                        Commons.ColortoHex(color));
+
+                n.setStyle(newStyle);
             }
+
         });
 
         getChildren().addAll(fontColorText, colorPicker);

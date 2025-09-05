@@ -22,6 +22,10 @@ public class Home extends BorderPane {
     private void selectNode(Node node) {
         visualNodeSelected.set(node);
         System.out.println("Selecionado: " + node);
+
+        System.out.println("estilo do compponente selecionado: ");
+        System.out.println(node.getStyle());
+
     }
 
     {

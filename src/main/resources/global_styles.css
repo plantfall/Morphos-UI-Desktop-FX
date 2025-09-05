@@ -1,6 +1,4 @@
 .button {
-  /* -fx-background-radius: 7px; */
-  /* -fx-padding: 5 12 5 12; */
   -fx-text-fill: white;
   -fx-cursor: hand;
 }
@@ -11,10 +9,14 @@
 
 #btnAppearence {
   -fx-background-color: #3b38a0;
+  -fx-padding: 5 12 5 12;
+  -fx-text-fill: white;
 }
 
 #btnLayout {
   -fx-background-color: #003161;
+  -fx-padding: 5 12 5 12;
+  -fx-text-fill: white;
 }
 
 /* #btnAppearence:hover {

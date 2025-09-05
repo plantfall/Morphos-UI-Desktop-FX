@@ -3,6 +3,7 @@ package my_app.components;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.text.FontWeight;
+import my_app.components.buttonComponent.ButtonComponent;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;

@@ -18,6 +18,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import my_app.components.buttonComponent.ButtonComponent;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 

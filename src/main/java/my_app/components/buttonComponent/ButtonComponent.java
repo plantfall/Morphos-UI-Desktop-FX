@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.components.buttonComponent;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -6,6 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import my_app.components.FontColorPicker;
+import my_app.components.FontSizeComponent;
+import my_app.components.FontWeightComponent;
+import my_app.components.TextContentComponent;
+import my_app.data.Commons;
 import my_app.data.ViewContract;
 
 public class ButtonComponent extends Button implements ViewContract {
@@ -14,15 +19,19 @@ public class ButtonComponent extends Button implements ViewContract {
 
     public ButtonComponent() {
         super();
-
-        setStyle("-fx-background-color:#664db3;-fx-padding: 10px");
-        currentState.set(this); // 👈 sempre aponta para o próprio botão
+        config();
     }
 
     public ButtonComponent(String content) {
         super(content);
-        setStyle("-fx-background-color:#664db3;-fx-padding: 10px");
-        currentState.set(this);
+        config();
+    }
+
+    void config() {
+        setStyle("-fx-background-color:%s;-fx-padding: %s;".formatted(Commons.ButtonBgColorDefault,
+                Commons.ButtonPaddingDefault));
+
+        currentState.set(this); // 👈 sempre aponta para o próprio botão
     }
 
     @Override
