@@ -108,19 +108,24 @@ public class App extends Application {
 
         for (int i = 0; i < children.size(); i++) {
             Node node = children.get(i);
+            String style = node.getStyle();
+
             if (node instanceof Button) {
                 var component = (Button) node;
 
                 String text = component.getText();
                 Font font = component.getFont();
                 Background bg = component.getBackground();
-                Border border = component.getBorder();
+
                 Insets padding = component.getPadding();
 
                 // Extraindo informações sobre a fonte
                 String fontFamily = font.getFamily();
-                double fontSize = font.getSize();
-                String fontStyle = font.getStyle();
+
+                String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
+                String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
+                String textFill = Commons.getValueOfSpecificField(style, "-fx-text-fill");
+                String borderWidth = Commons.getValueOfSpecificField(style, "-fx-border-width");
 
                 // fundo
                 double borderRadius = 0;
@@ -132,17 +137,10 @@ public class App extends Application {
                     borderRadius = fill_.getRadii().getTopLeftHorizontalRadius();
                 }
 
-                // borda
-                double borderWidth = 0;
-                if (border != null && border.getStrokes() != null && !border.getStrokes().isEmpty()) {
-                    BorderStroke stroke = border.getStrokes().get(0);
-                    borderWidth = stroke.getWidths().getTop();
-                }
-
                 String nodeCode = "        Button item_#d = new Button(\"#content\");\n" +
                         "        item_#d.setLayoutX(#lx);\n" +
                         "        item_#d.setLayoutY(#ly);\n" +
-                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL; -fx-font-family: '#fontFamily'; -fx-font-size: #fontSize; -fx-font-style: #fontStyle;\");\n"
+                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL; -fx-font-family: '#fontFamily'; -fx-font-size: #fontSize; -fx-font-weight: #fW; -fx-text-fill: #tF;\");\n"
                         +
                         "        root.getChildren().add(item_#d);\n";
 
@@ -160,7 +158,8 @@ public class App extends Application {
                         .replace("#paddingL", String.valueOf(padding.getLeft()))
                         .replace("#fontFamily", fontFamily)
                         .replace("#fontSize", String.valueOf(fontSize))
-                        .replace("#fontStyle", fontStyle)
+                        .replace("#fW", fontWeight)
+                        .replace("#tF", textFill)
 
                 ;
 

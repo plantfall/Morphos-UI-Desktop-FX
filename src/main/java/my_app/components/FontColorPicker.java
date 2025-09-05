@@ -14,68 +14,58 @@ import my_app.data.Commons;
 public class FontColorPicker extends HBox {
 
     ColorPicker colorPicker = new ColorPicker(Color.WHITE);
-    Text fontColorText = new Text("Font Color:");
+    Text title = new Text("Font Color:");
 
     public FontColorPicker(ObjectProperty<Node> selectedNode) {
 
-        fontColorText.setFont(Font.font(14));
-        fontColorText.setFill(Color.WHITE);
-
-        setSpacing(10);
+        config();
 
         Node node = selectedNode.get();
 
-        if (node instanceof ButtonComponent) {
+        String textFill = "";
 
-            String textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-text-fill");
-
-            if (textFill.isEmpty()) {
-                textFill = "white";
-            }
-
-            colorPicker.setValue(Color.web(textFill));
+        if (node instanceof ButtonComponent || node instanceof TextField) {
+            textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-text-fill");
+        } else if (node instanceof TextComponent) {
+            textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-fill");
         }
 
-        else if (node instanceof TextField t) {
-            // TextField não tem getter, tenta pegar do CSS
-            String style = t.getStyle();
-            Color currentColor = Color.BLACK;
-            if (style != null && style.contains("-fx-text-fill:")) {
-                String colorStr = style.substring(style.indexOf("-fx-text-fill:") + 14).replace(";", "").trim();
-                currentColor = Color.web(colorStr);
-            }
-            colorPicker.setValue(currentColor);
-
-        } else if (node instanceof TextComponent txt) {
-
-            colorPicker.setValue((Color) txt.getFill());
+        if (textFill.isEmpty()) {
+            textFill = Commons.ButtonTextColorDefault;
         }
+
+        colorPicker.setValue(Color.web(textFill));
 
         colorPicker.setOnAction(e -> {
-            Node n = selectedNode.get();
+
             String existingStyle = node.getStyle();
 
             Color color = colorPicker.getValue();
 
-            if (n instanceof ButtonComponent) {
+            if (node instanceof ButtonComponent || node instanceof TextField) {
 
                 String newStyle = Commons.UpdateEspecificStyle(existingStyle, "-fx-text-fill",
                         Commons.ColortoHex(color));
 
-                n.setStyle(newStyle);
+                node.setStyle(newStyle);
 
-            } else if (n instanceof TextField) {
-                n.setStyle("-fx-text-fill: " + AppearanceFactory.toRgbString(color) + ";");
-            } else if (n instanceof TextComponent) {
+            } else if (node instanceof TextComponent) {
                 String newStyle = Commons.UpdateEspecificStyle(existingStyle, "-fx-fill",
                         Commons.ColortoHex(color));
 
-                n.setStyle(newStyle);
+                node.setStyle(newStyle);
             }
 
         });
 
-        getChildren().addAll(fontColorText, colorPicker);
+        getChildren().addAll(title, colorPicker);
 
+    }
+
+    void config() {
+        title.setFont(Font.font(14));
+        title.setFill(Color.WHITE);
+
+        setSpacing(10);
     }
 }

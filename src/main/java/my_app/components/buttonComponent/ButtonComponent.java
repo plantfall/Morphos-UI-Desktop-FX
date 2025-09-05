@@ -28,8 +28,20 @@ public class ButtonComponent extends Button implements ViewContract {
     }
 
     void config() {
-        setStyle("-fx-background-color:%s;-fx-padding: %s;".formatted(Commons.ButtonBgColorDefault,
-                Commons.ButtonPaddingDefault));
+
+        setStyle(
+                "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
+                        .formatted(
+                                Commons.ButtonBgColorDefault,
+                                Commons.ButtonPaddingDefault,
+                                Commons.ButtonFontWeightDefault,
+                                Commons.ButtonRadiusDefault,
+                                Commons.ButtonRadiusDefault,
+                                Commons.ButtonTextColorDefault,
+                                Commons.ButtonFontSizeDefault,
+                                Commons.ButtonRadiusWidth
+                        //
+                        ));
 
         currentState.set(this); // 👈 sempre aponta para o próprio botão
     }

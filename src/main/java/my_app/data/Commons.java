@@ -7,9 +7,16 @@ import javafx.scene.paint.Color;
 
 public class Commons {
 
+    public static String FontWeightDefault = "normal";
+    public static String ItemTextFontSizeDefault = "14";
+
     public static String ButtonBgColorDefault = "#664db3";
     public static String ButtonPaddingDefault = "10";
-    public static String ItemTextFontSizeDefault = "14";
+    public static String ButtonFontWeightDefault = "normal";
+    public static String ButtonFontSizeDefault = "16";
+    public static String ButtonTextColorDefault = "white";
+    public static String ButtonRadiusDefault = "3";
+    public static String ButtonRadiusWidth = "0";
 
     public static String UpdateEspecificStyle(
             String currentStyle,
@@ -46,8 +53,9 @@ public class Commons {
 
         // Verifica se o campo está presente
         if (currentStyle.contains(targetField)) {
-            // Expressão regular para capturar o valor do campo
-            String regex = targetField + ": ([^;]+);";
+            // Expressão regular para capturar o valor do campo, tratando espaços extras e
+            // valores de cor
+            String regex = targetField + ":\\s*([^;]+);"; // \\s* permite espaços extras
             Pattern pattern = java.util.regex.Pattern.compile(regex);
             Matcher matcher = pattern.matcher(currentStyle);
 

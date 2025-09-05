@@ -9,3 +9,4 @@ dist
 *.log
 app_base/app.txt
 *.db
+src/main/java/my_app/GeneratedUI.java

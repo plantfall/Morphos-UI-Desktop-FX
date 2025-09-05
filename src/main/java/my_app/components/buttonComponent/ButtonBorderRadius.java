@@ -23,7 +23,7 @@ public class ButtonBorderRadius extends HBox {
         String currentBorderRadius = Commons.getValueOfSpecificField(node.getStyle(), "-fx-border-radius");
 
         if (currentBorderRadius.isEmpty()) {
-            currentBorderRadius = "0px";
+            currentBorderRadius = Commons.ButtonRadiusDefault;
         }
 
         // Inicializa o borderRadius do Button no TextField
