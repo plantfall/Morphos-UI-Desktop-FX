@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import my_app.data.Commons;
 import my_app.data.ViewContract;
 
 public class TextComponent extends Text implements ViewContract {
@@ -12,6 +13,13 @@ public class TextComponent extends Text implements ViewContract {
 
     public TextComponent(String content) {
         super(content);
+
+        setStyle("-fx-fill:black;-fx-font-size:%s;"
+                .formatted(
+                        Commons.FontSizeDefault
+                //
+                ));
+
         currentState.set(this);
     }
 
