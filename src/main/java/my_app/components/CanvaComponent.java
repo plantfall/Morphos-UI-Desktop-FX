@@ -64,7 +64,7 @@ public class CanvaComponent extends Pane implements ViewContract {
 
     }
 
-    private void addElementDragable(Node node, VisualNodeCallback callback) {
+    public void addElementDragable(Node node, VisualNodeCallback callback) {
         // posição inicial centralizada
         double relX = 0.5;
         double relY = 0.5;

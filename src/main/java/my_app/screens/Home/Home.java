@@ -12,14 +12,14 @@ public class Home extends BorderPane {
 
     SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
 
-    private CanvaComponent canva;
+    public CanvaComponent canva;
 
     @FunctionalInterface
     public interface VisualNodeCallback {
         public void set(Node n);
     }
 
-    private void selectNode(Node node) {
+    public void selectNode(Node node) {
         visualNodeSelected.set(node);
         System.out.println("Selecionado: " + node);
 

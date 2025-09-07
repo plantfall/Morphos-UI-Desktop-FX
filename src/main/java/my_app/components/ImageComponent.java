@@ -1,18 +1,12 @@
 package my_app.components;
 
-import java.io.InputStream;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import my_app.data.ViewContract;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
 public class ImageComponent extends ImageView implements ViewContract {

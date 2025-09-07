@@ -14,7 +14,7 @@ public class TextComponent extends Text implements ViewContract {
     public TextComponent(String content) {
         super(content);
 
-        setStyle("-fx-fill:black;-fx-font-size:%s;"
+        setStyle("-fx-fill:black;-fx-font-size:%s;-fx-font-weight:normal;"
                 .formatted(
                         Commons.FontSizeDefault
                 //

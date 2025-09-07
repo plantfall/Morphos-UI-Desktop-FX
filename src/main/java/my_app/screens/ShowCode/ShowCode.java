@@ -16,38 +16,6 @@ public class ShowCode {
         stage = new Stage();
         stage.setTitle("Nova Janela");
 
-        importsMessage = "import javafx.scene.Scene;\r\n" + //
-                "import javafx.scene.control.*;\r\n" + //
-                "import javafx.scene.text.*;\r\n" + //
-                "import javafx.scene.image.*;\r\n" + //
-                "import javafx.scene.layout.*;\r\n" + //
-                "import javafx.scene.paint.Color;\r\n" + //
-                "import javafx.stage.Stage;";
-
-        codeMessage = "public class Screen{\r\n" + //
-                "                {\r\n" + //
-                "                        Pane root = new Pane();\r\n" + //
-                "\r\n" + //
-                "                        Button item_0 = new Button(\"Im new here\");\r\n" + //
-                "                        item_0.setLayoutX(28.80000000000004);\r\n" + //
-                "                        item_0.setLayoutY(24.799999999999983);\r\n" + //
-                "                        item_0.setStyle(\"-fx-background-color: #664db3; -fx-background-radius:  3.0; -fx-border-width: 0; -fx-padding: 10.0  10.0  10.0  10.0; -fx-font-family: 'System'; -fx-font-size: 16; -fx-font-weight: normal; -fx-text-fill: white;\");\r\n"
-                + //
-                "                        root.getChildren().add(item_0);\r\n" + //
-                "\r\n" + //
-                "                        Text item_1 = new Text(\"Im new here\");\r\n" + //
-                "                        item_1.setLayoutX(39.19999999999996);\r\n" + //
-                "                        item_1.setLayoutY(106.39999999999998);\r\n" + //
-                "                        item_1.setFont(Font.font(\"System\", FontWeight.NORMAL, 16.0));\r\n" + //
-                "                        item_1.setFill(Color.web(\"0x000000ff\"));\r\n" + //
-                "                        root.getChildren().add(item_1);\r\n" + //
-                "\r\n" + //
-                "                }\r\n" + //
-                "        }\r\n" + //
-                "\r\n" + //
-                "\r\n" + //
-                "";
-
         VBox importsColumnContent = columnItem(importsMessage, "Imports");
 
         VBox.setMargin(importsColumnContent, new Insets(0, 0, 20, 0));
