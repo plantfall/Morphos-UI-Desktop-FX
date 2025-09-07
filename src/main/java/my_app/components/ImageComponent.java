@@ -8,25 +8,35 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import my_app.data.ViewContract;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
 public class ImageComponent extends ImageView implements ViewContract {
 
     final int size = 100;
+    ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
     // BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public ImageComponent() {
+        config();
     }
 
     public ImageComponent(String sourcePath) {
         super(new Image(sourcePath));
+        config();
+    }
 
+    void config() {
         setFitWidth(size);
         setFitHeight(size);
         setPreserveRatio(true);
+
+        currentState.set(this);
     }
 
     @Override
@@ -39,8 +49,6 @@ public class ImageComponent extends ImageView implements ViewContract {
 
     @Override
     public void settings(Pane father) {
-
-        Text title = new Text("Image Settings");
 
         var widthRow = new ItemRowComponent("Width", String.valueOf(getFitWidth()), newVal -> {
             if (!newVal.isBlank()) {
@@ -62,7 +70,8 @@ public class ImageComponent extends ImageView implements ViewContract {
             }
         });
 
-        father.getChildren().setAll(title, widthRow, heightRow);
+        father.getChildren().setAll(
+                new LayoutPositionComponent(currentState), widthRow, heightRow);
     }
 
 }

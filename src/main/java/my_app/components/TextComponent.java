@@ -36,9 +36,7 @@ public class TextComponent extends Text implements ViewContract {
 
     @Override
     public void settings(Pane father) {
-
-        Text title = new Text("Text Settings");
-
-        father.getChildren().setAll(title);
+        father.getChildren().setAll(
+                new LayoutPositionComponent(currentState));
     }
 }

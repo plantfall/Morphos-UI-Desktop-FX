@@ -28,15 +28,7 @@ public class CanvaComponent extends Pane implements ViewContract {
 
     public CanvaComponent(SimpleStringProperty optionSelected, VisualNodeCallback callback) {
 
-        setBorder(new Border(
-                new BorderStroke(
-                        Color.BLACK,
-                        BorderStrokeStyle.SOLID,
-                        null,
-                        new BorderWidths(1))));
-
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
+        config();
 
         optionSelected.addListener((obs, old, v) -> {
             if (v == null || v.isBlank())
@@ -77,8 +69,8 @@ public class CanvaComponent extends Pane implements ViewContract {
         double relX = 0.5;
         double relY = 0.5;
 
-        node.setLayoutX(getWidth() * relX);
-        node.setLayoutY(getHeight() * relY);
+        node.setLayoutX((getWidth() - node.prefWidth(-1)) * relX);
+        node.setLayoutY((getHeight() - node.prefHeight(-1)) * relY);
 
         // clique = seleciona
         node.setOnMouseClicked(e -> callback.set(node));
@@ -103,12 +95,20 @@ public class CanvaComponent extends Pane implements ViewContract {
             double x = e.getSceneX() - offsetX[0];
             double y = e.getSceneY() - offsetY[0];
 
+            // pega as dimensões reais do node
+            var bounds = node.getBoundsInLocal();
+            double nodeWidth = bounds.getWidth();
+            double nodeHeight = bounds.getHeight();
+
+            // clamp para garantir que fique 100% dentro do canva
+            x = Math.max(0, Math.min(x, getWidth() - nodeWidth));
+            y = Math.max(0, Math.min(y, getHeight() - nodeHeight));
+
             node.setLayoutX(x);
             node.setLayoutY(y);
 
-            // salva posição relativa
-            node.getProperties().put("relX", x / getWidth());
-            node.getProperties().put("relY", y / getHeight());
+            node.getProperties().put("relX", x / (getWidth() - nodeWidth));
+            node.getProperties().put("relY", y / (getHeight() - nodeHeight));
         });
 
         // quando o canva for redimensionado, reposiciona proporcionalmente
@@ -121,8 +121,13 @@ public class CanvaComponent extends Pane implements ViewContract {
         Object relY = node.getProperties().get("relY");
 
         if (relX instanceof Double && relY instanceof Double) {
-            node.setLayoutX((Double) relX * getWidth());
-            node.setLayoutY((Double) relY * getHeight());
+            var bounds = node.getBoundsInLocal();
+            double nodeWidth = bounds.getWidth();
+            double nodeHeight = bounds.getHeight();
+
+            node.setLayoutX((Double) relX * (getWidth() - nodeWidth));
+            node.setLayoutY((Double) relY * (getHeight() - nodeHeight));
+
         }
     }
 
@@ -172,4 +177,17 @@ public class CanvaComponent extends Pane implements ViewContract {
 
     }
 
+    void config() {
+        setBorder(new Border(
+                new BorderStroke(
+                        Color.BLACK,
+                        BorderStrokeStyle.SOLID,
+                        null,
+                        new BorderWidths(1))));
+
+        setMaxHeight(Double.MAX_VALUE);
+        setMaxWidth(Double.MAX_VALUE);
+
+        setStyle("-fx-background-color:yellow;");
+    }
 }

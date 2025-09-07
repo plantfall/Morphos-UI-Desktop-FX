@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import my_app.components.FontColorPicker;
 import my_app.components.FontSizeComponent;
 import my_app.components.FontWeightComponent;
+import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
@@ -63,9 +64,8 @@ public class ButtonComponent extends Button implements ViewContract {
     @Override
     public void settings(Pane father) {
 
-        Text title = new Text("Button Settings");
-
-        father.getChildren().setAll(title);
+        father.getChildren().setAll(
+                new LayoutPositionComponent(currentState));
 
     }
 }

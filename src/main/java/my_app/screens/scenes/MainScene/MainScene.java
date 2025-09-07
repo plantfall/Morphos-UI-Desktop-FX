@@ -64,22 +64,21 @@ public class MainScene extends Scene {
 
         // imports
         StringBuilder imports = new StringBuilder();
-        imports.append("package my_app;\n\nimport javafx.application.Application;\n")
-                .append("import javafx.scene.Scene;\n")
+        imports.append("import javafx.scene.Scene;\n")
                 .append("import javafx.scene.control.*;\n")
                 .append("import javafx.scene.text.*;\n")
                 .append("import javafx.scene.image.*;\n")
                 .append("import javafx.scene.layout.*;\n")
                 .append("import javafx.scene.paint.Color;\n")
-                .append("import javafx.stage.Stage;\n\n");
+                .append("import javafx.stage.Stage;");
 
         // codigo da classe
 
         StringBuilder code = new StringBuilder();
         code
-                .append("public class GeneratedUI extends Application {\n")
-                .append("     {\n")
-                .append("        Pane root = new Pane();\n");
+                .append("public class Screen{\n")
+                .append("\t\t{\n")
+                .append("\t\t\tPane root = new Pane();\n\n");
 
         for (int i = 0; i < children.size(); i++) {
             Node node = children.get(i);
@@ -112,12 +111,12 @@ public class MainScene extends Scene {
                     borderRadius = fill_.getRadii().getTopLeftHorizontalRadius();
                 }
 
-                String nodeCode = "        Button item_#d = new Button(\"#content\");\n" +
-                        "        item_#d.setLayoutX(#lx);\n" +
-                        "        item_#d.setLayoutY(#ly);\n" +
-                        "        item_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL; -fx-font-family: '#fontFamily'; -fx-font-size: #fontSize; -fx-font-weight: #fW; -fx-text-fill: #tF;\");\n"
+                String nodeCode = "\t\t\tButton item_#d = new Button(\"#content\");\n" +
+                        "\t\t\titem_#d.setLayoutX(#lx);\n" +
+                        "\t\t\titem_#d.setLayoutY(#ly);\n" +
+                        "\t\t\titem_#d.setStyle(\"-fx-background-color: #hex; -fx-background-radius:  #radius; -fx-border-width: #borderWidth; -fx-padding: #paddingT  #paddingR  #paddingB  #paddingL; -fx-font-family: '#fontFamily'; -fx-font-size: #fontSize; -fx-font-weight: #fW; -fx-text-fill: #tF;\");\n"
                         +
-                        "        root.getChildren().add(item_#d);\n";
+                        "\t\t\troot.getChildren().add(item_#d);\n\n";
 
                 nodeCode = nodeCode
                         .replace("#content", text)
@@ -150,12 +149,12 @@ public class MainScene extends Scene {
                                                                                            // "Regular", "Bold", etc.
                 Color fill = (Color) component.getFill();
 
-                String nodeCode = "        Text item_#d = new Text(\"#content\");\n" +
-                        "        item_#d.setLayoutX(#lx);\n" +
-                        "        item_#d.setLayoutY(#ly);\n" +
-                        "        item_#d.setFont(Font.font(\"#family\", FontWeight.#weight, #size));\r\n" + //
-                        "        item_#d.setFill(Color.web(\"#hex\"));\r\n" +
-                        "        root.getChildren().add(item_#d);\n";
+                String nodeCode = "\t\t\tText item_#d = new Text(\"#content\");\n" +
+                        "\t\t\titem_#d.setLayoutX(#lx);\n" +
+                        "\t\t\titem_#d.setLayoutY(#ly);\n" +
+                        "\t\t\titem_#d.setFont(Font.font(\"#family\", FontWeight.#weight, #size));\n" + //
+                        "\t\t\titem_#d.setFill(Color.web(\"#hex\"));\n" +
+                        "\t\t\troot.getChildren().add(item_#d);\n\n";
 
                 nodeCode = nodeCode
                         .replace("#content", component.getText())
@@ -189,7 +188,7 @@ public class MainScene extends Scene {
                         item_#d.setPreserveRatio(%s);
                         item_#d.setSmooth(%s);
                         %s
-                        root.getChildren().add(item_#d);
+                        root.getChildren().add(item_#d)\n\n;
                         """.formatted(
                         component.isPreserveRatio(),
                         component.isSmooth(),
@@ -208,10 +207,13 @@ public class MainScene extends Scene {
             // Você pode expandir para outros componentes...
         }
 
-        code.append("}\n\n\n\t\t}");
+        code.append("\t\t}\n");
+        code.append("\t}");
         System.out.println("codigo gerado...\nImports:\n");
 
-        System.out.println(imports + "\n\n");
+        System.out.println(imports);
+
+        System.out.println("codigo");
 
         System.out.println(code.toString());
 
