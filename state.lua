@@ -35,7 +35,7 @@ canva = {
       bg_radius = 3
     },
   },
-  image_componentes = {
+  image_components = {
     img_1 = {
       uri = "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
       layout_x = 376.40,

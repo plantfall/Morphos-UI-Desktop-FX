@@ -170,7 +170,7 @@ public class MainScene extends Scene {
             // fechou button_components
             writer.write("  },\n");
 
-            writer.write("  image_componentes = {\n");
+            writer.write("  image_components = {\n");
             int imgCount = 1;
             for (Node node : children) {
                 String style = node.getStyle();
@@ -285,7 +285,7 @@ public class MainScene extends Scene {
         }
 
         // --- Imagens ---
-        LuaValue imgComponents = canva.get("image_componentes");
+        LuaValue imgComponents = canva.get("image_components");
         if (imgComponents.istable()) {
             LuaTable table = (LuaTable) imgComponents;
             LuaValue k = LuaValue.NIL;
@@ -365,6 +365,36 @@ public class MainScene extends Scene {
                 node.setLayoutX(x);
                 node.setLayoutY(y);
 
+            }
+        }
+
+        // --- inputs ---
+        LuaValue inputComponents = canva.get("input_components");
+        if (inputComponents.istable()) {
+            LuaTable table = (LuaTable) inputComponents;
+            LuaValue k = LuaValue.NIL;
+            while (true) {
+                Varargs n = table.next(k);
+                if ((k = n.arg1()).isnil())
+                    break;
+                LuaValue comp = n.arg(2);
+
+                String text = comp.get("text").optjstring("");
+                double x = comp.get("layout_x").todouble();
+                double y = comp.get("layout_y").todouble();
+                String fontSize = comp.get("font_size").toString();
+                String colorHex = comp.get("color").toString();
+                String fontWeight = comp.get("font_weight").toString();
+
+                var node = new InputComponent(text);
+
+                node.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+                        .formatted(colorHex, fontSize, fontWeight));
+
+                canvaComp.addElementDragable(node, current -> home.selectNode(current));
+
+                node.setLayoutX(x);
+                node.setLayoutY(y);
             }
         }
     }
