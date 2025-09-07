@@ -32,6 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import my_app.components.CanvaComponent;
 import my_app.components.ImageComponent;
+import my_app.components.InputComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.data.Commons;
@@ -201,6 +202,37 @@ public class MainScene extends Scene {
                 }
             }
             // fechou image_components
+            writer.write("  },\n");
+
+            writer.write("  input_components = {\n");
+            int inputCount = 1;
+            for (Node node : children) {
+                String style = node.getStyle();
+
+                if (node instanceof InputComponent component) {
+                    String key = "input_" + inputCount++;
+
+                    String text = component.getText();
+                    String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
+                    double x = component.getLayoutX();
+                    double y = component.getLayoutY();
+
+                    String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
+                    String color = Commons.getValueOfSpecificField(style, "-fx-text-fill");
+
+                    writer.write(String.format(
+                            "    %s = {\n" +
+                                    "      text = \"%s\",\n" +
+                                    "      layout_x = %.2f,\n" +
+                                    "      layout_y = %.2f,\n" +
+                                    "      font_size = %s,\n" +
+                                    "      color = \"%s\",\n" +
+                                    "      font_weight = \"%s\"\n" +
+                                    "    },\n",
+                            key, text.replace("\"", "\\\""), x, y, fontSize, color, fontWeight));
+                }
+            }
+            // fechou input_components
             writer.write("  }\n");
 
             // fim do canva

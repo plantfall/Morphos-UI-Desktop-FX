@@ -78,7 +78,7 @@ public class RightSide extends VBox {
                 NodeWrapper nw = new NodeWrapper(renderable);
                 nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
             } else {
-                dynamicContainer.getChildren().setAll(new Text("Nenhuma configuração disponível"));
+                dynamicContainer.getChildren().setAll(new Text("No configuration available"));
             }
         });
 

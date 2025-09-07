@@ -40,7 +40,7 @@ public class CanvaComponent extends Pane implements ViewContract {
             if (v.equalsIgnoreCase("button")) {
                 node = new ButtonComponent(content);
             } else if (v.equalsIgnoreCase("input")) {
-                node = new TextField(content);
+                node = new InputComponent(content);
             } else if (v.equalsIgnoreCase("text")) {
                 node = new TextComponent(content);
             } else if (v.equalsIgnoreCase("image")) {

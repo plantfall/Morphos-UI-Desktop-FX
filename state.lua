@@ -44,5 +44,15 @@ canva = {
       height = 100.0,
       preserve_ratio = "true"
     },
+  },
+  input_components = {
+    input_1 = {
+      text = "Im new here",
+      layout_x = 536.00,
+      layout_y = 100.00,
+      font_size = 16,
+      color = "#ff6666",
+      font_weight = "normal"
+    },
   }
 }

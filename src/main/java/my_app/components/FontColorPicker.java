@@ -24,7 +24,7 @@ public class FontColorPicker extends HBox {
 
         String textFill = "";
 
-        if (node instanceof ButtonComponent || node instanceof TextField) {
+        if (node instanceof ButtonComponent || node instanceof InputComponent) {
             textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-text-fill");
         } else if (node instanceof TextComponent) {
             textFill = Commons.getValueOfSpecificField(node.getStyle(), "-fx-fill");
