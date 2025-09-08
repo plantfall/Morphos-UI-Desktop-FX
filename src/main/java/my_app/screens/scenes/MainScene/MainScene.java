@@ -1,6 +1,5 @@
 package my_app.screens.scenes.MainScene;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -22,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -48,7 +48,12 @@ public class MainScene extends Scene {
     public MainScene() {
         super(createRoot(), 1200, 650);
 
-        loadStateFromLua(new File("state.lua"), home.canva);
+        try {
+            loadStateFromLua(new File("state.lua"), home.canva);
+        } catch (Exception e) {
+
+        }
+
     }
 
     private static VBox createRoot() {
@@ -67,7 +72,7 @@ public class MainScene extends Scene {
 
         itemSalvar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            saveStateToFile(new File("state.lua"), home.canvaChildren());
+            saveStateToFile(new File("state.lua"), home.canva);
         });
 
         itemCarregar.setOnAction(ev -> {
@@ -79,14 +84,64 @@ public class MainScene extends Scene {
             reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveStateToFile(new File("state.lua"), home.canvaChildren()));
+        stage.setOnCloseRequest(ev -> saveStateToFile(new File("state.lua"), home.canva));
 
         return mainView;
     }
 
-    private static void saveStateToFile(File file, ObservableList<Node> children) {
+    private static void saveStateToFile(File file, CanvaComponent canva) {
+        ObservableList<Node> children = canva.getChildren();
+
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("canva = {\n");
+
+            // Escrevendo os text_componentes
+            writer.write("  self = {\n");
+
+            String canvastyle = canva.getStyle();
+
+            Insets cpadding = canva.getPadding();
+            double cpaddingTop = cpadding.getTop();
+            double cpaddingRight = cpadding.getRight();
+            double cpaddingBottom = cpadding.getBottom();
+            double cpaddingLeft = cpadding.getLeft();
+
+            double cwidth = canva.getPrefWidth();
+            double cheight = canva.getPrefHeight();
+
+            /*
+             * setStyle("-fx-background-image: url('" + url + "'); " +
+             * "-fx-background-size: cover; -fx-background-position: center;");
+             */
+            String bgType = "";
+            String bgContent = "";
+            if (Commons.getValueOfSpecificField(canvastyle, "-fx-background-image").isEmpty()) {
+                bgContent = Commons.getValueOfSpecificField(canvastyle, "-fx-background-color");
+                bgType = "color";
+            } else {
+                var bgImage = Commons.getValueOfSpecificField(canvastyle, "-fx-background-image");// url('" + url +
+                // "');
+
+                var right = bgImage.split("(")[1];
+                var left = right.split(")")[0];
+
+                bgContent = left;
+                bgType = "image";
+            }
+
+            writer.write(String.format(
+                    "      width = %.2f,\n" +
+                            "      height = %.2f,\n" +
+                            "      padding_top = %.2f,\n" +
+                            "      padding_right = %.2f,\n" +
+                            "      padding_bottom = %.2f,\n" +
+                            "      padding_left = %.2f,\n" +
+                            "      bg_type = \"%s\",\n" +
+                            "      bg_content = \"%s\"\n",
+                    cwidth, cheight, cpaddingTop, cpaddingRight, cpaddingBottom, cpaddingLeft, bgType, bgContent));
+
+            // fim do self
+            writer.write("  },\n");
 
             // Escrevendo os text_componentes
             writer.write("  text_componentes = {\n");
@@ -116,6 +171,7 @@ public class MainScene extends Scene {
                             key, text.replace("\"", "\\\""), x, y, fontSize, textFill, fontWeight));
                 }
             }
+            // fim do textcomponent
             writer.write("  },\n");
 
             // Escrevendo os button_componentes
@@ -253,6 +309,40 @@ public class MainScene extends Scene {
 
         var children = canvaComp.getChildren();
         children.clear();
+
+        // --- Extraindo as informações de self ---
+        LuaValue self = canva.get("self");
+        if (self.istable()) {
+            LuaTable selfTable = (LuaTable) self;
+
+            // Extraindo largura e altura
+            double width = selfTable.get("width").todouble();
+            double height = selfTable.get("height").todouble();
+            double paddingTop = selfTable.get("padding_top").todouble();
+            double paddingRight = selfTable.get("padding_right").todouble();
+            double paddingBottom = selfTable.get("padding_bottom").todouble();
+            double paddingLeft = selfTable.get("padding_left").todouble();
+            String bgType = selfTable.get("bg_type").toString();
+            String bgContent = selfTable.get("bg_content").toString();
+
+            // Aplicando as informações extraídas ao CanvaComponent
+            canvaComp.setPrefWidth(width);
+            canvaComp.setPrefHeight(height);
+
+            // Ajustando o padding
+            canvaComp.setPadding(new Insets(paddingTop, paddingRight, paddingBottom, paddingLeft));
+
+            // Definindo o fundo com base no tipo
+            if (bgType.equals("color")) {
+                canvaComp.setStyle("-fx-background-color:%s;".formatted(
+                        bgContent));
+            } else if (bgType.equals("image")) {
+                // Para imagem, você pode fazer algo como isso:
+                canvaComp.setStyle("-fx-background-image: url('" + bgContent + "');" +
+                        "-fx-background-size: cover; -fx-background-position: center;");
+            }
+
+        }
 
         // --- Textos ---
         LuaValue textComponents = canva.get("text_componentes");

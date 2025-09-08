@@ -10,6 +10,7 @@ public class Commons {
     public static String FontWeightDefault = "normal";
     public static String ItemTextFontSizeDefault = "14";
 
+    public static String CanvaBgColorDefault = "#d6d2e4ff";
     public static String ButtonBgColorDefault = "#664db3";
     public static String ButtonPaddingDefault = "10";
     public static String ButtonFontWeightDefault = "normal";

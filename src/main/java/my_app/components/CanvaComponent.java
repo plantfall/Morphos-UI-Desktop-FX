@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.components.buttonComponent.ButtonComponent;
+import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 
@@ -137,10 +138,14 @@ public class CanvaComponent extends Pane implements ViewContract {
         Text title = new Text("Background Settings");
 
         // Color Picker
-        ColorPicker bgColorPicker = new ColorPicker(Color.WHITE);
+        ColorPicker bgColorPicker = new ColorPicker(
+                Color.web(
+                        Commons.getValueOfSpecificField(getStyle(), "-fx-background-color")));
         bgColorPicker.setOnAction(e -> {
             Color c = bgColorPicker.getValue();
-            setBackground(new Background(new BackgroundFill(c, CornerRadii.EMPTY, Insets.EMPTY)));
+
+            setStyle("-fx-background-color:%s;".formatted(
+                    Commons.ColortoHex(c)));
         });
 
         // Botão para escolher imagem do sistema
@@ -168,7 +173,39 @@ public class CanvaComponent extends Pane implements ViewContract {
             }
         });
 
-        father.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField, applyUrl);
+        // Criação dos campos de entrada para largura e altura
+        TextField widthField = new TextField();
+        widthField.setPromptText("Largura em pixels (ex: 900)");
+        widthField.setPrefWidth(200);
+
+        TextField heightField = new TextField();
+        heightField.setPromptText("Altura em pixels (ex: 600)");
+        heightField.setPrefWidth(200);
+
+        // Botão para aplicar as dimensões
+        Button applyButton = new Button("Aplicar Dimensões");
+        applyButton.setOnAction(e -> {
+            try {
+                double realWidth = Double.parseDouble(widthField.getText());
+                double realHeight = Double.parseDouble(heightField.getText());
+
+                if (realWidth > 0 && realHeight > 0) {
+                    // definindo as dimensões "simuladas"
+                    setMinSize(realWidth, realHeight);
+                    setPrefSize(realWidth, realHeight);
+                    setMaxSize(realWidth, realHeight);
+
+                    // opcional: uma borda visual indicando o limite da tela simulada
+                    setStyle("-fx-background-color:yellow; -fx-border-color: red; -fx-border-width: 2;");
+                } else {
+                    System.out.println("Insira valores positivos para largura e altura.");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Por favor, insira números válidos.");
+            }
+        });
+        father.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField,
+                applyUrl, widthField, heightField, applyButton);
 
     }
 
@@ -185,9 +222,13 @@ public class CanvaComponent extends Pane implements ViewContract {
                         null,
                         new BorderWidths(1))));
 
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
+        // setPrefHeight(Double.MAX_VALUE);
+        // setMaxWidth(Double.MAX_VALUE);
 
-        setStyle("-fx-background-color:yellow;");
+        setPrefSize(800, 600); // tamanho inicial padrão
+
+        setPadding(new Insets(0));
+
+        setStyle("-fx-background-color:%s".formatted(Commons.CanvaBgColorDefault));
     }
 }
