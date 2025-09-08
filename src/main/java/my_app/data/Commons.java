@@ -7,6 +7,9 @@ import javafx.scene.paint.Color;
 
 public class Commons {
 
+    public static double CanvaWidthDefault = 800;
+    public static double CanvaHeightDefault = 600;
+
     public static String FontWeightDefault = "normal";
     public static String ItemTextFontSizeDefault = "14";
 

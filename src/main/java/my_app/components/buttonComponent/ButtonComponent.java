@@ -5,10 +5,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import my_app.components.FontColorPicker;
 import my_app.components.FontSizeComponent;
-import my_app.components.FontWeightComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
 import my_app.data.Commons;
@@ -55,7 +53,7 @@ public class ButtonComponent extends Button implements ViewContract {
                 new ButtonBorderRadius(currentState),
                 new ButtonBorderWidth(currentState),
                 new ButtonBorderColorPicker(currentState),
-                new FontWeightComponent(currentState),
+                new my_app.components.FontWeightComponent(currentState),
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
                 new FontSizeComponent(currentState));

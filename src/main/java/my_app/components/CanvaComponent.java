@@ -8,24 +8,23 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.components.buttonComponent.ButtonComponent;
+import my_app.components.canvaComponent.HeightComponent;
+import my_app.components.canvaComponent.WidthComponent;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 
 public class CanvaComponent extends Pane implements ViewContract {
 
-    ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
+    ObjectProperty<Node> currentState = new SimpleObjectProperty<>(this);
 
     public CanvaComponent(SimpleStringProperty optionSelected, VisualNodeCallback callback) {
 
@@ -135,8 +134,6 @@ public class CanvaComponent extends Pane implements ViewContract {
     @Override
     public void appearance(Pane father) {
 
-        Text title = new Text("Background Settings");
-
         // Color Picker
         ColorPicker bgColorPicker = new ColorPicker(
                 Color.web(
@@ -173,39 +170,10 @@ public class CanvaComponent extends Pane implements ViewContract {
             }
         });
 
-        // Criação dos campos de entrada para largura e altura
-        TextField widthField = new TextField();
-        widthField.setPromptText("Largura em pixels (ex: 900)");
-        widthField.setPrefWidth(200);
-
-        TextField heightField = new TextField();
-        heightField.setPromptText("Altura em pixels (ex: 600)");
-        heightField.setPrefWidth(200);
-
-        // Botão para aplicar as dimensões
-        Button applyButton = new Button("Aplicar Dimensões");
-        applyButton.setOnAction(e -> {
-            try {
-                double realWidth = Double.parseDouble(widthField.getText());
-                double realHeight = Double.parseDouble(heightField.getText());
-
-                if (realWidth > 0 && realHeight > 0) {
-                    // definindo as dimensões "simuladas"
-                    setMinSize(realWidth, realHeight);
-                    setPrefSize(realWidth, realHeight);
-                    setMaxSize(realWidth, realHeight);
-
-                    // opcional: uma borda visual indicando o limite da tela simulada
-                    setStyle("-fx-background-color:yellow; -fx-border-color: red; -fx-border-width: 2;");
-                } else {
-                    System.out.println("Insira valores positivos para largura e altura.");
-                }
-            } catch (NumberFormatException ex) {
-                System.out.println("Por favor, insira números válidos.");
-            }
-        });
-        father.getChildren().setAll(title, bgColorPicker, chooseImgBtn, urlField,
-                applyUrl, widthField, heightField, applyButton);
+        father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
+                applyUrl,
+                new WidthComponent(currentState),
+                new HeightComponent(currentState));
 
     }
 
@@ -225,7 +193,7 @@ public class CanvaComponent extends Pane implements ViewContract {
         // setPrefHeight(Double.MAX_VALUE);
         // setMaxWidth(Double.MAX_VALUE);
 
-        setPrefSize(800, 600); // tamanho inicial padrão
+        setPrefSize(Commons.CanvaWidthDefault, Commons.CanvaHeightDefault); // tamanho inicial padrão
 
         setPadding(new Insets(0));
 
