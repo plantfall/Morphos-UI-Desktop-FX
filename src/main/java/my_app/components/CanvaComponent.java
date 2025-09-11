@@ -22,6 +22,7 @@ import my_app.components.inputComponents.InputComponent;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
+import my_app.screens.scenes.ShowComponentScene.ShowComponentScene;
 
 public class CanvaComponent extends Pane implements ViewContract {
 
@@ -46,6 +47,10 @@ public class CanvaComponent extends Pane implements ViewContract {
                 node = new TextComponent(content);
             } else if (v.equalsIgnoreCase("image")) {
                 node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
+            }
+
+            else if (v.equalsIgnoreCase("component")) {
+                new ShowComponentScene().stage.show();
             }
 
             if (node != null) {
@@ -198,6 +203,6 @@ public class CanvaComponent extends Pane implements ViewContract {
 
         setPadding(new Insets(0));
 
-        setStyle("-fx-background-color:%s".formatted(Commons.CanvaBgColorDefault));
+        setStyle("-fx-background-color:%s;".formatted(Commons.CanvaBgColorDefault));
     }
 }

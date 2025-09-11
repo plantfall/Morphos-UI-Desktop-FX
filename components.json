@@ -1,0 +1,16 @@
+{
+  "config" : {
+    "width" : 370.4,
+    "height" : 250.4
+  },
+  "components" : [ {
+    "text_1" : {
+      "text" : "Im new here",
+      "layout_x" : 152.522265625,
+      "layout_y" : 117.21953125,
+      "fontSize" : "16",
+      "color" : "black",
+      "font_weight" : "normal"
+    }
+  } ]
+}

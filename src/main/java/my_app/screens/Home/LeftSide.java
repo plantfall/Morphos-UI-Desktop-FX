@@ -25,7 +25,7 @@ import my_app.App;
 public class LeftSide extends VBox {
 
     Text title = new Text("Visual Elements");
-    List<String> titles = List.of("Text", "Button", "Input", "Image");
+    List<String> titles = List.of("Text", "Button", "Input", "Image", "Component");
     IntegerProperty indexSelecionado = new SimpleIntegerProperty(-1);
 
     List<Item> nodes = new ArrayList<>();

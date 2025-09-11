@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import my_app.data.Commons;
+import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 
 public class TextComponent extends Text implements ViewContract {
@@ -38,5 +39,19 @@ public class TextComponent extends Text implements ViewContract {
     public void settings(Pane father) {
         father.getChildren().setAll(
                 new LayoutPositionComponent(currentState));
+    }
+
+    public TextComponentData getData() {
+        String style = getStyle();
+
+        String text = this.getText();
+        String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
+        double x = this.getLayoutX();
+        double y = this.getLayoutY();
+
+        String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
+        String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
+
+        return new TextComponentData(text, x, y, fontSize, textFill, fontWeight);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import my_app.components.CanvaComponent;
+import my_app.data.Commons;
 
 public class Home extends BorderPane {
     SimpleStringProperty selectedOption = new SimpleStringProperty("");
@@ -29,12 +30,16 @@ public class Home extends BorderPane {
 
     }
 
-    {
+    public Home(boolean openComponentScene) {
         setLeft(new LeftSide(selectedOption));
 
         ScrollPane editor = new ScrollPane();
 
         this.canva = new CanvaComponent(selectedOption, currentNode -> selectNode(currentNode));
+
+        if (openComponentScene) {
+            canva.setPrefSize(370, 250);
+        }
         // scrollPane mostra o canva com barras se for maior que a janela
         editor.setContent(canva);
         editor.setFitToWidth(false);

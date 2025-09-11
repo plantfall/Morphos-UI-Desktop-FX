@@ -41,7 +41,7 @@ import my_app.screens.ShowCode.ShowCode;
 
 public class MainScene extends Scene {
 
-    static Home home = new Home();
+    static Home home = new Home(false);
     static Stage stage = new Stage();
 
     // Scene mainScene = new Scene(mainView, 1200, 650);
