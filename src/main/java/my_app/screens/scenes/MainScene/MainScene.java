@@ -269,6 +269,7 @@ public class MainScene extends Scene {
                     String key = "input_" + inputCount++;
 
                     String text = component.getText();
+                    String placeholder = component.getPromptText();
                     String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
                     double x = component.getLayoutX();
                     double y = component.getLayoutY();
@@ -279,13 +280,17 @@ public class MainScene extends Scene {
                     writer.write(String.format(
                             "    %s = {\n" +
                                     "      text = \"%s\",\n" +
+                                    "      placeholder = \"%s\",\n" +
                                     "      layout_x = %.2f,\n" +
                                     "      layout_y = %.2f,\n" +
                                     "      font_size = %s,\n" +
                                     "      color = \"%s\",\n" +
                                     "      font_weight = \"%s\"\n" +
                                     "    },\n",
-                            key, text.replace("\"", "\\\""), x, y, fontSize, color, fontWeight));
+                            key,
+                            text.replace("\"", "\\\""),
+                            placeholder.replace("\"", "\\\""),
+                            x, y, fontSize, color, fontWeight));
                 }
             }
             // fechou input_components
@@ -470,6 +475,8 @@ public class MainScene extends Scene {
                 LuaValue comp = n.arg(2);
 
                 String text = comp.get("text").optjstring("");
+
+                String placeholder = comp.get("placeholder").optjstring("");
                 double x = comp.get("layout_x").todouble();
                 double y = comp.get("layout_y").todouble();
                 String fontSize = comp.get("font_size").toString();
@@ -485,6 +492,7 @@ public class MainScene extends Scene {
 
                 node.setLayoutX(x);
                 node.setLayoutY(y);
+                node.setPromptText(placeholder);
             }
         }
     }

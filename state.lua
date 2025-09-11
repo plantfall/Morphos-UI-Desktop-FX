@@ -98,6 +98,7 @@ canva = {
   input_components = {
     input_1 = {
       text = "Email",
+      placeholder = "seu email",
       layout_x = 830.40,
       layout_y = 18.40,
       font_size = 12,
@@ -105,7 +106,8 @@ canva = {
       font_weight = "normal"
     },
     input_2 = {
-      text = "Senha",
+      text = "",
+      placeholder = "teste",
       layout_x = 445.60,
       layout_y = 381.60,
       font_size = 12,
