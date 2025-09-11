@@ -1,10 +1,15 @@
-package my_app.components;
+package my_app.components.inputComponents;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import my_app.components.FontColorPicker;
+import my_app.components.FontSizeComponent;
+import my_app.components.FontWeightComponent;
+import my_app.components.LayoutPositionComponent;
+import my_app.components.TextContentComponent;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 
@@ -29,9 +34,8 @@ public class InputComponent extends TextField implements ViewContract {
                 new FontWeightComponent(currentState),
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
-                new FontSizeComponent(currentState)
-
-        );
+                new FontSizeComponent(currentState),
+                new PromptTextComponent(currentState));
     }
 
     @Override

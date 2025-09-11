@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.HeightComponent;
 import my_app.components.canvaComponent.WidthComponent;
+import my_app.components.inputComponents.InputComponent;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
