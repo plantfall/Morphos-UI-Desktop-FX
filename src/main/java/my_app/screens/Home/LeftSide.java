@@ -2,9 +2,14 @@ package my_app.screens.Home;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -21,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import my_app.App;
+import my_app.contexts.SubItemsContext;
 
 public class LeftSide extends VBox {
 
@@ -28,7 +34,7 @@ public class LeftSide extends VBox {
     List<String> titles = List.of("Text", "Button", "Input", "Image", "Component");
     IntegerProperty indexSelecionado = new SimpleIntegerProperty(-1);
 
-    List<Item> nodes = new ArrayList<>();
+    List<ItemColumn> nodes = new ArrayList<>();
 
     public LeftSide(SimpleStringProperty optionSelected) {
         config();
@@ -42,7 +48,7 @@ public class LeftSide extends VBox {
         getChildren().add(spacer);
 
         titles.forEach(title -> {
-            nodes.add(new Item(title, () -> {
+            nodes.add(new ItemColumn(title, () -> {
                 optionSelected.set(title);
                 indexSelecionado.set(titles.indexOf(title));
             }));
@@ -75,8 +81,72 @@ public class LeftSide extends VBox {
         title.setFill(Color.web("#BCCCDC"));
     }
 
-    class Item extends HBox {
-        public Item(String name, Runnable function) {
+    class ItemColumn extends VBox {
+        BooleanProperty expanded = new SimpleBooleanProperty(false);
+        VBox subItems = new VBox();
+        private String type;
+
+        public ItemColumn(String name, Runnable function) {
+            this.type = name.toLowerCase();
+
+            // Row principal
+            Row mainRow = new Row(name, () -> {
+                function.run();
+                expanded.set(!expanded.get());
+            });
+
+            getChildren().add(mainRow);
+            getChildren().add(subItems);
+
+            expanded.addListener((obs, old, value) -> {
+                if (value) {
+                    loadSubItems();
+                } else {
+                    subItems.getChildren().clear();
+                }
+            });
+
+            subItems.setPadding(new Insets(5, 0, 0, 20));
+            subItems.setSpacing(2);
+        }
+
+        private void loadSubItems() {
+            subItems.getChildren().clear();
+
+            SubItemsContext context = SubItemsContext.getInstance();
+            ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
+
+            // Converte SimpleStringProperty para String
+            List<String> items = itemsProperties.stream()
+                    .map(SimpleStringProperty::get)
+                    .collect(Collectors.toList());
+
+            for (String itemName : items) {
+                // Cria HBox simples para subitens
+                HBox subItemBox = new HBox();
+                Label subLabel = new Label("• " + itemName);
+                subLabel.setFont(Font.font(12));
+                subLabel.setTextFill(Color.LIGHTGRAY);
+
+                subItemBox.getChildren().add(subLabel);
+                subItemBox.setPadding(new Insets(3, 5, 3, 10));
+
+                subItemBox.setOnMouseClicked(e -> {
+                    System.out.println("Selected: " + itemName);
+                    // Lógica para adicionar ao canvas
+                });
+
+                subItemBox.setOnMouseEntered(e -> subItemBox.setStyle("-fx-background-color: #2D2A6E;"));
+
+                subItemBox.setOnMouseExited(e -> subItemBox.setStyle("-fx-background-color: transparent;"));
+
+                subItems.getChildren().add(subItemBox);
+            }
+        }
+    }
+
+    class Row extends HBox {
+        public Row(String name, Runnable function) {
             var label = new Label(name);
             label.setFont(Font.font(18));
             label.setStyle("-fx-text-fill: #F8FAFC;");

@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import my_app.components.CanvaComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
+import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.inputComponents.InputComponent;
 
 public class Commons {

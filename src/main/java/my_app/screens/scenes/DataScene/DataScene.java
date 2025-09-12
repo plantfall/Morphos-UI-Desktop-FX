@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import my_app.data.DataStore;
+import my_app.contexts.DataStore;
 
 public class DataScene extends Scene {
 

@@ -31,6 +31,7 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
         setFitHeight(size);
         setPreserveRatio(true);
 
+        setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
     }
 

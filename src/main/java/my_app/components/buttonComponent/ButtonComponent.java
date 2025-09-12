@@ -30,6 +30,8 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
 
     void config() {
 
+        setId(String.valueOf(System.currentTimeMillis()));
+
         setStyle(
                 "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
                         .formatted(

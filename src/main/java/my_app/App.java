@@ -35,6 +35,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import my_app.contexts.SubItemsContext;
 import my_app.data.Commons;
 import my_app.screens.Home.Home;
 import my_app.screens.scenes.DataScene.DataScene;
@@ -55,6 +56,10 @@ public class App extends Application {
         FONT_MEDIUM = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Medium.ttf"), 14);
         FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
+
+        SubItemsContext context = SubItemsContext.getInstance();
+        context.addItem("text", "Heading 1");
+        context.addItem("text", "Paragraph");
     }
 
     @Override

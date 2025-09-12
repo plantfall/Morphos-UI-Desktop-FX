@@ -1,4 +1,4 @@
-package my_app.data;
+package my_app.contexts;
 
 import java.util.ArrayList;
 import java.util.List;

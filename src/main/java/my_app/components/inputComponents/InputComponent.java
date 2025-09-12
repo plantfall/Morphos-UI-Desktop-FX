@@ -26,6 +26,7 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
                 //
                 ));
 
+        setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
     }
 

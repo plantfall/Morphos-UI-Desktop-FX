@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import my_app.components.CanvaComponent;
+import my_app.components.canvaComponent.CanvaComponent;
 import my_app.data.Commons;
 
 public class Home extends BorderPane {

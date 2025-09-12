@@ -21,6 +21,7 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
                 //
                 ));
 
+        setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
     }
 

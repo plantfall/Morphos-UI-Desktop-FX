@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.components.canvaComponent;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -15,10 +15,11 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import my_app.components.ImageComponent;
+import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
-import my_app.components.canvaComponent.HeightComponent;
-import my_app.components.canvaComponent.WidthComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.contexts.SubItemsContext;
 import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
@@ -33,24 +34,28 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
         config();
 
-        optionSelected.addListener((obs, old, v) -> {
-            if (v == null || v.isBlank())
+        var context = SubItemsContext.getInstance();
+
+        // clica no botão do menu e aí cria o component
+        optionSelected.addListener((obs, old, buttonType) -> {
+            if (buttonType == null || buttonType.isBlank())
                 return;
 
             Node node = null;
             var content = "Im new here";
 
-            if (v.equalsIgnoreCase("button")) {
+            if (buttonType.equalsIgnoreCase("button")) {
                 node = new ButtonComponent(content);
-            } else if (v.equalsIgnoreCase("input")) {
+
+            } else if (buttonType.equalsIgnoreCase("input")) {
                 node = new InputComponent(content);
-            } else if (v.equalsIgnoreCase("text")) {
+            } else if (buttonType.equalsIgnoreCase("text")) {
                 node = new TextComponent(content);
-            } else if (v.equalsIgnoreCase("image")) {
+            } else if (buttonType.equalsIgnoreCase("image")) {
                 node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
             }
 
-            else if (v.equalsIgnoreCase("component")) {
+            else if (buttonType.equalsIgnoreCase("component")) {
                 new ShowComponentScene().stage.show();
             }
 
@@ -59,6 +64,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
                 callback.set(node);
             }
 
+            context.addItem(buttonType.toLowerCase(), node.getId());
             optionSelected.set("");
         });
 
@@ -83,8 +89,6 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         node.setOnMouseClicked(e -> callback.set(node));
 
         enableDrag(node, relX, relY);
-
-        node.setId(String.valueOf(System.currentTimeMillis()));
 
         getChildren().add(node);
     }

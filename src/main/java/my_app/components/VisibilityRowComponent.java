@@ -9,7 +9,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import my_app.data.DataStore;
+import my_app.contexts.DataStore;
 import my_app.data.NodeVisibilityManager;
 
 public class VisibilityRowComponent extends VBox {

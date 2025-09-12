@@ -6,7 +6,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.CanvaComponent;
 import my_app.data.Commons;
 
 public class WidthComponent extends HBox {
