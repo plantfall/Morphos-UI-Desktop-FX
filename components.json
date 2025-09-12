@@ -1,16 +1,34 @@
-{
-  "config" : {
-    "width" : 370.4,
-    "height" : 250.4
-  },
-  "components" : [ {
-    "text_1" : {
-      "text" : "Im new here",
-      "layout_x" : 152.522265625,
-      "layout_y" : 117.21953125,
-      "fontSize" : "16",
-      "color" : "black",
-      "font_weight" : "normal"
-    }
-  } ]
-}
+[
+  {
+    "self": {
+      "padding_top": 0,
+      "padding_right": 0,
+      "padding_bottom": 0,
+      "paddingL_left": 0,
+      "width": 370.0,
+      "height": 70.0,
+      "bg_type": "color",
+      "bgContent": "#d6d2e4ff"
+    },
+    "text_componentes": [],
+    "button_componentes": [
+      {
+        "text": "Im new here",
+        "fontSize": "16",
+        "fontWeight": "normal",
+        "color": "white",
+        "borderWidth": "0",
+        "borderRadius": "3",
+        "bgColor": "#664db3",
+        "x": 250.0,
+        "y": 12.000000000000007,
+        "padding_top": 10,
+        "padding_right": 10,
+        "padding_bottom": 10,
+        "paddingL_left": 10
+      }
+    ],
+    "image_components": [],
+    "input_components": []
+  }
+]

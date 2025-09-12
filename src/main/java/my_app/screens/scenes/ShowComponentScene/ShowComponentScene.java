@@ -35,29 +35,19 @@ import my_app.components.CanvaComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.data.CanvaComponentData;
+import my_app.data.CanvaComponentJson;
 import my_app.data.Commons;
 import my_app.data.TextComponentData;
 import my_app.screens.Home.Home;
 
-record ConfigData(
-        double width,
-        double height) {
-}
-
-// Classe principal corrigida
-class Components {
-    public List<Map<String, Object>> components = new ArrayList<>();
-
-    public Components() {
-    }
-}
-
-record ComponentsWrapper(ConfigData config, List<Map<String, Serializable>> components) {
+record ComponentsWrapper(List<CanvaComponentJson> components) {
 }
 
 public class ShowComponentScene extends Scene {
     public Stage stage = new Stage();
 
+    static final String FileName = "components.json";
     Home home = new Home(true);
 
     MenuBar mb = new MenuBar();
@@ -73,7 +63,7 @@ public class ShowComponentScene extends Scene {
 
         menu.setOnAction(ev -> {
             System.out.println("clicked");
-            saveStateToFile(new File("components.json"),
+            saveStateToFile(new File(FileName),
                     home.canva);
         });
 
@@ -86,37 +76,15 @@ public class ShowComponentScene extends Scene {
     }
 
     private void saveStateToFile(File file, CanvaComponent canva) {
+        // carregar os components e dar um append
+        var components = List.of(Commons.CreateCanvaComponent(file, canva));
+        new ComponentsWrapper(components);
+
+        //
         ObservableList<Node> children = canva.getChildren();
+        var object = Commons.CreateCanvaComponent(file, canva);
 
-        ObjectMapper om = new ObjectMapper();
-        om.enable(SerializationFeature.INDENT_OUTPUT);
-
-        // Cria a config
-        ConfigData configData = new ConfigData(canva.getWidth(), canva.getHeight());
-
-        // Cria a lista de componentes
-        List<Map<String, Serializable>> componentsList = new ArrayList<>();
-
-        int textCount = 1;
-        for (Node node : children) {
-
-            if (node instanceof TextComponent component) {
-                String key = "text_" + textCount++;
-
-                var data = component.getData();
-
-                Map<String, Serializable> map = new HashMap<>();
-                map.put(key, data);
-
-                componentsList.add(map);
-                textCount++;
-            }
-        }
-
-        // Cria o wrapper final
-        ComponentsWrapper wrapper = new ComponentsWrapper(configData, componentsList);
-
-        Commons.WriteJsonInDisc(file, wrapper);
+        Commons.WriteJsonInDisc(file, components);
 
     }
 

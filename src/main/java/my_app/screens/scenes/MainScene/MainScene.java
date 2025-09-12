@@ -42,12 +42,14 @@ public class MainScene extends Scene {
     static Home home = new Home(false);
     static Stage stage = new Stage();
 
+    final static String FileName = "state.json";
+
     // Scene mainScene = new Scene(mainView, 1200, 650);
     public MainScene() {
         super(createRoot(), 1200, 650);
 
         try {
-            loadSceneFromJsonFile(new File("state.json"), home.canva);
+            loadSceneFromJsonFile(new File(FileName), home.canva);
         } catch (Exception e) {
         }
     }
@@ -68,48 +70,26 @@ public class MainScene extends Scene {
 
         itemSalvar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            saveSceneInJsonFile(new File("state.json"), home.canva);
+            saveSceneInJsonFile(new File(FileName), home.canva);
         });
 
         itemCarregar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            loadSceneFromJsonFile(new File("state.json"), home.canva);
+            loadSceneFromJsonFile(new File(FileName), home.canva);
         });
 
         itemShowCode.setOnAction(ev -> {
             reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File("state.json"), home.canva));
+        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
 
         return mainView;
     }
 
     private static void saveSceneInJsonFile(File file, CanvaComponent canva) {
-        ObservableList<Node> children = canva.getChildren();
 
-        CanvaComponentJson jsonTarget = new CanvaComponentJson();
-
-        jsonTarget.self = canva.getData();
-
-        for (Node node : children) {
-
-            if (node instanceof TextComponent component) {
-                jsonTarget.text_componentes.add(component.getData());
-            }
-
-            if (node instanceof ButtonComponent component) {
-                jsonTarget.button_componentes.add(component.getData());
-            }
-
-            if (node instanceof ImageComponent component) {
-                jsonTarget.image_components.add(component.getData());
-            }
-
-            if (node instanceof InputComponent component) {
-                jsonTarget.input_components.add(component.getData());
-            }
-        }
+        CanvaComponentJson jsonTarget = Commons.CreateCanvaComponent(file, canva);
 
         Commons.WriteJsonInDisc(file, jsonTarget);
     }

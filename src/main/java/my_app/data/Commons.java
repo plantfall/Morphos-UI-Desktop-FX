@@ -7,7 +7,14 @@ import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import my_app.components.CanvaComponent;
+import my_app.components.ImageComponent;
+import my_app.components.TextComponent;
+import my_app.components.buttonComponent.ButtonComponent;
+import my_app.components.inputComponents.InputComponent;
 
 public class Commons {
 
@@ -94,5 +101,34 @@ public class Commons {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static CanvaComponentJson CreateCanvaComponent(File file, CanvaComponent canva) {
+        ObservableList<Node> children = canva.getChildren();
+
+        CanvaComponentJson jsonTarget = new CanvaComponentJson();
+
+        jsonTarget.self = canva.getData();
+
+        for (Node node : children) {
+
+            if (node instanceof TextComponent component) {
+                jsonTarget.text_componentes.add(component.getData());
+            }
+
+            if (node instanceof ButtonComponent component) {
+                jsonTarget.button_componentes.add(component.getData());
+            }
+
+            if (node instanceof ImageComponent component) {
+                jsonTarget.image_components.add(component.getData());
+            }
+
+            if (node instanceof InputComponent component) {
+                jsonTarget.input_components.add(component.getData());
+            }
+        }
+
+        return jsonTarget;
     }
 }
