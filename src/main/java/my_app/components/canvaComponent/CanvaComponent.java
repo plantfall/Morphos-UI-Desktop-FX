@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import my_app.App;
+import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
@@ -52,10 +54,6 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
                 node = new TextComponent(content);
             } else if (buttonType.equalsIgnoreCase("image")) {
                 node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
-            }
-
-            else if (buttonType.equalsIgnoreCase("component")) {
-                new ShowComponentScene().stage.show();
             }
 
             if (node != null) {

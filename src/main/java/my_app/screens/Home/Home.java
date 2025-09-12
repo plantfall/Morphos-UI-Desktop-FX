@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import my_app.App;
+import my_app.components.CustomComponent;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.data.Commons;
 
@@ -18,14 +20,46 @@ public class Home extends BorderPane {
 
     @FunctionalInterface
     public interface HandleClickSubItem {
-        public void onClick(String itemIdentification);
+        public void onClick(String itemIdentification, String type);
     }
 
-    void onClickOnSubItem(String itemName) {
+    void onClickOnSubItem(String itemIdentification, String type) {
 
+        if (type.equalsIgnoreCase("component")) {
+            // new ShowComponentScene().stage.show();
+            var op = App.ComponentsList.stream().filter(it -> it.self.identification().equals(itemIdentification))
+                    .findFirst();
+
+            if (op.isPresent()) {
+                // vou buscar o custom component no canva
+                Node target = canvaChildren()
+                        .stream()
+                        .filter(n -> itemIdentification.equals(n.getId()))
+                        .findFirst()
+                        .orElse(null);
+
+                // 2. Se achou, seleciona
+                if (target != null) {
+                    selectNode(target);
+                }
+
+                else {
+                    // senao achou, cria e adiciona
+
+                    var cc = new CustomComponent();
+                    canva.addElementDragable(cc, currentNode -> selectNode(currentNode));
+                    cc.applyConfig(op.get());
+                    // node = new CustomComponent(op.get());
+                }
+
+            }
+
+            return;
+        }
+        //
         Node target = canvaChildren()
                 .stream()
-                .filter(n -> itemName.equals(n.getId()))
+                .filter(n -> itemIdentification.equals(n.getId()))
                 .findFirst()
                 .orElse(null);
 

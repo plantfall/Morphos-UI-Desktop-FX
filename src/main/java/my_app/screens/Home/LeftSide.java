@@ -104,14 +104,14 @@ public class LeftSide extends VBox {
 
         ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
 
-        public ItemColumn(String name,
+        public ItemColumn(String type,
                 HandleClickSubItem callbackClickSubItem,
                 Runnable function) {
-            this.type = name.toLowerCase();
+            this.type = type.toLowerCase();
 
             this.callbackClickSubItem = callbackClickSubItem;
             // Row principal
-            Row mainRow = new Row(name, () -> {
+            Row mainRow = new Row(type, () -> {
                 function.run();
                 expanded.set(!expanded.get());
             });
@@ -155,16 +155,16 @@ public class LeftSide extends VBox {
             ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
 
             for (SimpleStringProperty itemProperty : itemsProperties) {
-                String itemName = itemProperty.get();
+                String itemId = itemProperty.get();
 
-                HBox subItemBox = createSubItemBox(itemName);
+                HBox subItemBox = createSubItemBox(itemId);
                 subItems.getChildren().add(subItemBox);
             }
         }
 
-        private HBox createSubItemBox(String itemName) {
+        private HBox createSubItemBox(String itemId) {
             HBox subItemBox = new HBox();
-            Label subLabel = new Label("• " + itemName);
+            Label subLabel = new Label("• " + itemId);
             subLabel.setFont(Font.font(12));
             subLabel.setTextFill(Color.LIGHTGRAY);
 
@@ -175,7 +175,7 @@ public class LeftSide extends VBox {
 
             // 🔹 Listener para atualizar estilo quando subItemSelected mudar
             subItemSelected.addListener((obs, oldVal, newVal) -> {
-                if (itemName.equals(newVal)) {
+                if (itemId.equals(newVal)) {
                     subItemBox.setStyle("-fx-background-color: yellow;");
                 } else {
                     subItemBox.setStyle("-fx-background-color: transparent;");
@@ -183,18 +183,18 @@ public class LeftSide extends VBox {
             });
 
             subItemBox.setOnMouseClicked(e -> {
-                subItemSelected.set(itemName); // marca este como selecionado
-                this.callbackClickSubItem.onClick(itemName);
+                subItemSelected.set(itemId); // marca este como selecionado
+                this.callbackClickSubItem.onClick(itemId, this.type);
             });
 
             subItemBox.setOnMouseEntered(e -> {
-                if (!itemName.equals(subItemSelected.get())) {
+                if (!itemId.equals(subItemSelected.get())) {
                     subItemBox.setStyle("-fx-background-color: #2D2A6E;");
                 }
             });
 
             subItemBox.setOnMouseExited(e -> {
-                if (!itemName.equals(subItemSelected.get())) {
+                if (!itemId.equals(subItemSelected.get())) {
                     subItemBox.setStyle("-fx-background-color: transparent;");
                 }
             });

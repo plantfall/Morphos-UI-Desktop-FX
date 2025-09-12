@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,8 @@ public class App extends Application {
     public static Font FONT_SEMIBOLD;
     public static Font FONT_BOLD;
 
+    public static List<CanvaComponentJson> ComponentsList = new ArrayList<>();
+
     @Override
     public void init() {
         FONT_REGULAR = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Regular.ttf"), 14);
@@ -84,9 +87,10 @@ public class App extends Application {
 
             // Lê o JSON como array primeiro
             CanvaComponentJson[] componentsArray = om.readValue(componentsFile, CanvaComponentJson[].class);
-            List<CanvaComponentJson> componentsList = Arrays.asList(componentsArray);
 
-            componentsList.forEach(it -> {
+            ComponentsList = Arrays.asList(componentsArray);
+
+            ComponentsList.forEach(it -> {
                 context.addItem("component", it.self.identification());
             });
 
