@@ -96,7 +96,7 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         String borderRadius = Commons.getValueOfSpecificField(style, "-fx-border-radius");
 
         return new ButtonComponentData(text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
-                x, y, paddingTop, paddingRight, paddingBottom, paddingLeft);
+                x, y, paddingTop, paddingRight, paddingBottom, paddingLeft, this.getId());
 
     }
 
@@ -104,10 +104,11 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
     public void applyData(ButtonComponentData data) {
         var node = (Button) currentState.get();
 
+        node.setId(data.identification());
         node.setText(data.text());
 
         String paddings = "%s %s %s %s"
-                .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.paddingL_left());
+                .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left());
 
         node.setStyle(
                 "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"

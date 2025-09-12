@@ -38,11 +38,9 @@ import my_app.components.inputComponents.InputComponent;
 import my_app.data.CanvaComponentData;
 import my_app.data.CanvaComponentJson;
 import my_app.data.Commons;
+import my_app.data.ComponentsWrapper;
 import my_app.data.TextComponentData;
 import my_app.screens.Home.Home;
-
-record ComponentsWrapper(List<CanvaComponentJson> components) {
-}
 
 public class ShowComponentScene extends Scene {
     public Stage stage = new Stage();

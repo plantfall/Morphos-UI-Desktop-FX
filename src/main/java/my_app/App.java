@@ -6,8 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
@@ -35,8 +39,18 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import my_app.components.ImageComponent;
+import my_app.components.TextComponent;
+import my_app.components.buttonComponent.ButtonComponent;
+import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.SubItemsContext;
+import my_app.data.ButtonComponentData;
+import my_app.data.CanvaComponentJson;
 import my_app.data.Commons;
+import my_app.data.ComponentsWrapper;
+import my_app.data.ImageComponentData;
+import my_app.data.InputComponentData;
+import my_app.data.TextComponentData;
 import my_app.screens.Home.Home;
 import my_app.screens.scenes.DataScene.DataScene;
 import my_app.screens.scenes.MainScene.MainScene;
@@ -57,9 +71,39 @@ public class App extends Application {
         FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
 
+        loadSubItems();
+    }
+
+    File componentsFile = new File("components.json");
+
+    void loadSubItems() {
         SubItemsContext context = SubItemsContext.getInstance();
-        context.addItem("text", "Heading 1");
-        context.addItem("text", "Paragraph");
+
+        try {
+            ObjectMapper om = new ObjectMapper();
+
+            // Lê o JSON como array primeiro
+            CanvaComponentJson[] componentsArray = om.readValue(componentsFile, CanvaComponentJson[].class);
+            List<CanvaComponentJson> componentsList = Arrays.asList(componentsArray);
+
+            componentsList.forEach(it -> {
+                context.addItem("components", it.self.identification());
+
+                it.button_componentes.forEach(btn -> {
+                    context.addItem("button", btn.identification()); // Use btn.identification() em vez de
+                                                                     // it.self.identification()
+                });
+
+                // it.text_componentes.forEach(text -> {
+                // context.addItem("text", text.identification());
+                // });
+
+                // Adicione outros tipos conforme necessário
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

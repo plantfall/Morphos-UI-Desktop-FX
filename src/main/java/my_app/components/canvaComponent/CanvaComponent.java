@@ -14,7 +14,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
@@ -247,7 +246,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
         return new CanvaComponentData(
                 paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
-                bgContent);
+                bgContent, this.getId());
     }
 
     @Override
@@ -258,9 +257,11 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         node.setPrefWidth(data.width());
         node.setPrefHeight(data.height());
 
+        node.setId(data.identification());
+
         // Ajustando o padding
         node.setPadding(
-                new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.paddingL_left()));
+                new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left()));
 
         var bgType = data.bg_type();
         var bgContent = data.bgContent();

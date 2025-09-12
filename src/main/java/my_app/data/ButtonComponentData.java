@@ -15,5 +15,6 @@ public record ButtonComponentData(
         int padding_top,
         int padding_right,
         int padding_bottom,
-        int paddingL_left) implements Serializable {
+        int padding_left,
+        String identification) implements Serializable {
 }
