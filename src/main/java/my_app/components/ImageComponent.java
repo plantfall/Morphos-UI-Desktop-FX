@@ -8,7 +8,6 @@ import my_app.data.ViewContract;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
 public class ImageComponent extends ImageView implements ViewContract<ImageComponentData> {
@@ -89,6 +88,8 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
     @Override
     public void applyData(ImageComponentData data) {
         var node = (ImageView) currentState.get();
+
+        node.setImage(new Image(data.url()));
 
         node.setPreserveRatio(data.preserve_ratio());
 

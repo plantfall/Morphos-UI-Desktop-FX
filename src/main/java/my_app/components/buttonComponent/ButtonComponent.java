@@ -102,6 +102,8 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
     public void applyData(ButtonComponentData data) {
         var node = (Button) currentState.get();
 
+        node.setText(data.text());
+
         String paddings = "%s %s %s %s"
                 .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.paddingL_left());
 

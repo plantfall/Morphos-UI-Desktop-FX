@@ -86,14 +86,14 @@
       "url": "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
       "width": 100.0,
       "height": 100.0,
-      "x": 195.53,
-      "y": 128.67,
+      "x": 422.80000000000007,
+      "y": 33.19999999999999,
       "preserve_ratio": true
     }
   ],
   "input_components": [
     {
-      "text": "Email",
+      "text": "",
       "placeholder": "seu email",
       "font_weight": "normal",
       "font_size": "12",

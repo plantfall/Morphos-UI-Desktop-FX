@@ -2,7 +2,6 @@ package my_app.data;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -47,7 +47,7 @@ public class MainScene extends Scene {
         super(createRoot(), 1200, 650);
 
         try {
-            loadSceneFromJsonFile(new File("state.lua"), home.canva);
+            loadSceneFromJsonFile(new File("state.json"), home.canva);
         } catch (Exception e) {
         }
     }
@@ -80,7 +80,7 @@ public class MainScene extends Scene {
             reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File("state.lua"), home.canva));
+        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File("state.json"), home.canva));
 
         return mainView;
     }
