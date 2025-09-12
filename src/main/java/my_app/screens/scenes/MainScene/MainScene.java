@@ -1,13 +1,7 @@
 package my_app.screens.scenes.MainScene;
 
 import java.io.File;
-import java.io.FileWriter;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.jse.JsePlatform;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -21,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -35,7 +28,12 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.data.ButtonComponentData;
+import my_app.data.CanvaComponentJson;
 import my_app.data.Commons;
+import my_app.data.ImageComponentData;
+import my_app.data.InputComponentData;
+import my_app.data.TextComponentData;
 import my_app.screens.Home.Home;
 import my_app.screens.ShowCode.ShowCode;
 
@@ -49,11 +47,9 @@ public class MainScene extends Scene {
         super(createRoot(), 1200, 650);
 
         try {
-            loadStateFromLua(new File("state.lua"), home.canva);
+            loadSceneFromJsonFile(new File("state.lua"), home.canva);
         } catch (Exception e) {
-
         }
-
     }
 
     private static VBox createRoot() {
@@ -72,428 +68,104 @@ public class MainScene extends Scene {
 
         itemSalvar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            saveStateToFile(new File("state.lua"), home.canva);
+            saveSceneInJsonFile(new File("state.json"), home.canva);
         });
 
         itemCarregar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            loadStateFromLua(new File("state.lua"), home.canva);
+            loadSceneFromJsonFile(new File("state.json"), home.canva);
         });
 
         itemShowCode.setOnAction(ev -> {
             reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveStateToFile(new File("state.lua"), home.canva));
+        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File("state.lua"), home.canva));
 
         return mainView;
     }
 
-    private static void saveStateToFile(File file, CanvaComponent canva) {
+    private static void saveSceneInJsonFile(File file, CanvaComponent canva) {
         ObservableList<Node> children = canva.getChildren();
 
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write("canva = {\n");
+        CanvaComponentJson jsonTarget = new CanvaComponentJson();
 
-            // Escrevendo os text_componentes
-            writer.write("  self = {\n");
+        jsonTarget.self = canva.getData();
 
-            String canvastyle = canva.getStyle();
+        for (Node node : children) {
 
-            Insets cpadding = canva.getPadding();
-            double cpaddingTop = cpadding.getTop();
-            double cpaddingRight = cpadding.getRight();
-            double cpaddingBottom = cpadding.getBottom();
-            double cpaddingLeft = cpadding.getLeft();
-
-            double cwidth = canva.getPrefWidth();
-            double cheight = canva.getPrefHeight();
-
-            /*
-             * setStyle("-fx-background-image: url('" + url + "'); " +
-             * "-fx-background-size: cover; -fx-background-position: center;");
-             */
-            String bgType = "";
-            String bgContent = "";
-            if (Commons.getValueOfSpecificField(canvastyle, "-fx-background-image").isEmpty()) {
-                bgContent = Commons.getValueOfSpecificField(canvastyle, "-fx-background-color");
-                bgType = "color";
-            } else {
-                var bgImage = Commons.getValueOfSpecificField(canvastyle, "-fx-background-image");// url('" + url +
-                // "');
-
-                var right = bgImage.split("(")[1];
-                var left = right.split(")")[0];
-
-                bgContent = left;
-                bgType = "image";
+            if (node instanceof TextComponent component) {
+                jsonTarget.text_componentes.add(component.getData());
             }
 
-            writer.write(String.format(
-                    "      width = %.2f,\n" +
-                            "      height = %.2f,\n" +
-                            "      padding_top = %.2f,\n" +
-                            "      padding_right = %.2f,\n" +
-                            "      padding_bottom = %.2f,\n" +
-                            "      padding_left = %.2f,\n" +
-                            "      bg_type = \"%s\",\n" +
-                            "      bg_content = \"%s\"\n",
-                    cwidth, cheight, cpaddingTop, cpaddingRight, cpaddingBottom, cpaddingLeft, bgType, bgContent));
-
-            // fim do self
-            writer.write("  },\n");
-
-            // Escrevendo os text_componentes
-            writer.write("  text_componentes = {\n");
-            int textCount = 1;
-            for (Node node : children) {
-                String style = node.getStyle();
-
-                if (node instanceof TextComponent textNode) {
-                    String key = "text_" + textCount++;
-                    String text = textNode.getText();
-                    String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
-                    double x = textNode.getLayoutX();
-                    double y = textNode.getLayoutY();
-
-                    String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
-                    String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
-
-                    writer.write(String.format(
-                            "    %s = {\n" +
-                                    "      text = \"%s\",\n" +
-                                    "      layout_x = %.2f,\n" +
-                                    "      layout_y = %.2f,\n" +
-                                    "      font_size = %s,\n" +
-                                    "      color = \"%s\",\n" +
-                                    "      font_weight = \"%s\"\n" +
-                                    "    },\n",
-                            key, text.replace("\"", "\\\""), x, y, fontSize, textFill, fontWeight));
-                }
+            if (node instanceof ButtonComponent component) {
+                jsonTarget.button_componentes.add(component.getData());
             }
-            // fim do textcomponent
-            writer.write("  },\n");
 
-            // Escrevendo os button_componentes
-            writer.write("  button_componentes = {\n");
-            int buttonCount = 1;
-            for (Node node : children) {
-                String style = node.getStyle();
-
-                if (node instanceof Button component) {
-                    String key = "btn_" + buttonCount++;
-                    String text = component.getText();
-                    Font font = component.getFont();
-                    Background bg = component.getBackground();
-                    Insets padding = component.getPadding();
-
-                    // Extraindo informações sobre o estilo do botão
-                    String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
-                    String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
-                    String textFill = Commons.getValueOfSpecificField(style, "-fx-text-fill");
-                    String borderWidth = Commons.getValueOfSpecificField(style, "-fx-border-width");
-                    String bgColor = Commons.getValueOfSpecificField(style, "-fx-background-color");
-                    String paddingTop = String.valueOf(padding.getTop());
-                    String paddingRight = String.valueOf(padding.getRight());
-                    String paddingBottom = String.valueOf(padding.getBottom());
-                    String paddingLeft = String.valueOf(padding.getLeft());
-                    String borderRadius = Commons.getValueOfSpecificField(style, "-fx-border-radius");
-                    String bgRadius = Commons.getValueOfSpecificField(style, "-fx-background-radius");
-
-                    writer.write(String.format(
-                            "    %s = {\n" +
-                                    "      text = \"%s\",\n" +
-                                    "      layout_x = %.2f,\n" +
-                                    "      layout_y = %.2f,\n" +
-                                    "      font_size = %s,\n" +
-                                    "      color = \"%s\",\n" +
-                                    "      font_weight = \"%s\",\n" +
-                                    "      bg_color = \"%s\",\n" +
-                                    "      padding_top = %s,\n" +
-                                    "      padding_right = %s,\n" +
-                                    "      padding_bottom = %s,\n" +
-                                    "      padding_left = %s,\n" +
-                                    "      border_width = %s,\n" +
-                                    "      border_radius = %s,\n" +
-                                    "      bg_radius = %s\n" +
-                                    "    },\n",
-                            key, text.replace("\"", "\\\""), component.getLayoutX(), component.getLayoutY(), fontSize,
-                            textFill, fontWeight, bgColor, paddingTop, paddingRight, paddingBottom, paddingLeft,
-                            borderWidth, borderRadius, bgRadius));
-                }
-
+            if (node instanceof ImageComponent component) {
+                jsonTarget.image_components.add(component.getData());
             }
-            // fechou button_components
-            writer.write("  },\n");
 
-            writer.write("  image_components = {\n");
-            int imgCount = 1;
-            for (Node node : children) {
-                String style = node.getStyle();
-
-                if (node instanceof ImageComponent component) {
-                    String key = "img_" + imgCount++;
-
-                    Image img = component.getImage();
-
-                    String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
-                    double width = component.getFitWidth();
-                    double height = component.getFitHeight();
-
-                    double x = component.getLayoutX();
-                    double y = component.getLayoutY();
-
-                    boolean preserveRatio = component.isPreserveRatio();
-
-                    writer.write(String.format(
-                            "    %s = {\n" +
-                                    "      uri = \"%s\",\n" +
-                                    "      layout_x = %.2f,\n" +
-                                    "      layout_y = %.2f,\n" +
-                                    "      width = %s,\n" +
-                                    "      height = %s,\n" +
-                                    "      preserve_ratio = \"%s\"\n" +
-                                    "    },\n",
-                            key, url.replace("\"", "\\\""), x, y, width, height, preserveRatio));
-                }
+            if (node instanceof InputComponent component) {
+                jsonTarget.input_components.add(component.getData());
             }
-            // fechou image_components
-            writer.write("  },\n");
-
-            writer.write("  input_components = {\n");
-            int inputCount = 1;
-            for (Node node : children) {
-                String style = node.getStyle();
-
-                if (node instanceof InputComponent component) {
-                    String key = "input_" + inputCount++;
-
-                    String text = component.getText();
-                    String placeholder = component.getPromptText();
-                    String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
-                    double x = component.getLayoutX();
-                    double y = component.getLayoutY();
-
-                    String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
-                    String color = Commons.getValueOfSpecificField(style, "-fx-text-fill");
-
-                    writer.write(String.format(
-                            "    %s = {\n" +
-                                    "      text = \"%s\",\n" +
-                                    "      placeholder = \"%s\",\n" +
-                                    "      layout_x = %.2f,\n" +
-                                    "      layout_y = %.2f,\n" +
-                                    "      font_size = %s,\n" +
-                                    "      color = \"%s\",\n" +
-                                    "      font_weight = \"%s\"\n" +
-                                    "    },\n",
-                            key,
-                            text.replace("\"", "\\\""),
-                            placeholder.replace("\"", "\\\""),
-                            x, y, fontSize, color, fontWeight));
-                }
-            }
-            // fechou input_components
-            writer.write("  }\n");
-
-            // fim do canva
-            writer.write("}\n");
-
-            System.out.println(writer.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        Commons.WriteJsonInDisc(file, jsonTarget);
     }
 
-    private static void loadStateFromLua(File file, CanvaComponent canvaComp) {
-        Globals globals = JsePlatform.standardGlobals();
-        LuaValue chunk = globals.loadfile(file.getAbsolutePath());
-        chunk.call();
+    private static void loadSceneFromJsonFile(File file, CanvaComponent canvaCompTarget) {
 
-        LuaValue canva = globals.get("canva");
-
-        var children = canvaComp.getChildren();
+        var children = canvaCompTarget.getChildren();
         children.clear();
 
-        // --- Extraindo as informações de self ---
-        LuaValue self = canva.get("self");
-        if (self.istable()) {
-            LuaTable selfTable = (LuaTable) self;
+        try {
+            ObjectMapper om = new ObjectMapper();
 
-            // Extraindo largura e altura
-            double width = selfTable.get("width").todouble();
-            double height = selfTable.get("height").todouble();
-            double paddingTop = selfTable.get("padding_top").todouble();
-            double paddingRight = selfTable.get("padding_right").todouble();
-            double paddingBottom = selfTable.get("padding_bottom").todouble();
-            double paddingLeft = selfTable.get("padding_left").todouble();
-            String bgType = selfTable.get("bg_type").toString();
-            String bgContent = selfTable.get("bg_content").toString();
+            // Lê o JSON de volta para o objeto Java
+            CanvaComponentJson jsonTarget = om.readValue(file, CanvaComponentJson.class);
 
-            // Aplicando as informações extraídas ao CanvaComponent
-            canvaComp.setPrefWidth(width);
-            canvaComp.setPrefHeight(height);
+            // Restaura os dados do próprio Canva
+            canvaCompTarget.applyData(jsonTarget.self);
 
-            // Ajustando o padding
-            canvaComp.setPadding(new Insets(paddingTop, paddingRight, paddingBottom, paddingLeft));
+            // Restaura os textos
+            for (TextComponentData data : jsonTarget.text_componentes) {
+                TextComponent comp = new TextComponent("");
 
-            // Definindo o fundo com base no tipo
-            if (bgType.equals("color")) {
-                canvaComp.setStyle("-fx-background-color:%s;".formatted(
-                        bgContent));
-            } else if (bgType.equals("image")) {
-                // Para imagem, você pode fazer algo como isso:
-                canvaComp.setStyle("-fx-background-image: url('" + bgContent + "');" +
-                        "-fx-background-size: cover; -fx-background-position: center;");
-            }
+                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
-        }
-
-        // --- Textos ---
-        LuaValue textComponents = canva.get("text_componentes");
-        if (textComponents.istable()) {
-            LuaTable table = (LuaTable) textComponents;
-            LuaValue k = LuaValue.NIL;
-            while (true) {
-                Varargs n = table.next(k);
-                if ((k = n.arg1()).isnil())
-                    break;
-                LuaValue comp = n.arg(2);
-
-                String text = comp.get("text").optjstring("");
-                double x = comp.get("layout_x").todouble();
-                double y = comp.get("layout_y").todouble();
-                String fontSize = comp.get("font_size").toString();
-                String colorHex = comp.get("color").toString();
-                String fontWeight = comp.get("font_weight").toString();
-
-                TextComponent node = new TextComponent(text);
-
-                node.setStyle("-fx-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
-                        .formatted(colorHex, fontSize, fontWeight));
-
-                canvaComp.addElementDragable(node, current -> home.selectNode(current));
-
-                node.setLayoutX(x);
-                node.setLayoutY(y);
-            }
-        }
-
-        // --- Imagens ---
-        LuaValue imgComponents = canva.get("image_components");
-        if (imgComponents.istable()) {
-            LuaTable table = (LuaTable) imgComponents;
-            LuaValue k = LuaValue.NIL;
-            while (true) {
-                Varargs n = table.next(k);
-                if ((k = n.arg1()).isnil())
-                    break;
-                LuaValue comp = n.arg(2);
-
-                String url = comp.get("uri").optjstring("");
-                double x = comp.get("layout_x").todouble();
-                double y = comp.get("layout_y").todouble();
-                double width = comp.get("width").todouble();
-                double height = comp.get("height").todouble();
-                String preserveRatio = comp.get("preserve_ratio").toString();
-
-                if (!url.isBlank()) {
-                    ImageComponent node = new ImageComponent(url);
-
-                    canvaComp.addElementDragable(node, current -> home.selectNode(current));
-
-                    node.setPreserveRatio(preserveRatio.equals("true"));
-
-                    node.setLayoutX(x);
-                    node.setLayoutY(y);
-
-                    node.setFitHeight(height);
-                    node.setFitWidth(width);
-                }
-            }
-        }
-
-        // --- Botões ---
-        LuaValue btnComponents = canva.get("button_componentes");
-        if (btnComponents.istable()) {
-            LuaTable table = (LuaTable) btnComponents;
-            LuaValue k = LuaValue.NIL;
-            while (true) {
-                Varargs n = table.next(k);
-                if ((k = n.arg1()).isnil())
-                    break;
-                LuaValue comp = n.arg(2);
-
-                String text = comp.get("text").optjstring("Button");
-                double x = comp.get("layout_x").todouble();
-                double y = comp.get("layout_y").todouble();
-                String bg_color = comp.get("bg_color").toString();
-                String fontSize = comp.get("font_size").toString();
-                String textColor = comp.get("color").toString();
-                String fontWeight = comp.get("font_weight").toString();
-                String bg_radius = comp.get("bg_radius").toString();
-
-                String padding_top = comp.get("padding_top").toString();
-                String padding_right = comp.get("padding_right").toString();
-                String padding_bottom = comp.get("padding_bottom").toString();
-                String padding_left = comp.get("padding_left").toString();
-                String padding = padding_top + " " + padding_right + " " + padding_bottom + " " + padding_left;
-
-                String border_width = comp.get("border_width").toString();
-
-                ButtonComponent node = new ButtonComponent(text);
-
-                node.setStyle(
-                        "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
-                                .formatted(
-                                        bg_color,
-                                        padding,
-                                        fontWeight,
-                                        bg_radius,
-                                        bg_radius,
-                                        textColor,
-                                        fontSize,
-                                        border_width));
-
-                canvaComp.addElementDragable(node, current -> home.selectNode(current));
-
-                node.setLayoutX(x);
-                node.setLayoutY(y);
+                comp.applyData(data);
 
             }
-        }
 
-        // --- inputs ---
-        LuaValue inputComponents = canva.get("input_components");
-        if (inputComponents.istable()) {
-            LuaTable table = (LuaTable) inputComponents;
-            LuaValue k = LuaValue.NIL;
-            while (true) {
-                Varargs n = table.next(k);
-                if ((k = n.arg1()).isnil())
-                    break;
-                LuaValue comp = n.arg(2);
+            // Restaura os botões
+            for (ButtonComponentData data : jsonTarget.button_componentes) {
+                ButtonComponent comp = new ButtonComponent();
 
-                String text = comp.get("text").optjstring("");
+                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
-                String placeholder = comp.get("placeholder").optjstring("");
-                double x = comp.get("layout_x").todouble();
-                double y = comp.get("layout_y").todouble();
-                String fontSize = comp.get("font_size").toString();
-                String colorHex = comp.get("color").toString();
-                String fontWeight = comp.get("font_weight").toString();
-
-                var node = new InputComponent(text);
-
-                node.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
-                        .formatted(colorHex, fontSize, fontWeight));
-
-                canvaComp.addElementDragable(node, current -> home.selectNode(current));
-
-                node.setLayoutX(x);
-                node.setLayoutY(y);
-                node.setPromptText(placeholder);
+                comp.applyData(data);
             }
+
+            // Restaura as imagens
+            for (ImageComponentData data : jsonTarget.image_components) {
+                ImageComponent comp = new ImageComponent();
+                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+                comp.applyData(data);
+            }
+
+            // Restaura inputs
+            for (InputComponentData data : jsonTarget.input_components) {
+                InputComponent comp = new InputComponent("");
+
+                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+                comp.applyData(data);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

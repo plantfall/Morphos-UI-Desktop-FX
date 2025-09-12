@@ -2,6 +2,7 @@ package my_app.components.buttonComponent;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -9,10 +10,11 @@ import my_app.components.FontColorPicker;
 import my_app.components.FontSizeComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
+import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 
-public class ButtonComponent extends Button implements ViewContract {
+public class ButtonComponent extends Button implements ViewContract<ButtonComponentData> {
 
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
@@ -65,5 +67,57 @@ public class ButtonComponent extends Button implements ViewContract {
         father.getChildren().setAll(
                 new LayoutPositionComponent(currentState));
 
+    }
+
+    @Override
+    public ButtonComponentData getData() {
+        String style = this.getStyle();
+
+        Insets padding = this.getPadding();
+
+        String text = this.getText();
+        // Extraindo informações sobre o estilo do botão
+        String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
+        String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
+        String color = Commons.getValueOfSpecificField(style, "-fx-text-fill");
+        String borderWidth = Commons.getValueOfSpecificField(style, "-fx-border-width");
+
+        String bgColor = Commons.getValueOfSpecificField(style, "-fx-background-color");
+
+        double x = this.getLayoutX();
+        double y = this.getLayoutY();
+
+        int paddingTop = (int) padding.getTop();
+        int paddingRight = (int) padding.getRight();
+        int paddingBottom = (int) padding.getBottom();
+        int paddingLeft = (int) padding.getLeft();
+        String borderRadius = Commons.getValueOfSpecificField(style, "-fx-border-radius");
+
+        return new ButtonComponentData(text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
+                x, y, paddingTop, paddingRight, paddingBottom, paddingLeft);
+
+    }
+
+    @Override
+    public void applyData(ButtonComponentData data) {
+        var node = (Button) currentState.get();
+
+        String paddings = "%s %s %s %s"
+                .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.paddingL_left());
+
+        node.setStyle(
+                "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
+                        .formatted(
+                                data.bgColor(),
+                                paddings,
+                                data.fontWeight(),
+                                data.borderRadius(),
+                                data.borderRadius(),
+                                data.color(),
+                                data.fontSize(),
+                                data.borderWidth()));
+
+        node.setLayoutX(data.x());
+        node.setLayoutY(data.y());
     }
 }

@@ -3,6 +3,7 @@ package my_app.components.inputComponents;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import my_app.components.FontColorPicker;
@@ -11,9 +12,10 @@ import my_app.components.FontWeightComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
 import my_app.data.Commons;
+import my_app.data.InputComponentData;
 import my_app.data.ViewContract;
 
-public class InputComponent extends TextField implements ViewContract {
+public class InputComponent extends TextField implements ViewContract<InputComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
     public InputComponent(String content) {
@@ -42,5 +44,38 @@ public class InputComponent extends TextField implements ViewContract {
     public void settings(Pane father) {
         father.getChildren().setAll(
                 new LayoutPositionComponent(currentState));
+    }
+
+    @Override
+    public InputComponentData getData() {
+
+        String style = getStyle();
+
+        String text = this.getText();
+        String placeholder = this.getPromptText();
+
+        String fontWeight = Commons.getValueOfSpecificField(style, "-fx-font-weight");
+
+        String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
+        String color = Commons.getValueOfSpecificField(style, "-fx-text-fill");
+
+        double x = this.getLayoutX();
+        double y = this.getLayoutY();
+
+        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y);
+    }
+
+    @Override
+    public void applyData(InputComponentData data) {
+
+        var node = (TextField) currentState.get();
+
+        node.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+                .formatted(data.color(), data.font_size(), data.font_weight()));
+
+        node.setLayoutX(data.x());
+        node.setLayoutY(data.y());
+        node.setPromptText(data.placeholder());
+
     }
 }

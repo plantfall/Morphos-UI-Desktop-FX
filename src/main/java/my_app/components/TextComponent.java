@@ -9,7 +9,7 @@ import my_app.data.Commons;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 
-public class TextComponent extends Text implements ViewContract {
+public class TextComponent extends Text implements ViewContract<TextComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
     public TextComponent(String content) {
@@ -41,6 +41,7 @@ public class TextComponent extends Text implements ViewContract {
                 new LayoutPositionComponent(currentState));
     }
 
+    @Override
     public TextComponentData getData() {
         String style = getStyle();
 
@@ -53,5 +54,19 @@ public class TextComponent extends Text implements ViewContract {
         String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
 
         return new TextComponentData(text, x, y, fontSize, textFill, fontWeight);
+    }
+
+    @Override
+    public void applyData(TextComponentData data) {
+        var node = (Text) this.currentState.get();
+
+        node.setText(data.text());
+
+        node.setStyle("-fx-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+                .formatted(data.color(), data.fontSize(), data.font_weight()));
+
+        node.setLayoutX(data.layout_x());
+        node.setLayoutY(data.layout_y());
+
     }
 }

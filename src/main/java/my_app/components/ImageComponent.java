@@ -3,13 +3,15 @@ package my_app.components;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import my_app.data.ImageComponentData;
 import my_app.data.ViewContract;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 
-public class ImageComponent extends ImageView implements ViewContract {
+public class ImageComponent extends ImageView implements ViewContract<ImageComponentData> {
 
     final int size = 100;
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
@@ -66,6 +68,36 @@ public class ImageComponent extends ImageView implements ViewContract {
 
         father.getChildren().setAll(
                 new LayoutPositionComponent(currentState), widthRow, heightRow);
+    }
+
+    @Override
+    public ImageComponentData getData() {
+        Image img = this.getImage();
+
+        String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
+        double width = this.getFitWidth();
+        double height = this.getFitHeight();
+
+        double x = this.getLayoutX();
+        double y = this.getLayoutY();
+
+        boolean preserveRatio = this.isPreserveRatio();
+
+        return new ImageComponentData(url, width, height, x, y, preserveRatio);
+    }
+
+    @Override
+    public void applyData(ImageComponentData data) {
+        var node = (ImageView) currentState.get();
+
+        node.setPreserveRatio(data.preserve_ratio());
+
+        node.setLayoutX(data.x());
+        node.setLayoutY(data.y());
+
+        node.setFitHeight(data.height());
+        node.setFitWidth(data.width());
+
     }
 
 }

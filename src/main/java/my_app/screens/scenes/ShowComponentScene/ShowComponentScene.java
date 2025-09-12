@@ -116,11 +116,7 @@ public class ShowComponentScene extends Scene {
         // Cria o wrapper final
         ComponentsWrapper wrapper = new ComponentsWrapper(configData, componentsList);
 
-        try (FileWriter writer = new FileWriter(file)) {
-            om.writeValue(file, wrapper);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Commons.WriteJsonInDisc(file, wrapper);
 
     }
 

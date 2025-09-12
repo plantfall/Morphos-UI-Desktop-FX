@@ -1,0 +1,114 @@
+{
+  "self": {
+    "padding_top": 0,
+    "padding_right": 0,
+    "padding_bottom": 0,
+    "paddingL_left": 0,
+    "width": 800.0,
+    "height": 600.0,
+    "bg_type": "color",
+    "bgContent": "#cc3333"
+  },
+  "text_componentes": [
+    {
+      "text": "Bem vindo de volta",
+      "layout_x": 198.13,
+      "layout_y": 56.02,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal"
+    }
+  ],
+  "button_componentes": [
+    {
+      "text": "Acessar",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#b31a1a",
+      "x": 197.16,
+      "y": 247.87,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "paddingL_left": 50
+    },
+    {
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 10.4,
+      "y": 10.4,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "paddingL_left": 10
+    },
+    {
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 9.6,
+      "y": 72.8,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "paddingL_left": 10
+    },
+    {
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 8.0,
+      "y": 138.4,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "paddingL_left": 10
+    }
+  ],
+  "image_components": [
+    {
+      "url": "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
+      "width": 100.0,
+      "height": 100.0,
+      "x": 195.53,
+      "y": 128.67,
+      "preserve_ratio": true
+    }
+  ],
+  "input_components": [
+    {
+      "text": "Email",
+      "placeholder": "seu email",
+      "font_weight": "normal",
+      "font_size": "12",
+      "color": "black",
+      "x": 194.41,
+      "y": 85.31
+    },
+    {
+      "text": "",
+      "placeholder": "teste",
+      "font_weight": "normal",
+      "font_size": "12",
+      "color": "black",
+      "x": 200.4,
+      "y": 312.53
+    }
+  ]
+}

@@ -19,12 +19,13 @@ import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.HeightComponent;
 import my_app.components.canvaComponent.WidthComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 import my_app.screens.scenes.ShowComponentScene.ShowComponentScene;
 
-public class CanvaComponent extends Pane implements ViewContract {
+public class CanvaComponent extends Pane implements ViewContract<CanvaComponentData> {
 
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>(this);
 
@@ -204,5 +205,69 @@ public class CanvaComponent extends Pane implements ViewContract {
         setPadding(new Insets(0));
 
         setStyle("-fx-background-color:%s;".formatted(Commons.CanvaBgColorDefault));
+    }
+
+    @Override
+    public CanvaComponentData getData() {
+
+        String canvastyle = this.getStyle();
+
+        Insets padding = this.getPadding();
+        int paddingTop = (int) padding.getTop();
+        int paddingRight = (int) padding.getRight();
+        int paddingBottom = (int) padding.getBottom();
+        int paddingLeft = (int) padding.getLeft();
+
+        double width = this.getPrefWidth();
+        double height = this.getPrefHeight();
+
+        /*
+         * setStyle("-fx-background-image: url('" + url + "'); " +
+         * "-fx-background-size: cover; -fx-background-position: center;");
+         */
+        String bgType = "";
+        String bgContent = "";
+        if (Commons.getValueOfSpecificField(canvastyle, "-fx-background-image").isEmpty()) {
+            bgContent = Commons.getValueOfSpecificField(canvastyle, "-fx-background-color");
+            bgType = "color";
+        } else {
+            var bgImage = Commons.getValueOfSpecificField(canvastyle, "-fx-background-image");// url('" + url +
+            // "');
+
+            var right = bgImage.split("(")[1];
+            var left = right.split(")")[0];
+
+            bgContent = left;
+            bgType = "image";
+        }
+
+        return new CanvaComponentData(
+                paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
+                bgContent);
+    }
+
+    @Override
+    public void applyData(CanvaComponentData data) {
+        var node = (Pane) currentState.get();
+
+        // Aplicando as informações extraídas ao CanvaComponent
+        node.setPrefWidth(data.width());
+        node.setPrefHeight(data.height());
+
+        // Ajustando o padding
+        node.setPadding(
+                new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.paddingL_left()));
+
+        var bgType = data.bg_type();
+        var bgContent = data.bgContent();
+        // Definindo o fundo com base no tipo
+        if (bgType.equals("color")) {
+            node.setStyle("-fx-background-color:%s;".formatted(
+                    bgContent));
+        } else if (bgType.equals("image")) {
+            // Para imagem, você pode fazer algo como isso:
+            node.setStyle("-fx-background-image: url('" + bgContent + "');" +
+                    "-fx-background-size: cover; -fx-background-position: center;");
+        }
     }
 }

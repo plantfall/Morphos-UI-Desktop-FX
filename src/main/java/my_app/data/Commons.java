@@ -1,7 +1,12 @@
 package my_app.data;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.scene.paint.Color;
 
@@ -79,5 +84,16 @@ public class Commons {
                 (int) (color.getRed() * 255),
                 (int) (color.getGreen() * 255),
                 (int) (color.getBlue() * 255));
+    }
+
+    public static void WriteJsonInDisc(File file, Object obj) {
+
+        ObjectMapper om = new ObjectMapper();
+
+        try {
+            om.writeValue(file, obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
