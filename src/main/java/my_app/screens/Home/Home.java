@@ -17,6 +17,25 @@ public class Home extends BorderPane {
     public CanvaComponent canva;
 
     @FunctionalInterface
+    public interface HandleClickSubItem {
+        public void onClick(String itemIdentification);
+    }
+
+    void onClickOnSubItem(String itemName) {
+
+        Node target = canvaChildren()
+                .stream()
+                .filter(n -> itemName.equals(n.getId()))
+                .findFirst()
+                .orElse(null);
+
+        // 2. Se achou, seleciona
+        if (target != null) {
+            selectNode(target);
+        }
+    }
+
+    @FunctionalInterface
     public interface VisualNodeCallback {
         public void set(Node n);
     }
@@ -31,7 +50,7 @@ public class Home extends BorderPane {
     }
 
     public Home(boolean openComponentScene) {
-        setLeft(new LeftSide(selectedOption));
+        setLeft(new LeftSide(selectedOption, this::onClickOnSubItem));
 
         ScrollPane editor = new ScrollPane();
 

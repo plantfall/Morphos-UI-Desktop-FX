@@ -17,6 +17,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -35,6 +36,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import my_app.App;
 import my_app.contexts.SubItemsContext;
+import my_app.screens.Home.Home.HandleClickSubItem;
 
 public class LeftSide extends VBox {
 
@@ -46,7 +48,9 @@ public class LeftSide extends VBox {
 
     SimpleStringProperty optionSelected;
 
-    public LeftSide(SimpleStringProperty optionSelected) {
+    public LeftSide(
+            SimpleStringProperty optionSelected,
+            HandleClickSubItem callbackClickSubItem) {
         this.optionSelected = optionSelected;
 
         config();
@@ -60,7 +64,7 @@ public class LeftSide extends VBox {
         getChildren().add(spacer);
 
         titles.forEach(title -> {
-            nodes.add(new ItemColumn(title, () -> {
+            nodes.add(new ItemColumn(title, callbackClickSubItem, () -> {
                 indexSelecionado.set(titles.indexOf(title));
             }));
         });
@@ -99,9 +103,14 @@ public class LeftSide extends VBox {
         private WeakListChangeListener<SimpleStringProperty> weakListChangeListener;
         private ListChangeListener<SimpleStringProperty> listChangeListener;
 
-        public ItemColumn(String name, Runnable function) {
+        HandleClickSubItem callbackClickSubItem;
+
+        public ItemColumn(String name,
+                HandleClickSubItem callbackClickSubItem,
+                Runnable function) {
             this.type = name.toLowerCase();
 
+            this.callbackClickSubItem = callbackClickSubItem;
             // Row principal
             Row mainRow = new Row(name, () -> {
                 function.run();
@@ -121,7 +130,9 @@ public class LeftSide extends VBox {
 
             expanded.addListener((obs, old, value) -> {
                 SubItemsContext context = SubItemsContext.getInstance();
-                ObservableList<SimpleStringProperty> items = context.getItemsByType(type);
+                // ObservableList<SimpleStringProperty> items = context.getItemsByType(type);
+
+                var items = context.getItemsByType(type);
 
                 if (value) {
                     // Adiciona o listener quando expandido
@@ -163,7 +174,10 @@ public class LeftSide extends VBox {
 
             subItemBox.setOnMouseClicked(e -> {
                 System.out.println("Selected: " + itemName);
-                // Lógica para adicionar ao canvas
+                // Lógica para deixar o componente selecionado no Canva
+
+                this.callbackClickSubItem.onClick(itemName);
+
             });
 
             subItemBox.setOnMouseEntered(e -> subItemBox.setStyle("-fx-background-color: #2D2A6E;"));
