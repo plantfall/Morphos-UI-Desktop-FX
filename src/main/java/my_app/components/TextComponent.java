@@ -54,20 +54,20 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
         String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
         String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
 
-        return new TextComponentData(text, x, y, fontSize, textFill, fontWeight);
+        return new TextComponentData(text, x, y, fontSize, textFill, fontWeight, this.getId());
     }
 
     @Override
     public void applyData(TextComponentData data) {
-        var node = (Text) this.currentState.get();
 
-        node.setText(data.text());
+        this.setText(data.text());
+        this.setId(data.identification());
 
-        node.setStyle("-fx-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+        this.setStyle("-fx-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
                 .formatted(data.color(), data.fontSize(), data.font_weight()));
 
-        node.setLayoutX(data.layout_x());
-        node.setLayoutY(data.layout_y());
+        this.setLayoutX(data.layout_x());
+        this.setLayoutY(data.layout_y());
 
     }
 }

@@ -2,11 +2,8 @@ package my_app.screens.Home;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -19,7 +16,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -33,7 +29,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import my_app.App;
@@ -210,7 +205,6 @@ public class LeftSide extends VBox {
     }
 
     class Row extends HBox {
-        BooleanProperty onHover = new SimpleBooleanProperty(false);
         Button btnAdd = new Button();
 
         public Row(String name, Runnable function) {
@@ -223,9 +217,6 @@ public class LeftSide extends VBox {
             getChildren().add(label);
             getChildren().add(btnAdd);
 
-            btnAdd.managedProperty().bind(onHover);
-            btnAdd.visibleProperty().bind(onHover);
-
             btnAdd.setOnAction(ev -> {
                 optionSelected.set(name);
             });
@@ -234,7 +225,6 @@ public class LeftSide extends VBox {
                     AntDesignIconsOutlined.PLUS_CIRCLE,
                     12,
                     Color.BLACK);
-            onHover.set(true);
 
             btnAdd.setGraphic(icon);
 
@@ -247,22 +237,17 @@ public class LeftSide extends VBox {
 
                 // notifica a lógica externa
                 function.run();
-
-                onHover.set(true);
-
             });
 
             setOnMouseEntered(e -> {
-                if (indexSelecionado.get() != nodes.indexOf(this)) {
-                    onHover.set(true);
 
+                if (indexSelecionado.get() != nodes.indexOf(this)) {
                     setStyle("-fx-background-color: lightblue;");
                 }
             });
 
             setOnMouseExited(e -> {
                 if (indexSelecionado.get() != nodes.indexOf(this)) {
-                    onHover.set(false);
                     setStyle("-fx-background-color: transparent;");
                 }
             });

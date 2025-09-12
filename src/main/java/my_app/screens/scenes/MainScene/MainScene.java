@@ -28,6 +28,7 @@ import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.contexts.SubItemsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.CanvaComponentJson;
 import my_app.data.Commons;
@@ -48,10 +49,7 @@ public class MainScene extends Scene {
     public MainScene() {
         super(createRoot(), 1200, 650);
 
-        try {
-            loadSceneFromJsonFile(new File(FileName), home.canva);
-        } catch (Exception e) {
-        }
+        loadSceneFromJsonFile(new File(FileName), home.canva);
     }
 
     private static VBox createRoot() {
@@ -99,6 +97,8 @@ public class MainScene extends Scene {
         var children = canvaCompTarget.getChildren();
         children.clear();
 
+        SubItemsContext context = SubItemsContext.getInstance();
+
         try {
             ObjectMapper om = new ObjectMapper();
 
@@ -115,7 +115,7 @@ public class MainScene extends Scene {
                 canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
                 comp.applyData(data);
-
+                context.addItem("text", data.identification());
             }
 
             // Restaura os botões
@@ -125,6 +125,7 @@ public class MainScene extends Scene {
                 canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
                 comp.applyData(data);
+                context.addItem("button", data.identification());
             }
 
             // Restaura as imagens
@@ -133,6 +134,7 @@ public class MainScene extends Scene {
                 canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
                 comp.applyData(data);
+                context.addItem("image", data.identification());
             }
 
             // Restaura inputs
@@ -142,6 +144,7 @@ public class MainScene extends Scene {
                 canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
                 comp.applyData(data);
+                context.addItem("input", data.identification());
             }
 
         } catch (Exception e) {

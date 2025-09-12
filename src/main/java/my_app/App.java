@@ -71,12 +71,12 @@ public class App extends Application {
         FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
 
-        loadSubItems();
+        loadSubItemsOfCustomComponents();
     }
 
     File componentsFile = new File("components.json");
 
-    void loadSubItems() {
+    void loadSubItemsOfCustomComponents() {
         SubItemsContext context = SubItemsContext.getInstance();
 
         try {
@@ -87,18 +87,7 @@ public class App extends Application {
             List<CanvaComponentJson> componentsList = Arrays.asList(componentsArray);
 
             componentsList.forEach(it -> {
-                context.addItem("components", it.self.identification());
-
-                it.button_componentes.forEach(btn -> {
-                    context.addItem("button", btn.identification()); // Use btn.identification() em vez de
-                                                                     // it.self.identification()
-                });
-
-                // it.text_componentes.forEach(text -> {
-                // context.addItem("text", text.identification());
-                // });
-
-                // Adicione outros tipos conforme necessário
+                context.addItem("component", it.self.identification());
             });
 
         } catch (Exception e) {

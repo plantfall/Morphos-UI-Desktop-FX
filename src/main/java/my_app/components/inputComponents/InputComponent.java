@@ -62,20 +62,20 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
         double x = this.getLayoutX();
         double y = this.getLayoutY();
 
-        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y);
+        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y, this.getId());
     }
 
     @Override
     public void applyData(InputComponentData data) {
 
-        var node = (TextField) currentState.get();
+        this.setId(data.identification());
+        this.setText(data.text());
 
-        node.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+        this.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
                 .formatted(data.color(), data.font_size(), data.font_weight()));
 
-        node.setLayoutX(data.x());
-        node.setLayoutY(data.y());
-        node.setPromptText(data.placeholder());
-
+        this.setLayoutX(data.x());
+        this.setLayoutY(data.y());
+        this.setPromptText(data.placeholder());
     }
 }

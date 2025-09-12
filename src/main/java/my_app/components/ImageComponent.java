@@ -83,22 +83,23 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
         boolean preserveRatio = this.isPreserveRatio();
 
-        return new ImageComponentData(url, width, height, x, y, preserveRatio);
+        return new ImageComponentData(url, width, height, x, y, preserveRatio, this.getId());
     }
 
     @Override
     public void applyData(ImageComponentData data) {
-        var node = (ImageView) currentState.get();
 
-        node.setImage(new Image(data.url()));
+        this.setId(data.identification());
 
-        node.setPreserveRatio(data.preserve_ratio());
+        this.setImage(new Image(data.url()));
 
-        node.setLayoutX(data.x());
-        node.setLayoutY(data.y());
+        this.setPreserveRatio(data.preserve_ratio());
 
-        node.setFitHeight(data.height());
-        node.setFitWidth(data.width());
+        this.setLayoutX(data.x());
+        this.setLayoutY(data.y());
+
+        this.setFitHeight(data.height());
+        this.setFitWidth(data.width());
 
     }
 
