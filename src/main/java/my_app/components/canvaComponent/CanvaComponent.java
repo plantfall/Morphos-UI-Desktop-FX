@@ -24,8 +24,8 @@ import my_app.contexts.SubItemsContext;
 import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
+import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.Home.VisualNodeCallback;
-import my_app.screens.scenes.ShowComponentScene.ShowComponentScene;
 
 public class CanvaComponent extends Pane implements ViewContract<CanvaComponentData> {
 
@@ -244,7 +244,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
         return new CanvaComponentData(
                 paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
-                bgContent, this.getId());
+                bgContent, this.getId(), 0, 0);
     }
 
     @Override
@@ -252,17 +252,17 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         var node = (Pane) currentState.get();
 
         // Aplicando as informações extraídas ao CanvaComponent
-        node.setPrefWidth(data.width());
-        node.setPrefHeight(data.height());
+        node.setPrefWidth(data.width);
+        node.setPrefHeight(data.height);
 
-        node.setId(data.identification());
+        node.setId(data.identification);
 
         // Ajustando o padding
         node.setPadding(
-                new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left()));
+                new Insets(data.padding_top, data.padding_right, data.padding_bottom, data.padding_left));
 
-        var bgType = data.bg_type();
-        var bgContent = data.bgContent();
+        var bgType = data.bg_type;
+        var bgContent = data.bgContent;
         // Definindo o fundo com base no tipo
         if (bgType.equals("color")) {
             node.setStyle("-fx-background-color:%s;".formatted(

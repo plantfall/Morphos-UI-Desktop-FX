@@ -1,4 +1,4 @@
-package my_app.screens.scenes.MainScene;
+package my_app.scenes.MainScene;
 
 import java.io.File;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
@@ -145,6 +146,15 @@ public class MainScene extends Scene {
 
                 comp.applyData(data);
                 context.addItem("input", data.identification());
+            }
+
+            for (CanvaComponentJson data : jsonTarget.custom_components) {
+                var comp = new CustomComponent();
+
+                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+                comp.applyData(data);
+                context.addItem("input", data.self.identification);
             }
 
         } catch (Exception e) {

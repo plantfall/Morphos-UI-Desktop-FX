@@ -52,9 +52,9 @@ import my_app.data.ComponentsWrapper;
 import my_app.data.ImageComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.TextComponentData;
+import my_app.scenes.DataScene.DataScene;
+import my_app.scenes.MainScene.MainScene;
 import my_app.screens.Home.Home;
-import my_app.screens.scenes.DataScene.DataScene;
-import my_app.screens.scenes.MainScene.MainScene;
 
 public class App extends Application {
 
@@ -91,7 +91,7 @@ public class App extends Application {
             ComponentsList = Arrays.asList(componentsArray);
 
             ComponentsList.forEach(it -> {
-                context.addItem("component", it.self.identification());
+                context.addItem("component", it.self.identification);
             });
 
         } catch (Exception e) {

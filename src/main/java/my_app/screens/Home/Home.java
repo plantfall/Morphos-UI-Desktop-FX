@@ -27,7 +27,7 @@ public class Home extends BorderPane {
 
         if (type.equalsIgnoreCase("component")) {
             // new ShowComponentScene().stage.show();
-            var op = App.ComponentsList.stream().filter(it -> it.self.identification().equals(itemIdentification))
+            var op = App.ComponentsList.stream().filter(it -> it.self.identification.equals(itemIdentification))
                     .findFirst();
 
             if (op.isPresent()) {
@@ -48,8 +48,8 @@ public class Home extends BorderPane {
 
                     var cc = new CustomComponent();
                     canva.addElementDragable(cc, currentNode -> selectNode(currentNode));
-                    cc.applyConfig(op.get());
-                    // node = new CustomComponent(op.get());
+                    cc.applyData(op.get());
+
                 }
 
             }

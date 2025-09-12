@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
@@ -126,6 +127,10 @@ public class Commons {
 
             if (node instanceof InputComponent component) {
                 jsonTarget.input_components.add(component.getData());
+            }
+
+            if (node instanceof CustomComponent component) {
+                jsonTarget.custom_components.add(component.getData());
             }
         }
 

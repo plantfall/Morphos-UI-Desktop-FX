@@ -1,4 +1,4 @@
-package my_app.screens.scenes.ShowComponentScene;
+package my_app.scenes.ShowComponentScene;
 
 import java.io.File;
 import java.io.FileWriter;

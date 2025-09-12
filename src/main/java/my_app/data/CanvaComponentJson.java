@@ -10,4 +10,6 @@ public class CanvaComponentJson implements Serializable {
         public List<ButtonComponentData> button_componentes = new ArrayList<>();
         public List<ImageComponentData> image_components = new ArrayList<>();
         public List<InputComponentData> input_components = new ArrayList<>();
+
+        public List<CanvaComponentJson> custom_components = new ArrayList<>();
 }

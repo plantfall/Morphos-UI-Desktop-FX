@@ -1,4 +1,4 @@
-package my_app.screens.scenes.DataScene;
+package my_app.scenes.DataScene;
 
 import javafx.collections.FXCollections;
 import javafx.scene.Node;

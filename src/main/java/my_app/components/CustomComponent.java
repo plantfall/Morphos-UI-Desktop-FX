@@ -7,28 +7,58 @@ import my_app.data.ButtonComponentData;
 import my_app.data.CanvaComponentJson;
 import my_app.data.ImageComponentData;
 import my_app.data.TextComponentData;
+import my_app.data.ViewContract;
 
-public class CustomComponent extends Pane {
+public class CustomComponent extends Pane implements ViewContract<CanvaComponentJson> {
+
+    private CanvaComponentJson data;
+
     public CustomComponent() {
 
     }
 
-    public void applyConfig(CanvaComponentJson data) {
+    @Override
+    public void appearance(Pane father) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'appearance'");
+    }
+
+    @Override
+    public void settings(Pane father) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'settings'");
+    }
+
+    @Override
+    public CanvaComponentJson getData() {
+
+        this.data.self.x = (int) this.getLayoutX();
+        this.data.self.y = (int) this.getLayoutY();
+
+        return this.data;
+    }
+
+    @Override
+    public void applyData(CanvaComponentJson data) {
+
+        this.data = data;
+
         var self = data.self;
-        this.setId(self.identification());
+        this.setId(self.identification);
+
+        this.setLayoutX(data.self.x);
+        this.setLayoutY(data.self.y);
 
         // Aplicando as informações extraídas ao CanvaComponent
-        this.setPrefWidth(self.width());
-        this.setPrefHeight(self.height());
-
-        this.setId(self.identification());
+        this.setPrefWidth(self.width);
+        this.setPrefHeight(self.height);
 
         // Ajustando o padding
         this.setPadding(
-                new Insets(self.padding_top(), self.padding_right(), self.padding_bottom(), self.padding_left()));
+                new Insets(self.padding_top, self.padding_right, self.padding_bottom, self.padding_left));
 
-        var bgType = self.bg_type();
-        var bgContent = self.bgContent();
+        var bgType = self.bg_type;
+        var bgContent = self.bgContent;
         // Definindo o fundo com base no tipo
         if (bgType.equals("color")) {
             this.setStyle("-fx-background-color:%s;".formatted(
