@@ -10,8 +10,10 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -105,6 +107,8 @@ public class LeftSide extends VBox {
 
         HandleClickSubItem callbackClickSubItem;
 
+        ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
+
         public ItemColumn(String name,
                 HandleClickSubItem callbackClickSubItem,
                 Runnable function) {
@@ -172,17 +176,34 @@ public class LeftSide extends VBox {
             subItemBox.getChildren().add(subLabel);
             subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
-            subItemBox.setOnMouseClicked(e -> {
-                System.out.println("Selected: " + itemName);
-                // Lógica para deixar o componente selecionado no Canva
+            //
 
-                this.callbackClickSubItem.onClick(itemName);
-
+            // 🔹 Listener para atualizar estilo quando subItemSelected mudar
+            subItemSelected.addListener((obs, oldVal, newVal) -> {
+                if (itemName.equals(newVal)) {
+                    subItemBox.setStyle("-fx-background-color: yellow;");
+                } else {
+                    subItemBox.setStyle("-fx-background-color: transparent;");
+                }
             });
 
-            subItemBox.setOnMouseEntered(e -> subItemBox.setStyle("-fx-background-color: #2D2A6E;"));
+            subItemBox.setOnMouseClicked(e -> {
+                subItemSelected.set(itemName); // marca este como selecionado
+                this.callbackClickSubItem.onClick(itemName);
+            });
 
-            subItemBox.setOnMouseExited(e -> subItemBox.setStyle("-fx-background-color: transparent;"));
+            subItemBox.setOnMouseEntered(e -> {
+                if (!itemName.equals(subItemSelected.get())) {
+                    subItemBox.setStyle("-fx-background-color: #2D2A6E;");
+                }
+            });
+
+            subItemBox.setOnMouseExited(e -> {
+                if (!itemName.equals(subItemSelected.get())) {
+                    subItemBox.setStyle("-fx-background-color: transparent;");
+                }
+            });
+            //
 
             return subItemBox;
         }
