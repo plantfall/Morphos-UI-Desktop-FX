@@ -4,13 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
+import org.kordamp.ikonli.javafx.FontIcon;
+
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import my_app.App;
@@ -36,7 +44,11 @@ public class LeftSide extends VBox {
 
     List<ItemColumn> nodes = new ArrayList<>();
 
+    SimpleStringProperty optionSelected;
+
     public LeftSide(SimpleStringProperty optionSelected) {
+        this.optionSelected = optionSelected;
+
         config();
 
         getChildren().add(title);
@@ -49,7 +61,6 @@ public class LeftSide extends VBox {
 
         titles.forEach(title -> {
             nodes.add(new ItemColumn(title, () -> {
-                optionSelected.set(title);
                 indexSelecionado.set(titles.indexOf(title));
             }));
         });
@@ -85,6 +96,8 @@ public class LeftSide extends VBox {
         BooleanProperty expanded = new SimpleBooleanProperty(false);
         VBox subItems = new VBox();
         private String type;
+        private WeakListChangeListener<SimpleStringProperty> weakListChangeListener;
+        private ListChangeListener<SimpleStringProperty> listChangeListener;
 
         public ItemColumn(String name, Runnable function) {
             this.type = name.toLowerCase();
@@ -98,10 +111,25 @@ public class LeftSide extends VBox {
             getChildren().add(mainRow);
             getChildren().add(subItems);
 
+            // Cria o listener
+            listChangeListener = (ListChangeListener.Change<? extends SimpleStringProperty> change) -> {
+                if (expanded.get()) {
+                    Platform.runLater(this::loadSubItems);
+                }
+            };
+            weakListChangeListener = new WeakListChangeListener<>(listChangeListener);
+
             expanded.addListener((obs, old, value) -> {
+                SubItemsContext context = SubItemsContext.getInstance();
+                ObservableList<SimpleStringProperty> items = context.getItemsByType(type);
+
                 if (value) {
+                    // Adiciona o listener quando expandido
+                    items.addListener(weakListChangeListener);
                     loadSubItems();
                 } else {
+                    // Remove o listener quando recolhido
+                    items.removeListener(weakListChangeListener);
                     subItems.getChildren().clear();
                 }
             });
@@ -116,36 +144,40 @@ public class LeftSide extends VBox {
             SubItemsContext context = SubItemsContext.getInstance();
             ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
 
-            // Converte SimpleStringProperty para String
-            List<String> items = itemsProperties.stream()
-                    .map(SimpleStringProperty::get)
-                    .collect(Collectors.toList());
+            for (SimpleStringProperty itemProperty : itemsProperties) {
+                String itemName = itemProperty.get();
 
-            for (String itemName : items) {
-                // Cria HBox simples para subitens
-                HBox subItemBox = new HBox();
-                Label subLabel = new Label("• " + itemName);
-                subLabel.setFont(Font.font(12));
-                subLabel.setTextFill(Color.LIGHTGRAY);
-
-                subItemBox.getChildren().add(subLabel);
-                subItemBox.setPadding(new Insets(3, 5, 3, 10));
-
-                subItemBox.setOnMouseClicked(e -> {
-                    System.out.println("Selected: " + itemName);
-                    // Lógica para adicionar ao canvas
-                });
-
-                subItemBox.setOnMouseEntered(e -> subItemBox.setStyle("-fx-background-color: #2D2A6E;"));
-
-                subItemBox.setOnMouseExited(e -> subItemBox.setStyle("-fx-background-color: transparent;"));
-
+                HBox subItemBox = createSubItemBox(itemName);
                 subItems.getChildren().add(subItemBox);
             }
+        }
+
+        private HBox createSubItemBox(String itemName) {
+            HBox subItemBox = new HBox();
+            Label subLabel = new Label("• " + itemName);
+            subLabel.setFont(Font.font(12));
+            subLabel.setTextFill(Color.LIGHTGRAY);
+
+            subItemBox.getChildren().add(subLabel);
+            subItemBox.setPadding(new Insets(3, 5, 3, 10));
+
+            subItemBox.setOnMouseClicked(e -> {
+                System.out.println("Selected: " + itemName);
+                // Lógica para adicionar ao canvas
+            });
+
+            subItemBox.setOnMouseEntered(e -> subItemBox.setStyle("-fx-background-color: #2D2A6E;"));
+
+            subItemBox.setOnMouseExited(e -> subItemBox.setStyle("-fx-background-color: transparent;"));
+
+            return subItemBox;
         }
     }
 
     class Row extends HBox {
+        BooleanProperty onHover = new SimpleBooleanProperty(false);
+        Button btnAdd = new Button();
+
         public Row(String name, Runnable function) {
             var label = new Label(name);
             label.setFont(Font.font(18));
@@ -154,6 +186,22 @@ public class LeftSide extends VBox {
             label.setFont(App.FONT_BOLD);
 
             getChildren().add(label);
+            getChildren().add(btnAdd);
+
+            btnAdd.managedProperty().bind(onHover);
+            btnAdd.visibleProperty().bind(onHover);
+
+            btnAdd.setOnAction(ev -> {
+                optionSelected.set(name);
+            });
+
+            var icon = FontIcon.of(
+                    AntDesignIconsOutlined.PLUS_CIRCLE,
+                    12,
+                    Color.BLACK);
+            onHover.set(true);
+
+            btnAdd.setGraphic(icon);
 
             setOnMouseClicked(ev -> {
                 // limpa todos
@@ -164,16 +212,22 @@ public class LeftSide extends VBox {
 
                 // notifica a lógica externa
                 function.run();
+
+                onHover.set(true);
+
             });
 
             setOnMouseEntered(e -> {
                 if (indexSelecionado.get() != nodes.indexOf(this)) {
+                    onHover.set(true);
+
                     setStyle("-fx-background-color: lightblue;");
                 }
             });
 
             setOnMouseExited(e -> {
                 if (indexSelecionado.get() != nodes.indexOf(this)) {
+                    onHover.set(false);
                     setStyle("-fx-background-color: transparent;");
                 }
             });
