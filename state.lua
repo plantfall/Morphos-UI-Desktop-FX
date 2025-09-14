@@ -11,7 +11,7 @@ canva = {
   },
   text_componentes = {
     text_1 = {
-      text = "Bem vindo de volta",
+      text = "Welcome back",
       layout_x = 198.13,
       layout_y = 56.02,
       font_size = 16,
@@ -21,7 +21,7 @@ canva = {
   },
   button_componentes = {
     btn_1 = {
-      text = "Acessar",
+      text = "Access",
       layout_x = 197.16,
       layout_y = 247.87,
       font_size = 16,

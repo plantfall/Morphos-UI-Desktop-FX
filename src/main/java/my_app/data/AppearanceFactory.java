@@ -1,8 +1,9 @@
-package my_app.components;
+package my_app.data;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.text.FontWeight;
+import my_app.components.VisibilityRowComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;

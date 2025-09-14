@@ -1,10 +1,8 @@
 package my_app;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,46 +13,16 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import my_app.components.ImageComponent;
-import my_app.components.TextComponent;
-import my_app.components.buttonComponent.ButtonComponent;
-import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.SubItemsContext;
-import my_app.data.ButtonComponentData;
 import my_app.data.CanvaComponentJson;
-import my_app.data.Commons;
-import my_app.data.ComponentsWrapper;
-import my_app.data.ImageComponentData;
-import my_app.data.InputComponentData;
-import my_app.data.TextComponentData;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
-import my_app.screens.Home.Home;
 
 public class App extends Application {
 

@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+//beta tests
 public class GeneratedUI extends Application {
     @Override
     public void start(Stage stage) {
@@ -22,7 +23,8 @@ public class GeneratedUI extends Application {
         Button item_1 = new Button("Im new here");
         item_1.setLayoutX(403.19999999999993);
         item_1.setLayoutY(339.99999999999994);
-        item_1.setStyle("-fx-background-color: #664db3; -fx-background-radius:  3.0; -fx-border-width: 0; -fx-padding: 10.0  10.0  10.0  10.0; -fx-font-family: 'System'; -fx-font-size: 16; -fx-font-weight: normal; -fx-text-fill: white;");
+        item_1.setStyle(
+                "-fx-background-color: #664db3; -fx-background-radius:  3.0; -fx-border-width: 0; -fx-padding: 10.0  10.0  10.0  10.0; -fx-font-family: 'System'; -fx-font-size: 16; -fx-font-weight: normal; -fx-text-fill: white;");
         root.getChildren().add(item_1);
         stage.setScene(new Scene(root, 800, 600));
         stage.show();

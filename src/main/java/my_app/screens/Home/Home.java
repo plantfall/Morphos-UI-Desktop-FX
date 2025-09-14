@@ -31,20 +31,20 @@ public class Home extends BorderPane {
                     .findFirst();
 
             if (op.isPresent()) {
-                // vou buscar o custom component no canva
+                // lookin for custom component in canva
                 Node target = canvaChildren()
                         .stream()
                         .filter(n -> itemIdentification.equals(n.getId()))
                         .findFirst()
                         .orElse(null);
 
-                // 2. Se achou, seleciona
+                // 2. finded so, selected
                 if (target != null) {
                     selectNode(target);
                 }
 
                 else {
-                    // senao achou, cria e adiciona
+                    // if not, just create and add in canva
 
                     var cc = new CustomComponent();
                     canva.addElementDragable(cc, currentNode -> selectNode(currentNode));
@@ -56,14 +56,14 @@ public class Home extends BorderPane {
 
             return;
         }
-        //
+        // basics components (text, image...)
         Node target = canvaChildren()
                 .stream()
                 .filter(n -> itemIdentification.equals(n.getId()))
                 .findFirst()
                 .orElse(null);
 
-        // 2. Se achou, seleciona
+        //
         if (target != null) {
             selectNode(target);
         }

@@ -55,8 +55,8 @@ public class MainScene extends Scene {
 
     private static VBox createRoot() {
         Menu menu = new Menu("Options");
-        MenuItem itemSalvar = new MenuItem("Salvar");
-        MenuItem itemCarregar = new MenuItem("Carregar");
+        MenuItem itemSalvar = new MenuItem("Save");
+        MenuItem itemCarregar = new MenuItem("Load");
         MenuItem itemShowCode = new MenuItem("Show code");
         menu.getItems().addAll(itemSalvar, itemCarregar, itemShowCode);
 
