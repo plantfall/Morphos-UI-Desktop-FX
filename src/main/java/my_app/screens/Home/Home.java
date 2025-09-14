@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import my_app.App;
 import my_app.components.CustomComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.data.Commons;
+import my_app.screens.Home.leftside.LeftSide;
 
 public class Home extends BorderPane {
     SimpleStringProperty selectedOption = new SimpleStringProperty("");
@@ -21,6 +21,10 @@ public class Home extends BorderPane {
     @FunctionalInterface
     public interface HandleClickSubItem {
         public void onClick(String itemIdentification, String type);
+    }
+
+    void onClickAdd(String type) {
+
     }
 
     void onClickOnSubItem(String itemIdentification, String type) {
@@ -84,7 +88,7 @@ public class Home extends BorderPane {
     }
 
     public Home(boolean openComponentScene) {
-        setLeft(new LeftSide(selectedOption, this::onClickOnSubItem));
+        setLeft(new LeftSide(this::onClickAdd, this::onClickOnSubItem));
 
         ScrollPane editor = new ScrollPane();
 
