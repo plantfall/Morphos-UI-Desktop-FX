@@ -59,11 +59,9 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
             if (node != null) {
                 addElementDragable(node, callback);
-                callback.set(node);
             }
 
             context.addItem(buttonType.toLowerCase(), node.getId());
-            optionSelected.set("");
         });
 
         setOnMouseClicked(e -> {

@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
@@ -27,10 +28,10 @@ public class Option extends VBox {
     BooleanProperty expanded = new SimpleBooleanProperty(false);
     VBox subItems = new VBox();
     private String type;
-    private WeakListChangeListener<SimpleStringProperty> weakListChangeListener;
-    private ListChangeListener<SimpleStringProperty> listChangeListener;
 
     ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
+
+    SubItemsContext context = SubItemsContext.getInstance();
 
     void handleHeaderClick() {
         expanded.set(!expanded.get());
@@ -41,33 +42,25 @@ public class Option extends VBox {
             HandleClickSubItem callbackClickSubItem) {
         this.type = type.toLowerCase();
 
-        // Row principal
         OptionHeader header = new OptionHeader(type, callbackClickOnBtnAdd, this::handleHeaderClick);
 
         getChildren().add(header);
         getChildren().add(subItems);
 
-        // Cria o listener
-        listChangeListener = (ListChangeListener.Change<? extends SimpleStringProperty> change) -> {
-            if (expanded.get()) {
-                Platform.runLater(this::loadSubItems);
+        var items = context.getItemsByType(this.type);
+
+        items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
+            while (change.next()) {
+                if (change.wasAdded() || change.wasRemoved()) {
+                    loadSubItems(callbackClickSubItem);
+                }
             }
-        };
-        weakListChangeListener = new WeakListChangeListener<>(listChangeListener);
+        });
 
         expanded.addListener((obs, old, value) -> {
-            SubItemsContext context = SubItemsContext.getInstance();
-            // ObservableList<SimpleStringProperty> items = context.getItemsByType(type);
-
-            var items = context.getItemsByType(type);
-
             if (value) {
-                // Adiciona o listener quando expandido
-                items.addListener(weakListChangeListener);
-                loadSubItems();
+                loadSubItems(callbackClickSubItem);
             } else {
-                // Remove o listener quando recolhido
-                items.removeListener(weakListChangeListener);
                 subItems.getChildren().clear();
             }
         });
@@ -76,21 +69,20 @@ public class Option extends VBox {
         subItems.setSpacing(2);
     }
 
-    private void loadSubItems() {
+    private void loadSubItems(HandleClickSubItem callbackClickSubItem) {
         subItems.getChildren().clear();
 
-        SubItemsContext context = SubItemsContext.getInstance();
         ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
 
         for (SimpleStringProperty itemProperty : itemsProperties) {
             String itemId = itemProperty.get();
 
-            HBox subItemBox = createSubItemBox(itemId);
+            HBox subItemBox = createSubItemBox(itemId, callbackClickSubItem);
             subItems.getChildren().add(subItemBox);
         }
     }
 
-    private HBox createSubItemBox(String itemId) {
+    private HBox createSubItemBox(String itemId, HandleClickSubItem callbackClickSubItem) {
         HBox subItemBox = new HBox();
         Label subLabel = new Label("• " + itemId);
         subLabel.setFont(Font.font(12));
@@ -112,7 +104,7 @@ public class Option extends VBox {
 
         subItemBox.setOnMouseClicked(e -> {
             subItemSelected.set(itemId); // marca este como selecionado
-            // this.callbackClickSubItem.onClick(itemId, this.type);
+            callbackClickSubItem.onClick(itemId, this.type);
         });
 
         subItemBox.setOnMouseEntered(e -> {

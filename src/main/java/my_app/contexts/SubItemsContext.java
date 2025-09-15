@@ -14,14 +14,18 @@ public class SubItemsContext {
         dataMap = FXCollections.observableHashMap();
     }
 
-    public void addItem(String type, String itemName) {
+    public void addItem(String type, String identification) {
         dataMap.computeIfAbsent(type, k -> FXCollections.observableArrayList())
-                .add(new SimpleStringProperty(itemName));
+                .add(new SimpleStringProperty(identification));
     }
 
     public ObservableList<SimpleStringProperty> getItemsByType(String type) {
-        return dataMap.getOrDefault(type, FXCollections.observableArrayList());
+        return dataMap.computeIfAbsent(type, k -> FXCollections.observableArrayList());
     }
+
+    // public ObservableList<SimpleStringProperty> getItemsByType(String type) {
+    // return dataMap.getOrDefault(type, FXCollections.observableArrayList());
+    // }
 
     public ObservableMap<String, ObservableList<SimpleStringProperty>> getAllData() {
         return dataMap;

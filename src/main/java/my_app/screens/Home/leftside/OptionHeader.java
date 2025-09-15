@@ -17,7 +17,8 @@ public class OptionHeader extends HBox {
     Label label = new Label();
     Button btnAdd = new Button();
 
-    public OptionHeader(String type,
+    public OptionHeader(
+            String type,
             Consumer<String> callbackClickOnBtnAdd,
             Runnable onClick) {
 
@@ -41,12 +42,7 @@ public class OptionHeader extends HBox {
         btnAdd.setGraphic(icon);
 
         setOnMouseClicked(ev -> {
-            // limpa todos
-            // nodes.forEach(n -> n.setStyle("-fx-background-color: transparent;"));
-
-            // pinta o atual imediatamente
             setStyle("-fx-background-color:#3B38A0;");
-
             onClick.run();
         });
 

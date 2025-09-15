@@ -8,7 +8,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import my_app.App;
 import my_app.components.CustomComponent;
+import my_app.components.ImageComponent;
+import my_app.components.TextComponent;
+import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
+import my_app.components.inputComponents.InputComponent;
+import my_app.contexts.SubItemsContext;
+import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.leftside.LeftSide;
 
 public class Home extends BorderPane {
@@ -24,6 +30,41 @@ public class Home extends BorderPane {
     }
 
     void onClickAdd(String type) {
+        SubItemsContext context = SubItemsContext.getInstance();
+
+        if (type == null || type.isBlank())
+            return;
+
+        Node node = null;
+        var content = "Im new here";
+
+        if (type.equals("Button")) {
+            node = new ButtonComponent(content);
+
+        } else if (type.equals("Input")) {
+            node = new InputComponent(content);
+        } else if (type.equals("Text")) {
+            node = new TextComponent(content);
+        } else if (type.equals("Image")) {
+            node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
+        } else if (type.equals("Component")) {
+            new ShowComponentScene().stage.show();
+            return;
+        }
+
+        if (node != null) {
+            canva.addElementDragable(node, s -> {
+            });
+            // callback.set(node);
+        }
+
+        // criar o node com o id
+        // e o subitem com o mesmo id
+        var nodeId = node.getId();
+        context.addItem(type.toLowerCase(), nodeId);
+        // optionSelected.set("");
+
+        // adiciona subitem na lista
 
     }
 
