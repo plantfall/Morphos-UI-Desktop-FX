@@ -1,5 +1,7 @@
 package my_app.screens.Home;
 
+import java.util.function.Consumer;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -21,6 +23,8 @@ public class Home extends BorderPane {
     SimpleStringProperty selectedOption = new SimpleStringProperty("");
 
     SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
+
+    public static SimpleStringProperty idOfComponentCreated = new SimpleStringProperty("");
 
     public CanvaComponent canva;
 
@@ -56,16 +60,13 @@ public class Home extends BorderPane {
             canva.addElementDragable(node, s -> {
             });
             // callback.set(node);
+
+            // criar o node com o id
+            // e o subitem com o mesmo id
+            var nodeId = node.getId();
+            context.addItem(type.toLowerCase(), nodeId);
+            idOfComponentCreated.set(nodeId);
         }
-
-        // criar o node com o id
-        // e o subitem com o mesmo id
-        var nodeId = node.getId();
-        context.addItem(type.toLowerCase(), nodeId);
-        // optionSelected.set("");
-
-        // adiciona subitem na lista
-
     }
 
     void onClickOnSubItem(String itemIdentification, String type) {
@@ -125,7 +126,6 @@ public class Home extends BorderPane {
 
         System.out.println("estilo do compponente selecionado: ");
         System.out.println(node.getStyle());
-
     }
 
     public Home(boolean openComponentScene) {

@@ -13,12 +13,14 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.contexts.SubItemsContext;
+import my_app.screens.Home.Home;
 import my_app.screens.Home.Home.HandleClickSubItem;
 
 //--Button
@@ -51,22 +53,36 @@ public class Option extends VBox {
 
         items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
             while (change.next()) {
-                if (change.wasAdded() || change.wasRemoved()) {
+                if (change.wasAdded()) {
                     loadSubItems(callbackClickSubItem);
                 }
             }
         });
 
-        expanded.addListener((obs, old, value) -> {
-            if (value) {
-                loadSubItems(callbackClickSubItem);
-            } else {
-                subItems.getChildren().clear();
-            }
-        });
+        subItems.managedProperty().bind(expanded);
+        subItems.visibleProperty().bind(expanded);
 
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
+
+        // Listener global para marcar o subitem que tem o nodeId criado
+        Home.idOfComponentCreated.addListener((obs, oldId, newId) -> {
+            for (Node n : subItems.getChildren()) {
+                if (n instanceof HBox hbox) {
+                    Label lbl = (Label) hbox.getChildren().get(0);
+                    String text = lbl.getText().replace("• ", ""); // remove o bullet
+                    if (text.equals(newId)) {
+                        hbox.setStyle("-fx-background-color: red;");
+                    } else {
+                        // não sobrescreve a seleção amarela
+                        if (!text.equals(subItemSelected.get())) {
+                            hbox.setStyle("-fx-background-color: transparent;");
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     private void loadSubItems(HandleClickSubItem callbackClickSubItem) {
@@ -74,12 +90,20 @@ public class Option extends VBox {
 
         ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
 
-        for (SimpleStringProperty itemProperty : itemsProperties) {
+        for (int i = 0; i < itemsProperties.size(); i++) {
+            SimpleStringProperty itemProperty = itemsProperties.get(i);
             String itemId = itemProperty.get();
 
             HBox subItemBox = createSubItemBox(itemId, callbackClickSubItem);
+
+            // // se for o último item, aplica fundo vermelho
+            // if (i == itemsProperties.size() - 1) {
+            // subItemBox.setStyle("-fx-background-color: red;");
+            // }
+
             subItems.getChildren().add(subItemBox);
         }
+
     }
 
     private HBox createSubItemBox(String itemId, HandleClickSubItem callbackClickSubItem) {

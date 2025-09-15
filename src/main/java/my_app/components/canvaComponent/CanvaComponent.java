@@ -35,6 +35,8 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
         var context = SubItemsContext.getInstance();
 
+        // REMOVER ESSE CODIGO ABAIXO DO LISTENER
+
         // clica no botão do menu e aí cria o component
         optionSelected.addListener((obs, old, buttonType) -> {
             if (buttonType == null || buttonType.isBlank())
