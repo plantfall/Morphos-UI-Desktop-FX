@@ -23,8 +23,8 @@ import my_app.contexts.SubItemsContext;
 import my_app.screens.Home.Home;
 import my_app.screens.Home.Home.HandleClickSubItem;
 
-//--Button
-//     -btn1
+//--Button (OptionHeader)
+//     -btn1 (subItem)
 
 public class Option extends VBox {
     BooleanProperty expanded = new SimpleBooleanProperty(false);
@@ -65,8 +65,7 @@ public class Option extends VBox {
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
 
-        // Listener global para marcar o subitem que tem o nodeId criado
-        Home.idOfComponentCreated.addListener((obs, oldId, newId) -> {
+        Home.idOfComponentSelected.addListener((obs, oldId, newId) -> {
             for (Node n : subItems.getChildren()) {
                 if (n instanceof HBox hbox) {
                     Label lbl = (Label) hbox.getChildren().get(0);
@@ -96,14 +95,8 @@ public class Option extends VBox {
 
             HBox subItemBox = createSubItemBox(itemId, callbackClickSubItem);
 
-            // // se for o último item, aplica fundo vermelho
-            // if (i == itemsProperties.size() - 1) {
-            // subItemBox.setStyle("-fx-background-color: red;");
-            // }
-
             subItems.getChildren().add(subItemBox);
         }
-
     }
 
     private HBox createSubItemBox(String itemId, HandleClickSubItem callbackClickSubItem) {
@@ -115,34 +108,21 @@ public class Option extends VBox {
         subItemBox.getChildren().add(subLabel);
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
-        //
-
-        // 🔹 Listener para atualizar estilo quando subItemSelected mudar
-        subItemSelected.addListener((obs, oldVal, newVal) -> {
-            if (itemId.equals(newVal)) {
-                subItemBox.setStyle("-fx-background-color: yellow;");
-            } else {
-                subItemBox.setStyle("-fx-background-color: transparent;");
-            }
-        });
-
         subItemBox.setOnMouseClicked(e -> {
-            subItemSelected.set(itemId); // marca este como selecionado
             callbackClickSubItem.onClick(itemId, this.type);
         });
 
         subItemBox.setOnMouseEntered(e -> {
-            if (!itemId.equals(subItemSelected.get())) {
+            if (!Home.idOfComponentSelected.get().equals(itemId)) {
                 subItemBox.setStyle("-fx-background-color: #2D2A6E;");
             }
         });
 
         subItemBox.setOnMouseExited(e -> {
-            if (!itemId.equals(subItemSelected.get())) {
+            if (!Home.idOfComponentSelected.get().equals(itemId)) {
                 subItemBox.setStyle("-fx-background-color: transparent;");
             }
         });
-        //
 
         return subItemBox;
     }

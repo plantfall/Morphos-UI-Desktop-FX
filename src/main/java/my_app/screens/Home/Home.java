@@ -1,13 +1,16 @@
 package my_app.screens.Home;
 
-import java.util.function.Consumer;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 import my_app.App;
 import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
@@ -20,11 +23,9 @@ import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.leftside.LeftSide;
 
 public class Home extends BorderPane {
-    SimpleStringProperty selectedOption = new SimpleStringProperty("");
-
     SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
 
-    public static SimpleStringProperty idOfComponentCreated = new SimpleStringProperty("");
+    public static SimpleStringProperty idOfComponentSelected = new SimpleStringProperty("");
 
     public CanvaComponent canva;
 
@@ -57,16 +58,44 @@ public class Home extends BorderPane {
         }
 
         if (node != null) {
-            canva.addElementDragable(node, s -> {
-            });
+            canva.addElementDragable(node);
+            canva.setOnClickMethodToNode(node, this::selectNode);
             // callback.set(node);
 
             // criar o node com o id
             // e o subitem com o mesmo id
             var nodeId = node.getId();
             context.addItem(type.toLowerCase(), nodeId);
-            idOfComponentCreated.set(nodeId);
+            idOfComponentSelected.set(nodeId);
+            visualNodeSelected.set(node);
+
+            animateOnEntry(node);
         }
+    }
+
+    void animateOnEntry(Node node) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(400), node);
+        st.setFromX(0.5);
+        st.setFromY(0.5);
+        st.setToX(1);
+        st.setToY(1);
+
+        st.play();
+    }
+
+    // achacoalhar
+    void shake(Node node) {
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), 0)),
+                new KeyFrame(Duration.millis(100), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(200), new KeyValue(node.translateXProperty(), 1)),
+                new KeyFrame(Duration.millis(300), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(400), new KeyValue(node.translateXProperty(), 1)),
+                new KeyFrame(Duration.millis(500), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(600), new KeyValue(node.translateXProperty(), 0)));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 
     void onClickOnSubItem(String itemIdentification, String type) {
@@ -83,7 +112,6 @@ public class Home extends BorderPane {
                         .filter(n -> itemIdentification.equals(n.getId()))
                         .findFirst()
                         .orElse(null);
-
                 // 2. finded so, selected
                 if (target != null) {
                     selectNode(target);
@@ -91,13 +119,10 @@ public class Home extends BorderPane {
 
                 else {
                     // if not, just create and add in canva
-
                     var cc = new CustomComponent();
                     canva.addElementDragable(cc, currentNode -> selectNode(currentNode));
                     cc.applyData(op.get());
-
                 }
-
             }
 
             return;
@@ -122,6 +147,9 @@ public class Home extends BorderPane {
 
     public void selectNode(Node node) {
         visualNodeSelected.set(node);
+        idOfComponentSelected.set(node.getId());
+
+        shake(node);
         System.out.println("Selecionado: " + node);
 
         System.out.println("estilo do compponente selecionado: ");
@@ -133,7 +161,7 @@ public class Home extends BorderPane {
 
         ScrollPane editor = new ScrollPane();
 
-        this.canva = new CanvaComponent(selectedOption, currentNode -> selectNode(currentNode));
+        this.canva = new CanvaComponent();
 
         if (openComponentScene) {
             canva.setPrefSize(370, 250);

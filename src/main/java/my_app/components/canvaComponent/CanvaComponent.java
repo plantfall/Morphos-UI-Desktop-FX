@@ -29,52 +29,19 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>(this);
 
-    public CanvaComponent(SimpleStringProperty optionSelected, VisualNodeCallback callback) {
+    public CanvaComponent() {
 
         config();
 
-        var context = SubItemsContext.getInstance();
-
-        // REMOVER ESSE CODIGO ABAIXO DO LISTENER
-
-        // clica no botão do menu e aí cria o component
-        optionSelected.addListener((obs, old, buttonType) -> {
-            if (buttonType == null || buttonType.isBlank())
-                return;
-
-            Node node = null;
-            var content = "Im new here";
-
-            if (buttonType.equalsIgnoreCase("button")) {
-                node = new ButtonComponent(content);
-
-            } else if (buttonType.equalsIgnoreCase("input")) {
-                node = new InputComponent(content);
-            } else if (buttonType.equalsIgnoreCase("text")) {
-                node = new TextComponent(content);
-            } else if (buttonType.equalsIgnoreCase("image")) {
-                node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
-            } else if (buttonType.equalsIgnoreCase("component")) {
-                new ShowComponentScene().stage.show();
-                return;
-            }
-
-            if (node != null) {
-                addElementDragable(node, callback);
-            }
-
-            context.addItem(buttonType.toLowerCase(), node.getId());
-        });
-
         setOnMouseClicked(e -> {
             if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
-                callback.set(this);
                 System.out.println("Canva selecionado");
             }
         });
 
     }
 
+    @Deprecated
     public void addElementDragable(Node node, VisualNodeCallback callback) {
         // posição inicial centralizada
         double relX = 0.5;
@@ -89,6 +56,24 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         enableDrag(node, relX, relY);
 
         getChildren().add(node);
+    }
+
+    public void addElementDragable(Node node) {
+        // posição inicial centralizada
+        double relX = 0.5;
+        double relY = 0.5;
+
+        node.setLayoutX((getWidth() - node.prefWidth(-1)) * relX);
+        node.setLayoutY((getHeight() - node.prefHeight(-1)) * relY);
+
+        enableDrag(node, relX, relY);
+
+        getChildren().add(node);
+    }
+
+    public void setOnClickMethodToNode(Node node, VisualNodeCallback callback) {
+        // clique = seleciona
+        node.setOnMouseClicked(e -> callback.set(node));
     }
 
     private void enableDrag(Node node, double relX, double relY) {

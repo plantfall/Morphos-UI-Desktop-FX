@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import my_app.components.FontColorPicker;
 import my_app.components.FontSizeComponent;
@@ -13,6 +15,7 @@ import my_app.components.TextContentComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
+import my_app.screens.Home.Home;
 
 public class ButtonComponent extends Button implements ViewContract<ButtonComponentData> {
 
@@ -47,6 +50,19 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
                         ));
 
         currentState.set(this); // 👈 sempre aponta para o próprio botão
+        setOnAction(ev -> {
+            Home.idOfComponentSelected.set(this.getId());
+        });
+
+        Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
+            System.out.println("newId: " + newId);
+
+            if (newId.equals(this.getId())) {
+                String novoEstilo = Commons.UpdateEspecificStyle(this.getStyle(), "-fx-background-color", "red");
+                this.setStyle(novoEstilo);
+            }
+
+        });
     }
 
     @Override
