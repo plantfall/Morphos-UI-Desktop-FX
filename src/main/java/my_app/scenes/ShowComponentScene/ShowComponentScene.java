@@ -53,16 +53,17 @@ public class ShowComponentScene extends Scene {
     static BorderPane root = new BorderPane();
 
     public ShowComponentScene() {
-        super(root, 750, 300);
+        super(root, 760, 300);
         stage.setScene(this);
 
         Menu menu = new Menu();
         MenuItem is = new MenuItem("Save");
 
         menu.setOnAction(ev -> {
-            System.out.println("clicked");
             saveStateToFile(new File(FileName),
                     home.canva);
+
+            System.out.println("salvou");
         });
 
         menu.getItems().add(is);

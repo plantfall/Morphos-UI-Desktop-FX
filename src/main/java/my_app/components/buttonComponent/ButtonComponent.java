@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import my_app.components.FontColorPicker;
 import my_app.components.FontSizeComponent;
+import my_app.components.FontWeightComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
 import my_app.data.ButtonComponentData;
@@ -54,15 +55,16 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
             Home.idOfComponentSelected.set(this.getId());
         });
 
-        Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
-            System.out.println("newId: " + newId);
+        // Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
+        // System.out.println("newId: " + newId);
 
-            if (newId.equals(this.getId())) {
-                String novoEstilo = Commons.UpdateEspecificStyle(this.getStyle(), "-fx-background-color", "red");
-                this.setStyle(novoEstilo);
-            }
+        // if (newId.equals(this.getId())) {
+        // String novoEstilo = Commons.UpdateEspecificStyle(this.getStyle(),
+        // "-fx-background-color", "red");
+        // this.setStyle(novoEstilo);
+        // }
 
-        });
+        // });
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
                 new ButtonBorderRadius(currentState),
                 new ButtonBorderWidth(currentState),
                 new ButtonBorderColorPicker(currentState),
-                new my_app.components.FontWeightComponent(currentState),
+                new FontWeightComponent(currentState),
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
                 new FontSizeComponent(currentState));

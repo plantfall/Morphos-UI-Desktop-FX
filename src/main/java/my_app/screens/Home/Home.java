@@ -17,6 +17,7 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
+import my_app.components.flexComponent.FlexComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.SubItemsContext;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
@@ -55,6 +56,8 @@ public class Home extends BorderPane {
         } else if (type.equals("Component")) {
             new ShowComponentScene().stage.show();
             return;
+        } else if (type.equals("Flex items")) {
+            node = new FlexComponent();
         }
 
         if (node != null) {

@@ -1,6 +1,8 @@
 package my_app.scenes.MainScene;
 
 import java.io.File;
+import java.util.Arrays;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.collections.ObservableList;
@@ -148,14 +150,34 @@ public class MainScene extends Scene {
                 context.addItem("input", data.identification());
             }
 
+            // custom_cumponentes dentro do Canva principal
             for (CanvaComponentJson data : jsonTarget.custom_components) {
                 var comp = new CustomComponent();
 
                 canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
                 comp.applyData(data);
-                context.addItem("input", data.self.identification);
+                context.addItem("component", data.self.identification);
             }
+
+            // File componentsFile = new File("components.json");
+
+            // // Lê o JSON como array primeiro
+            // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
+            // CanvaComponentJson[].class);
+
+            // var listComponents = Arrays.asList(componentsArray);
+
+            // // custom_cumponentes do arquivo components.json
+            // for (CanvaComponentJson data : listComponents) {
+            // var comp = new CustomComponent();
+
+            // canvaCompTarget.addElementDragable(comp, current ->
+            // home.selectNode(current));
+
+            // comp.applyData(data);
+            // context.addItem("component", data.self.identification);
+            // }
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -15,12 +15,21 @@
   "text_componentes": [
     {
       "text": "Hey whats going on",
-      "layout_x": 120.92226562500008,
-      "layout_y": 158.41953125,
+      "layout_x": 382.5222656250001,
+      "layout_y": 444.01953125,
       "fontSize": "30",
       "color": "#4d66cc",
       "font_weight": "normal",
       "identification": "1757866777421"
+    },
+    {
+      "text": "Alunos",
+      "layout_x": 128.1222656249999,
+      "layout_y": 310.41953125,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal",
+      "identification": "1758028252066"
     }
   ],
   "button_componentes": [
@@ -32,8 +41,8 @@
       "borderWidth": "1",
       "borderRadius": "10",
       "bgColor": "#8066cc",
-      "x": 120.79999999999995,
-      "y": 174.40000000000003,
+      "x": 117.59999999999997,
+      "y": 172.8,
       "padding_top": 10,
       "padding_right": 10,
       "padding_bottom": 10,
@@ -64,5 +73,53 @@
       "identification": "1757866838635"
     }
   ],
-  "custom_components": []
+  "custom_components": [
+    {
+      "self": {
+        "padding_top": 0,
+        "padding_right": 0,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "width": 260.0,
+        "height": 97.0,
+        "bg_type": "color",
+        "bgContent": "#4B5842",
+        "identification": "1758332199421",
+        "x": 430,
+        "y": 24
+      },
+      "text_componentes": [
+        {
+          "text": "Im new here",
+          "layout_x": 34.922265624999966,
+          "layout_y": 70.01953125000001,
+          "fontSize": "16",
+          "color": "black",
+          "font_weight": "normal",
+          "identification": "1758332216465"
+        }
+      ],
+      "button_componentes": [
+        {
+          "text": "Im new here",
+          "fontSize": "16",
+          "fontWeight": "normal",
+          "color": "white",
+          "borderWidth": "0",
+          "borderRadius": "3",
+          "bgColor": "#664db3",
+          "x": 125.0,
+          "y": 47.999999999999986,
+          "padding_top": 10,
+          "padding_right": 10,
+          "padding_bottom": 10,
+          "padding_left": 10,
+          "identification": "1758332220813"
+        }
+      ],
+      "image_components": [],
+      "input_components": [],
+      "custom_components": []
+    }
+  ]
 }
