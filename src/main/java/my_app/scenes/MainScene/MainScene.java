@@ -31,6 +31,7 @@ import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.CanvaComponentJson;
@@ -101,87 +102,79 @@ public class MainScene extends Scene {
         children.clear();
 
         SubItemsContext context = SubItemsContext.getInstance();
+        var state = ComponentsContext.getInstance().data;
 
-        try {
-            ObjectMapper om = new ObjectMapper();
+        // Restaura os dados do próprio Canva
+        canvaCompTarget.applyData(state.self);
 
-            // Lê o JSON de volta para o objeto Java
-            CanvaComponentJson jsonTarget = om.readValue(file, CanvaComponentJson.class);
+        // Restaura os textos
+        for (TextComponentData data : state.text_componentes) {
+            TextComponent comp = new TextComponent("");
 
-            // Restaura os dados do próprio Canva
-            canvaCompTarget.applyData(jsonTarget.self);
+            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
 
-            // Restaura os textos
-            for (TextComponentData data : jsonTarget.text_componentes) {
-                TextComponent comp = new TextComponent("");
-
-                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-                comp.applyData(data);
-                context.addItem("text", data.identification());
-            }
-
-            // Restaura os botões
-            for (ButtonComponentData data : jsonTarget.button_componentes) {
-                ButtonComponent comp = new ButtonComponent();
-
-                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-                comp.applyData(data);
-                context.addItem("button", data.identification());
-            }
-
-            // Restaura as imagens
-            for (ImageComponentData data : jsonTarget.image_components) {
-                ImageComponent comp = new ImageComponent();
-                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-                comp.applyData(data);
-                context.addItem("image", data.identification());
-            }
-
-            // Restaura inputs
-            for (InputComponentData data : jsonTarget.input_components) {
-                InputComponent comp = new InputComponent("");
-
-                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-                comp.applyData(data);
-                context.addItem("input", data.identification());
-            }
-
-            // custom_cumponentes dentro do Canva principal
-            for (CanvaComponentJson data : jsonTarget.custom_components) {
-                var comp = new CustomComponent();
-
-                canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-                comp.applyData(data);
-                context.addItem("component", data.self.identification);
-            }
-
-            // File componentsFile = new File("components.json");
-
-            // // Lê o JSON como array primeiro
-            // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
-            // CanvaComponentJson[].class);
-
-            // var listComponents = Arrays.asList(componentsArray);
-
-            // // custom_cumponentes do arquivo components.json
-            // for (CanvaComponentJson data : listComponents) {
-            // var comp = new CustomComponent();
-
-            // canvaCompTarget.addElementDragable(comp, current ->
-            // home.selectNode(current));
-
-            // comp.applyData(data);
-            // context.addItem("component", data.self.identification);
-            // }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            comp.applyData(data);
+            context.addItem("text", data.identification());
         }
+
+        // Restaura os botões
+        for (ButtonComponentData data : state.button_componentes) {
+            ButtonComponent comp = new ButtonComponent();
+
+            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+            comp.applyData(data);
+            context.addItem("button", data.identification());
+        }
+
+        // Restaura as imagens
+        for (ImageComponentData data : state.image_components) {
+            ImageComponent comp = new ImageComponent();
+            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+            comp.applyData(data);
+            context.addItem("image", data.identification());
+        }
+
+        // Restaura inputs
+        for (InputComponentData data : state.input_components) {
+            InputComponent comp = new InputComponent("");
+
+            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+            comp.applyData(data);
+            context.addItem("input", data.identification());
+        }
+
+        // custom_cumponentes dentro do Canva principal
+        for (CanvaComponentJson data : state.custom_components) {
+            var comp = new CustomComponent();
+
+            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
+
+            comp.applyData(data);
+            context.addItem("component", data.self.identification);
+        }
+
+        // File componentsFile = new File("components.json");
+
+        // // Lê o JSON como array primeiro
+        // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
+        // CanvaComponentJson[].class);
+
+        // var listComponents = Arrays.asList(componentsArray);
+
+        // // custom_cumponentes do arquivo components.json
+        // for (CanvaComponentJson data : listComponents) {
+        // var comp = new CustomComponent();
+
+        // canvaCompTarget.addElementDragable(comp, current ->
+        // home.selectNode(current));
+
+        // comp.applyData(data);
+        // context.addItem("component", data.self.identification);
+        // }
+
     }
 
     private static void reviewJavaCode(ObservableList<Node> children) {

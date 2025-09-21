@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.data.CanvaComponentJson;
 import my_app.scenes.DataScene.DataScene;
@@ -42,30 +43,34 @@ public class App extends Application {
         FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
 
-        loadSubItemsOfCustomComponents();
+        // loadSubItemsOfCustomComponents();
+
+        var componentsContext = ComponentsContext.getInstance();
+        componentsContext.loadJsonState(new File("state.json"));
     }
 
     File componentsFile = new File("components.json");
 
-    void loadSubItemsOfCustomComponents() {
-        SubItemsContext context = SubItemsContext.getInstance();
+    // void loadSubItemsOfCustomComponents() {
+    // SubItemsContext context = SubItemsContext.getInstance();
 
-        try {
-            ObjectMapper om = new ObjectMapper();
+    // try {
+    // ObjectMapper om = new ObjectMapper();
 
-            // Lê o JSON como array primeiro
-            CanvaComponentJson[] componentsArray = om.readValue(componentsFile, CanvaComponentJson[].class);
+    // // Lê o JSON como array primeiro
+    // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
+    // CanvaComponentJson[].class);
 
-            ComponentsList = Arrays.asList(componentsArray);
+    // ComponentsList = Arrays.asList(componentsArray);
 
-            ComponentsList.forEach(it -> {
-                context.addItem("component", it.self.identification);
-            });
+    // ComponentsList.forEach(it -> {
+    // context.addItem("component", it.self.identification);
+    // });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
