@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.App;
+import my_app.screens.Home.Home;
 
 public class LeftSide extends VBox {
 
@@ -26,7 +27,7 @@ public class LeftSide extends VBox {
 
         List<Option> options = new ArrayList<>();
 
-        public LeftSide() {
+        public LeftSide(Home home) {
 
                 config();
 
@@ -39,7 +40,8 @@ public class LeftSide extends VBox {
                 getChildren().add(spacer);
 
                 optionsText.forEach(
-                                title -> options.add(new Option(title)));
+                                title -> options.add(
+                                                new Option(title, home)));
 
                 getChildren().addAll(options);
 

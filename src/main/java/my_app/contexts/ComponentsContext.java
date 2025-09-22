@@ -2,8 +2,6 @@ package my_app.contexts;
 
 import java.io.File;
 import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.animation.KeyFrame;
@@ -12,10 +10,8 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import my_app.App;
 import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
@@ -30,6 +26,7 @@ import my_app.data.InputComponentData;
 import my_app.data.StateJson;
 import my_app.data.TextComponentData;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
+import my_app.screens.Home.Home;
 
 public class ComponentsContext {
 
@@ -39,15 +36,20 @@ public class ComponentsContext {
     public static SimpleStringProperty idOfComponentSelected = new SimpleStringProperty("");
     public static SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
 
-    private CanvaComponent canvaComponent;
-
     SubItemsContext context = SubItemsContext.getInstance();
 
-    public void useCanva(CanvaComponent canva) {
-        this.canvaComponent = canva;
+    public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
+
+        String nodeId = customComponent.getId();
+        context.addItem("component", nodeId);
+
+        mainCanva.addElementDragable(customComponent);
+        mainCanva.setOnClickMethodToNode(customComponent, this::selectNode);
+
+        animateOnEntry(customComponent);
     }
 
-    public void onClickOnSubItem(String itemIdentification, String type) {
+    public void onClickOnSubItem(String itemIdentification, String type, CanvaComponent canvaComponent) {
 
         // if (type.equalsIgnoreCase("component")) {
         // // new ShowComponentScene().stage.show();
@@ -112,7 +114,7 @@ public class ComponentsContext {
         timeline.play();
     }
 
-    public void loadJsonState(File file) {
+    public void loadJsonState(File file, CanvaComponent canvaComponent) {
 
         var children = canvaComponent.getChildren();
         children.clear();
@@ -182,8 +184,10 @@ public class ComponentsContext {
         Commons.WriteJsonInDisc(file, this.data);
     }
 
-    public void addComponent(String type) {
+    public void addComponent(String type, Home home) {
         SubItemsContext context = SubItemsContext.getInstance();
+
+        CanvaComponent canvaComponent = home.canva;
 
         if (type == null || type.isBlank())
             return;
@@ -203,7 +207,7 @@ public class ComponentsContext {
             node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
 
         } else if (type.equals("Component")) {
-            new ShowComponentScene().stage.show();
+            new ShowComponentScene(home.canva).stage.show();
             return;
         } else if (type.equals("Flex items")) {
             node = new FlexComponent();

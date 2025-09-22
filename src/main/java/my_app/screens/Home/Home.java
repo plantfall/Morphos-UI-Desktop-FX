@@ -21,7 +21,7 @@ public class Home extends BorderPane {
     }
 
     public Home(boolean openComponentScene) {
-        setLeft(new LeftSide());
+        setLeft(new LeftSide(this));
 
         ScrollPane editor = new ScrollPane();
 

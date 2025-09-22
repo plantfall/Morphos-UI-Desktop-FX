@@ -14,8 +14,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
+import my_app.screens.Home.Home;
 
 //--Button (OptionHeader)
 //     -btn1 (subItem)
@@ -34,10 +36,13 @@ public class Option extends VBox {
         expanded.set(!expanded.get());
     }
 
-    public Option(String type) {
-        this.type = type.toLowerCase();
+    Home home;
 
-        OptionHeader header = new OptionHeader(type, this::handleHeaderClick);
+    public Option(String type, Home home) {
+        this.type = type.toLowerCase();
+        this.home = home;
+
+        OptionHeader header = new OptionHeader(type, home, this::handleHeaderClick);
 
         getChildren().add(header);
         getChildren().add(subItems);
@@ -102,7 +107,7 @@ public class Option extends VBox {
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
         subItemBox.setOnMouseClicked(e -> {
-            componentsContext.onClickOnSubItem(itemId, this.type);
+            componentsContext.onClickOnSubItem(itemId, this.type, home.canva);
         });
 
         subItemBox.setOnMouseEntered(e -> {

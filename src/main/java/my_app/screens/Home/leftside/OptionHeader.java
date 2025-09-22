@@ -9,7 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.App;
+import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
+import my_app.screens.Home.Home;
 
 public class OptionHeader extends HBox {
     Label label = new Label();
@@ -18,7 +20,7 @@ public class OptionHeader extends HBox {
 
     public OptionHeader(
             String type,
-            Runnable onClick) {
+            Home home, Runnable onClick) {
 
         label.setText(type);
         label.setFont(Font.font(18));
@@ -29,7 +31,7 @@ public class OptionHeader extends HBox {
         getChildren().add(btnAdd);
 
         btnAdd.setOnAction(ev -> {
-            componentsContext.addComponent(type);
+            componentsContext.addComponent(type, home);
         });
 
         var icon = FontIcon.of(
