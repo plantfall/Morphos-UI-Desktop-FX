@@ -41,7 +41,7 @@ public class ComponentsContext {
 
     SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
-    ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
+    public ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
 
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
 
@@ -176,7 +176,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                subItemsContext.addItem("component", data.self.identification);
+                // subItemsContext.addItem("component", data.self.identification);
             }
 
         } catch (Exception e) {

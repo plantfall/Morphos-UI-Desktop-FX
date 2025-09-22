@@ -73,8 +73,10 @@ public class ShowComponentScene extends Scene {
             }
 
             // Adiciona o novo componente
-            var customComponent = Commons.CreateStateData(canva);
-            componentsList.add(customComponent);
+            var state = Commons.CreateStateData(canva);
+            componentsList.add(state);
+
+            componentsContext.componentsList.add(state);
 
             // Salva tudo de volta
             Commons.WriteJsonInDisc(file, componentsList);
