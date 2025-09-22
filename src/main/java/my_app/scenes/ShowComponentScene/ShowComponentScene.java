@@ -36,7 +36,7 @@ import my_app.components.TextComponent;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.CanvaComponentData;
-import my_app.data.CanvaComponentJson;
+import my_app.data.StateJson;
 import my_app.data.Commons;
 import my_app.data.ComponentsWrapper;
 import my_app.data.TextComponentData;

@@ -2,7 +2,6 @@ package my_app.components.canvaComponent;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,15 +13,9 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import my_app.components.ImageComponent;
-import my_app.components.TextComponent;
-import my_app.components.buttonComponent.ButtonComponent;
-import my_app.components.inputComponents.InputComponent;
-import my_app.contexts.SubItemsContext;
 import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
-import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.Home.VisualNodeCallback;
 
 public class CanvaComponent extends Pane implements ViewContract<CanvaComponentData> {

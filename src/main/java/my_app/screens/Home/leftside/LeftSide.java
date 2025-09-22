@@ -2,8 +2,6 @@ package my_app.screens.Home.leftside;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
@@ -19,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.App;
-import my_app.screens.Home.Home.HandleClickSubItem;
 
 public class LeftSide extends VBox {
 
@@ -29,9 +26,7 @@ public class LeftSide extends VBox {
 
         List<Option> options = new ArrayList<>();
 
-        public LeftSide(
-                        Consumer<String> callbackClickOnBtnAdd,
-                        HandleClickSubItem callbackClickSubItem) {
+        public LeftSide() {
 
                 config();
 
@@ -44,7 +39,7 @@ public class LeftSide extends VBox {
                 getChildren().add(spacer);
 
                 optionsText.forEach(
-                                title -> options.add(new Option(title, callbackClickOnBtnAdd, callbackClickSubItem)));
+                                title -> options.add(new Option(title)));
 
                 getChildren().addAll(options);
 

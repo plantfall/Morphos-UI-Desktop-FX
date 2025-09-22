@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -20,8 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import my_app.contexts.ComponentsContext;
-import my_app.contexts.SubItemsContext;
-import my_app.data.CanvaComponentJson;
+import my_app.data.StateJson;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
 
@@ -34,7 +30,7 @@ public class App extends Application {
     public static Font FONT_SEMIBOLD;
     public static Font FONT_BOLD;
 
-    public static List<CanvaComponentJson> ComponentsList = new ArrayList<>();
+    public static List<StateJson> ComponentsList = new ArrayList<>();
 
     @Override
     public void init() {
@@ -45,8 +41,8 @@ public class App extends Application {
 
         // loadSubItemsOfCustomComponents();
 
-        var componentsContext = ComponentsContext.getInstance();
-        componentsContext.loadJsonState(new File("state.json"));
+        ComponentsContext.getInstance();
+
     }
 
     File componentsFile = new File("components.json");
@@ -58,8 +54,8 @@ public class App extends Application {
     // ObjectMapper om = new ObjectMapper();
 
     // // Lê o JSON como array primeiro
-    // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
-    // CanvaComponentJson[].class);
+    // StateJson[] componentsArray = om.readValue(componentsFile,
+    // StateJson[].class);
 
     // ComponentsList = Arrays.asList(componentsArray);
 

@@ -11,11 +11,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextComponent;
-import my_app.data.TextComponentData;
+import my_app.contexts.ComponentsContext;
+import my_app.data.FlexComponentData;
 import my_app.data.ViewContract;
-import my_app.screens.Home.Home;
 
-public class FlexComponent extends FlowPane implements ViewContract<TextComponentData> {
+public class FlexComponent extends FlowPane implements ViewContract<FlexComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
     SimpleStringProperty currentChild = new SimpleStringProperty("Text");
 
@@ -46,7 +46,7 @@ public class FlexComponent extends FlowPane implements ViewContract<TextComponen
         setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
 
-        Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
+        ComponentsContext.idOfComponentSelected.addListener((_a, _b, newId) -> {
             System.out.println("newId: " + newId);
 
             if (newId.equals(this.getId())) {
@@ -73,7 +73,19 @@ public class FlexComponent extends FlowPane implements ViewContract<TextComponen
     }
 
     @Override
-    public TextComponentData getData() {
+    public FlexComponentData getData() {
+
+        String childType = "Text";
+        String orientation_ = getOrientation().equals(Orientation.VERTICAL) ? "column" : "row";
+
+        if (currentChild.get().equals("Text")) {
+            childType = "text_component";
+        }
+
+        return new FlexComponentData(
+                childType,
+                this.getId(),
+                orientation_);
         // String style = getStyle();
 
         // String text = this.getText();
@@ -87,11 +99,11 @@ public class FlexComponent extends FlowPane implements ViewContract<TextComponen
 
         // return new TextComponentData(text, x, y, fontSize, textFill, fontWeight,
         // this.getId());
-        return null;
+
     }
 
     @Override
-    public void applyData(TextComponentData data) {
+    public void applyData(FlexComponentData data) {
 
         // this.setText(data.text());
         // this.setId(data.identification());

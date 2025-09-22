@@ -4,14 +4,14 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.data.ButtonComponentData;
-import my_app.data.CanvaComponentJson;
+import my_app.data.StateJson;
 import my_app.data.ImageComponentData;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 
-public class CustomComponent extends Pane implements ViewContract<CanvaComponentJson> {
+public class CustomComponent extends Pane implements ViewContract<StateJson> {
 
-    private CanvaComponentJson data;
+    private StateJson data;
 
     public CustomComponent() {
 
@@ -30,7 +30,7 @@ public class CustomComponent extends Pane implements ViewContract<CanvaComponent
     }
 
     @Override
-    public CanvaComponentJson getData() {
+    public StateJson getData() {
 
         this.data.self.x = (int) this.getLayoutX();
         this.data.self.y = (int) this.getLayoutY();
@@ -39,7 +39,7 @@ public class CustomComponent extends Pane implements ViewContract<CanvaComponent
     }
 
     @Override
-    public void applyData(CanvaComponentJson data) {
+    public void applyData(StateJson data) {
 
         this.data = data;
 

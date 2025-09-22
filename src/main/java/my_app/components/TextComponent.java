@@ -8,7 +8,6 @@ import javafx.scene.text.Text;
 import my_app.data.Commons;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
-import my_app.screens.Home.Home;
 
 public class TextComponent extends Text implements ViewContract<TextComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
@@ -25,15 +24,6 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
         setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
 
-        Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
-            System.out.println("newId: " + newId);
-
-            if (newId.equals(this.getId())) {
-                String novoEstilo = Commons.UpdateEspecificStyle(this.getStyle(), "-fx-background-color", "red");
-                this.setStyle(novoEstilo);
-            }
-
-        });
     }
 
     @Override

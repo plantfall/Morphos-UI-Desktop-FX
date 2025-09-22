@@ -34,7 +34,7 @@ import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.data.ButtonComponentData;
-import my_app.data.CanvaComponentJson;
+import my_app.data.StateJson;
 import my_app.data.Commons;
 import my_app.data.ImageComponentData;
 import my_app.data.InputComponentData;
@@ -44,6 +44,7 @@ import my_app.screens.ShowCode.ShowCode;
 
 public class MainScene extends Scene {
 
+    static ComponentsContext componentsContext = ComponentsContext.getInstance();
     static Home home = new Home(false);
     static Stage stage = new Stage();
 
@@ -53,7 +54,7 @@ public class MainScene extends Scene {
     public MainScene() {
         super(createRoot(), 1200, 650);
 
-        loadSceneFromJsonFile(new File(FileName), home.canva);
+        loadSceneFromJsonFile(new File(FileName));
     }
 
     private static VBox createRoot() {
@@ -70,111 +71,29 @@ public class MainScene extends Scene {
         HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
         VBox.setVgrow(mainView.getChildren().get(1), Priority.ALWAYS);
 
-        itemSalvar.setOnAction(ev -> {
-            // generateJavaCode(home.canvaChildren());
-            saveSceneInJsonFile(new File(FileName), home.canva);
-        });
+        itemSalvar.setOnAction(ev -> saveSceneInJsonFile(new File(FileName)));
 
         itemCarregar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
-            loadSceneFromJsonFile(new File(FileName), home.canva);
+            loadSceneFromJsonFile(new File(FileName));
         });
 
         itemShowCode.setOnAction(ev -> {
-            reviewJavaCode(home.canvaChildren());
+            // reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
+        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName)));
 
         return mainView;
     }
 
-    private static void saveSceneInJsonFile(File file, CanvaComponent canva) {
-
-        CanvaComponentJson jsonTarget = Commons.CreateCanvaComponent(file, canva);
-
-        Commons.WriteJsonInDisc(file, jsonTarget);
+    private static void saveSceneInJsonFile(File file) {
+        componentsContext.saveStateInJsonFile(file);
     }
 
-    private static void loadSceneFromJsonFile(File file, CanvaComponent canvaCompTarget) {
-
-        var children = canvaCompTarget.getChildren();
-        children.clear();
-
-        SubItemsContext context = SubItemsContext.getInstance();
-        var state = ComponentsContext.getInstance().data;
-
-        // Restaura os dados do próprio Canva
-        canvaCompTarget.applyData(state.self);
-
-        // Restaura os textos
-        for (TextComponentData data : state.text_componentes) {
-            TextComponent comp = new TextComponent("");
-
-            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-            comp.applyData(data);
-            context.addItem("text", data.identification());
-        }
-
-        // Restaura os botões
-        for (ButtonComponentData data : state.button_componentes) {
-            ButtonComponent comp = new ButtonComponent();
-
-            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-            comp.applyData(data);
-            context.addItem("button", data.identification());
-        }
-
-        // Restaura as imagens
-        for (ImageComponentData data : state.image_components) {
-            ImageComponent comp = new ImageComponent();
-            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-            comp.applyData(data);
-            context.addItem("image", data.identification());
-        }
-
-        // Restaura inputs
-        for (InputComponentData data : state.input_components) {
-            InputComponent comp = new InputComponent("");
-
-            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-            comp.applyData(data);
-            context.addItem("input", data.identification());
-        }
-
-        // custom_cumponentes dentro do Canva principal
-        for (CanvaComponentJson data : state.custom_components) {
-            var comp = new CustomComponent();
-
-            canvaCompTarget.addElementDragable(comp, current -> home.selectNode(current));
-
-            comp.applyData(data);
-            context.addItem("component", data.self.identification);
-        }
-
-        // File componentsFile = new File("components.json");
-
-        // // Lê o JSON como array primeiro
-        // CanvaComponentJson[] componentsArray = om.readValue(componentsFile,
-        // CanvaComponentJson[].class);
-
-        // var listComponents = Arrays.asList(componentsArray);
-
-        // // custom_cumponentes do arquivo components.json
-        // for (CanvaComponentJson data : listComponents) {
-        // var comp = new CustomComponent();
-
-        // canvaCompTarget.addElementDragable(comp, current ->
-        // home.selectNode(current));
-
-        // comp.applyData(data);
-        // context.addItem("component", data.self.identification);
-        // }
-
+    private static void loadSceneFromJsonFile(File file) {
+        componentsContext.useCanva(home.canva);
+        componentsContext.loadJsonState(file);
     }
 
     private static void reviewJavaCode(ObservableList<Node> children) {

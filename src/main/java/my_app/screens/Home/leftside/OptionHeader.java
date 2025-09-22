@@ -1,10 +1,7 @@
 package my_app.screens.Home.leftside;
 
-import java.util.function.Consumer;
-
 import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
 import org.kordamp.ikonli.javafx.FontIcon;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,14 +9,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.App;
+import my_app.contexts.ComponentsContext;
 
 public class OptionHeader extends HBox {
     Label label = new Label();
     Button btnAdd = new Button();
+    ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     public OptionHeader(
             String type,
-            Consumer<String> callbackClickOnBtnAdd,
             Runnable onClick) {
 
         label.setText(type);
@@ -31,7 +29,7 @@ public class OptionHeader extends HBox {
         getChildren().add(btnAdd);
 
         btnAdd.setOnAction(ev -> {
-            callbackClickOnBtnAdd.accept(type);
+            componentsContext.addComponent(type);
         });
 
         var icon = FontIcon.of(

@@ -1,17 +1,12 @@
 package my_app.screens.Home.leftside;
 
-import java.util.function.Consumer;
-
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.WeakListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -19,9 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
-import my_app.screens.Home.Home;
-import my_app.screens.Home.Home.HandleClickSubItem;
 
 //--Button (OptionHeader)
 //     -btn1 (subItem)
@@ -34,17 +28,16 @@ public class Option extends VBox {
     ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
 
     SubItemsContext context = SubItemsContext.getInstance();
+    ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     void handleHeaderClick() {
         expanded.set(!expanded.get());
     }
 
-    public Option(String type,
-            Consumer<String> callbackClickOnBtnAdd,
-            HandleClickSubItem callbackClickSubItem) {
+    public Option(String type) {
         this.type = type.toLowerCase();
 
-        OptionHeader header = new OptionHeader(type, callbackClickOnBtnAdd, this::handleHeaderClick);
+        OptionHeader header = new OptionHeader(type, this::handleHeaderClick);
 
         getChildren().add(header);
         getChildren().add(subItems);
@@ -54,7 +47,7 @@ public class Option extends VBox {
         items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
-                    loadSubItems(callbackClickSubItem);
+                    loadSubItems();
                 }
             }
         });
@@ -65,7 +58,7 @@ public class Option extends VBox {
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
 
-        Home.idOfComponentSelected.addListener((obs, oldId, newId) -> {
+        ComponentsContext.idOfComponentSelected.addListener((obs, oldId, newId) -> {
             for (Node n : subItems.getChildren()) {
                 if (n instanceof HBox hbox) {
                     Label lbl = (Label) hbox.getChildren().get(0);
@@ -84,7 +77,7 @@ public class Option extends VBox {
 
     }
 
-    private void loadSubItems(HandleClickSubItem callbackClickSubItem) {
+    private void loadSubItems() {
         subItems.getChildren().clear();
 
         ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
@@ -93,13 +86,13 @@ public class Option extends VBox {
             SimpleStringProperty itemProperty = itemsProperties.get(i);
             String itemId = itemProperty.get();
 
-            HBox subItemBox = createSubItemBox(itemId, callbackClickSubItem);
+            HBox subItemBox = createSubItemBox(itemId);
 
             subItems.getChildren().add(subItemBox);
         }
     }
 
-    private HBox createSubItemBox(String itemId, HandleClickSubItem callbackClickSubItem) {
+    private HBox createSubItemBox(String itemId) {
         HBox subItemBox = new HBox();
         Label subLabel = new Label("• " + itemId);
         subLabel.setFont(Font.font(12));
@@ -109,17 +102,17 @@ public class Option extends VBox {
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
         subItemBox.setOnMouseClicked(e -> {
-            callbackClickSubItem.onClick(itemId, this.type);
+            componentsContext.onClickOnSubItem(itemId, this.type);
         });
 
         subItemBox.setOnMouseEntered(e -> {
-            if (!Home.idOfComponentSelected.get().equals(itemId)) {
+            if (!ComponentsContext.idOfComponentSelected.get().equals(itemId)) {
                 subItemBox.setStyle("-fx-background-color: #2D2A6E;");
             }
         });
 
         subItemBox.setOnMouseExited(e -> {
-            if (!Home.idOfComponentSelected.get().equals(itemId)) {
+            if (!ComponentsContext.idOfComponentSelected.get().equals(itemId)) {
                 subItemBox.setStyle("-fx-background-color: transparent;");
             }
         });
