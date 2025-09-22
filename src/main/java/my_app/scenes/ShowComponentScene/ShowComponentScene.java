@@ -1,7 +1,12 @@
 package my_app.scenes.ShowComponentScene;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,6 +19,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.data.ComponentsWrapper;
+import my_app.data.StateJson;
 import my_app.screens.Home.Home;
 
 public class ShowComponentScene extends Scene {
@@ -55,16 +61,27 @@ public class ShowComponentScene extends Scene {
     }
 
     private void saveStateToFile(File file, CanvaComponent canva) {
-        // carregar os components e dar um append
-        var components = List.of(Commons.CreateCanvaComponent(file, canva));
-        new ComponentsWrapper(components);
+        ObjectMapper om = new ObjectMapper();
 
-        //
-        ObservableList<Node> children = canva.getChildren();
-        var object = Commons.CreateCanvaComponent(file, canva);
+        try {
+            List<StateJson> componentsList = new ArrayList<>();
 
-        Commons.WriteJsonInDisc(file, components);
+            // Se o arquivo existe e tem conteúdo, carrega
+            if (file.exists() && file.length() > 0) {
+                StateJson[] componentsArray = om.readValue(file, StateJson[].class);
+                componentsList = new ArrayList<>(Arrays.asList(componentsArray));
+            }
 
+            // Adiciona o novo componente
+            var customComponent = Commons.CreateStateData(canva);
+            componentsList.add(customComponent);
+
+            // Salva tudo de volta
+            Commons.WriteJsonInDisc(file, componentsList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

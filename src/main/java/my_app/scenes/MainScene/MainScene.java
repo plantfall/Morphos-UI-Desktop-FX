@@ -71,7 +71,7 @@ public class MainScene extends Scene {
         HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
         VBox.setVgrow(mainView.getChildren().get(1), Priority.ALWAYS);
 
-        itemSalvar.setOnAction(ev -> saveSceneInJsonFile(new File(FileName)));
+        itemSalvar.setOnAction(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
 
         itemCarregar.setOnAction(ev -> {
             // generateJavaCode(home.canvaChildren());
@@ -82,17 +82,18 @@ public class MainScene extends Scene {
             // reviewJavaCode(home.canvaChildren());
         });
 
-        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName)));
+        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
 
         return mainView;
     }
 
-    private static void saveSceneInJsonFile(File file) {
-        componentsContext.saveStateInJsonFile(file);
+    private static void saveSceneInJsonFile(File file, CanvaComponent mainCanva) {
+        componentsContext.saveStateInJsonFile(file, mainCanva);
     }
 
     private static void loadSceneFromJsonFile(File file) {
         componentsContext.loadJsonState(file, home.canva);
+        componentsContext.loadJsonCustomComponents(new File("components.json"));
     }
 
     private static void reviewJavaCode(ObservableList<Node> children) {

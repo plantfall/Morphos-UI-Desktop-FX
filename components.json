@@ -1,1 +1,33 @@
-[{"self":{"padding_top":0,"padding_right":0,"padding_bottom":0,"padding_left":0,"width":370.0,"height":250.0,"bg_type":"color","bgContent":"#d6d2e4ff","identification":"1758547909532","x":0,"y":0},"text_componentes":[{"text":"Im new here","layout_x":152.522265625,"layout_y":117.21953125,"fontSize":"16","color":"black","font_weight":"normal","identification":"1758547912200"}],"button_componentes":[],"image_components":[],"input_components":[],"flex_componentes":[],"custom_components":[]}]
+[
+  {
+    "self": {
+      "padding_top": 0,
+      "padding_right": 0,
+      "padding_bottom": 0,
+      "padding_left": 0,
+      "width": 370.0,
+      "height": 250.0,
+      "bg_type": "color",
+      "bgContent": "#d6d2e4ff",
+      "identification": "1758549077100",
+      "x": 0,
+      "y": 0
+    },
+    "text_componentes": [
+      {
+        "text": "Im new here",
+        "layout_x": 152.522265625,
+        "layout_y": 117.21953125,
+        "fontSize": "16",
+        "color": "black",
+        "font_weight": "normal",
+        "identification": "1758549078599"
+      }
+    ],
+    "button_componentes": [],
+    "image_components": [],
+    "input_components": [],
+    "flex_componentes": [],
+    "custom_components": []
+  }
+]

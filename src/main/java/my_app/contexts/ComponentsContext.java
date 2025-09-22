@@ -1,6 +1,8 @@
 package my_app.contexts;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,6 +12,8 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.util.Duration;
 import my_app.components.CustomComponent;
@@ -31,61 +35,55 @@ import my_app.screens.Home.Home;
 public class ComponentsContext {
 
     private static ComponentsContext instance;
-    public StateJson data;
 
     public static SimpleStringProperty idOfComponentSelected = new SimpleStringProperty("");
     public static SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
 
-    SubItemsContext context = SubItemsContext.getInstance();
+    SubItemsContext subItemsContext = SubItemsContext.getInstance();
+
+    ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
 
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
 
         String nodeId = customComponent.getId();
-        context.addItem("component", nodeId);
+        subItemsContext.addItem("component", nodeId);
 
-        mainCanva.addElementDragable(customComponent);
+        // mainCanva.addElementDragable(customComponent);
         mainCanva.setOnClickMethodToNode(customComponent, this::selectNode);
 
-        animateOnEntry(customComponent);
+        // animateOnEntry(customComponent);
     }
 
-    public void onClickOnSubItem(String itemIdentification, String type, CanvaComponent canvaComponent) {
+    public void onClickOnSubItem(String itemIdentification, String type, CanvaComponent mainCanvaComponent) {
 
-        // if (type.equalsIgnoreCase("component")) {
-        // // new ShowComponentScene().stage.show();
-        // var op = App.ComponentsList.stream().filter(it ->
-        // it.self.identification.equals(itemIdentification))
-        // .findFirst();
+        var canvaChildren = mainCanvaComponent.getChildren();
 
-        // if (op.isPresent()) {
-        // // lookin for custom component in canva
-        // Node target = canvaChildren()
-        // .stream()
-        // .filter(n -> itemIdentification.equals(n.getId()))
-        // .findFirst()
-        // .orElse(null);
-        // // 2. finded so, selected
-        // if (target != null) {
-        // selectNode(target);
-        // }
-
-        // else {
-        // // if not, just create and add in canva
-        // var cc = new CustomComponent();
-        // canva.addElementDragable(cc, currentNode -> selectNode(currentNode));
-        // cc.applyData(op.get());
-        // }
-        // }
-
-        // return;
-        // }
-        // basics components (text, image...)
-        Optional<Node> target = canvaComponent.getChildren()
-                .stream()
-                .filter(n -> itemIdentification.equals(n.getId()))
+        var op = componentsList.stream().filter(it -> it.self.identification.equals(itemIdentification))
                 .findFirst();
 
-        target.ifPresent(this::selectNode);
+        op.ifPresentOrElse(state -> {
+            // lookin for custom component in main canva
+            Node target = canvaChildren.stream()
+                    .filter(n -> itemIdentification.equals(n.getId()))
+                    .findFirst()
+                    .orElse(null);
+            // 2. finded in main canva so, selected
+            if (target != null) {
+                selectNode(target);
+            } else {
+                // if not, just create and add in canva
+                // constroi componente que também é um canva
+
+                CustomComponent customComponent = new CustomComponent();
+
+                customComponent.applyData(state);
+                mainCanvaComponent.addElementDragable(customComponent);
+                mainCanvaComponent.setOnClickMethodToNode(customComponent, this::selectNode);
+            }
+
+        },
+                null);
+
     }
 
     public void selectNode(Node node) {
@@ -115,12 +113,18 @@ public class ComponentsContext {
     }
 
     public void loadJsonState(File file, CanvaComponent canvaComponent) {
-
+        ObjectMapper om = new ObjectMapper();
         var children = canvaComponent.getChildren();
         children.clear();
 
+        if (!file.exists())
+            return;
+
+        if (file.exists() && file.length() == 0)
+            return;
+
         try {
-            ObjectMapper om = new ObjectMapper();
+
             var state = om.readValue(file, StateJson.class);
 
             // Restaura os dados do próprio Canva
@@ -133,7 +137,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                context.addItem("text", data.identification());
+                subItemsContext.addItem("text", data.identification());
             }
 
             // Restaura os botões
@@ -143,7 +147,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                context.addItem("button", data.identification());
+                subItemsContext.addItem("button", data.identification());
             }
 
             // Restaura as imagens
@@ -152,7 +156,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                context.addItem("image", data.identification());
+                subItemsContext.addItem("image", data.identification());
             }
 
             // Restaura inputs
@@ -162,7 +166,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                context.addItem("input", data.identification());
+                subItemsContext.addItem("input", data.identification());
             }
 
             // custom_cumponentes dentro do Canva principal
@@ -172,7 +176,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
-                context.addItem("component", data.self.identification);
+                subItemsContext.addItem("component", data.self.identification);
             }
 
         } catch (Exception e) {
@@ -180,12 +184,39 @@ public class ComponentsContext {
         }
     }
 
-    public void saveStateInJsonFile(File file) {
-        Commons.WriteJsonInDisc(file, this.data);
+    public void loadJsonCustomComponents(File file) {
+        ObjectMapper om = new ObjectMapper();
+
+        if (!file.exists())
+            return;
+
+        if (file.exists() && file.length() == 0)
+            return;
+
+        try {
+            StateJson[] componentsArray = om.readValue(file, StateJson[].class);
+
+            var list = new ArrayList<>(Arrays.asList(componentsArray));
+
+            list.forEach(it -> {
+                componentsList.add(it);
+                subItemsContext.addItem("component", it.self.identification);
+
+                System.out.println("aqui: " + it.self.identification);
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveStateInJsonFile(File file, CanvaComponent mainCanvaComponent) {
+        StateJson data = Commons.CreateStateData(mainCanvaComponent);
+        Commons.WriteJsonInDisc(file, data);
     }
 
     public void addComponent(String type, Home home) {
-        SubItemsContext context = SubItemsContext.getInstance();
+        SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
         CanvaComponent canvaComponent = home.canva;
 
@@ -215,7 +246,7 @@ public class ComponentsContext {
 
         if (node != null) {
             String nodeId = node.getId();
-            context.addItem(type.toLowerCase(), nodeId);
+            subItemsContext.addItem(type.toLowerCase(), nodeId);
 
             canvaComponent.addElementDragable(node);
             canvaComponent.setOnClickMethodToNode(node, this::selectNode);

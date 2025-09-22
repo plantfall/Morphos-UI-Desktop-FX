@@ -105,7 +105,7 @@ public class Commons {
     }
 
     @Deprecated
-    public static StateJson CreateCanvaComponent(File file, CanvaComponent canva) {
+    public static StateJson CreateStateData(CanvaComponent canva) {
         ObservableList<Node> children = canva.getChildren();
 
         StateJson jsonTarget = new StateJson();

@@ -42,31 +42,7 @@ public class App extends Application {
         // loadSubItemsOfCustomComponents();
 
         ComponentsContext.getInstance();
-
     }
-
-    File componentsFile = new File("components.json");
-
-    // void loadSubItemsOfCustomComponents() {
-    // SubItemsContext context = SubItemsContext.getInstance();
-
-    // try {
-    // ObjectMapper om = new ObjectMapper();
-
-    // // Lê o JSON como array primeiro
-    // StateJson[] componentsArray = om.readValue(componentsFile,
-    // StateJson[].class);
-
-    // ComponentsList = Arrays.asList(componentsArray);
-
-    // ComponentsList.forEach(it -> {
-    // context.addItem("component", it.self.identification);
-    // });
-
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
