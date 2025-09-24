@@ -2,7 +2,9 @@ package my_app.components;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import my_app.components.buttonComponent.ButtonComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.StateJson;
 import my_app.data.ImageComponentData;
@@ -13,20 +15,20 @@ public class CustomComponent extends Pane implements ViewContract<StateJson> {
 
     private StateJson data;
 
+    ComponentsContext componentsContext = ComponentsContext.getInstance();
+
     public CustomComponent() {
 
     }
 
     @Override
     public void appearance(Pane father) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'appearance'");
+        father.getChildren().setAll(new Text("Empty"));
     }
 
     @Override
     public void settings(Pane father) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'settings'");
+        father.getChildren().setAll(new Text("Empty"));
     }
 
     @Override
@@ -72,18 +74,21 @@ public class CustomComponent extends Pane implements ViewContract<StateJson> {
         for (ButtonComponentData data_ : data.button_componentes) {
             var node = new ButtonComponent(data_.text());
             node.applyData(data_);
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
         for (TextComponentData data_ : data.text_componentes) {
             var node = new TextComponent(data_.text());
             node.applyData(data_);
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
         for (ImageComponentData data_ : data.image_components) {
             var node = new ImageComponent(data_.url());
             node.applyData(data_);
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
     }

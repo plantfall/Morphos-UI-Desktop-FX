@@ -165,7 +165,6 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
     @Override
     public void settings(Pane father) {
-        System.out.println("clear ");
         father.getChildren().clear();
     }
 

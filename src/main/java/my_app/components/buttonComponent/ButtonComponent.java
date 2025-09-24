@@ -49,11 +49,6 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
                         ));
 
         currentState.set(this); // 👈 sempre aponta para o próprio botão
-
-        setOnAction(ev -> {
-            ComponentsContext.idOfComponentSelected.set(this.getId());
-        });
-
         // Home.idOfComponentSelected.addListener((_a, _b, newId) -> {
         // System.out.println("newId: " + newId);
 
