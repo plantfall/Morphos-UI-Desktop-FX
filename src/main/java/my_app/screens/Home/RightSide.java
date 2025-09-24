@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.App;
 import my_app.components.NodeWrapper;
+import my_app.contexts.ComponentsContext;
 import my_app.data.ViewContract;
 
 public class RightSide extends VBox {
@@ -27,7 +28,6 @@ public class RightSide extends VBox {
 
     Button btnAppearence = new Button("Appearence");
     Button btnLayout = new Button("Layout");
-
     HBox top = new HBox(btnAppearence, btnLayout);
     HBox topWrapper = new HBox(top); // wrapper só para não se esticar
 
@@ -37,7 +37,9 @@ public class RightSide extends VBox {
 
     BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
-    public RightSide(ObjectProperty<Node> selectedNode) {
+    public RightSide() {
+        ObjectProperty<Node> selectedNode = ComponentsContext.visualNodeSelected;
+
         this.selectedNode = selectedNode;
 
         btnAppearence.setOnAction(ev -> appearenceIsSelected.set(true));
@@ -60,19 +62,15 @@ public class RightSide extends VBox {
         spacer.setPrefHeight(10);
         getChildren().add(spacer);
 
+        // mount
+        mount();
+
         // Atualiza UI quando muda de seleção
 
-        appearenceIsSelected.addListener((obs, old, node) -> {
-            Node currentNode = selectedNode.get();
-            if (currentNode instanceof ViewContract renderable) {
-                NodeWrapper nw = new NodeWrapper(renderable);
-                nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
-            } else {
-                dynamicContainer.getChildren().setAll(new Text("Nenhuma configuração disponível"));
-            }
-        });
+        appearenceIsSelected.addListener((obs, old, node) -> mount());
         // NodeWrapper
 
+        // quando muda o node
         selectedNode.addListener((obs, oldNode, newNode) -> {
             if (newNode instanceof ViewContract renderable) {
                 NodeWrapper nw = new NodeWrapper(renderable);
@@ -83,6 +81,14 @@ public class RightSide extends VBox {
         });
 
         config();
+    }
+
+    void mount() {
+        Node currentNode = selectedNode.get();
+        if (currentNode instanceof ViewContract renderable) {
+            NodeWrapper nw = new NodeWrapper(renderable);
+            nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+        }
     }
 
     void config() {

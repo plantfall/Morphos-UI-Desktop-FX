@@ -1,6 +1,5 @@
 package my_app.components.canvaComponent;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -12,9 +11,9 @@ public class WidthComponent extends HBox {
     Text title = new Text("Width:");
     TextField tf = new TextField();
 
-    public WidthComponent(ObjectProperty<Node> selectedNode) {
+    public WidthComponent(Node selectedNode) {
 
-        Node node = selectedNode.get();
+        Node node = selectedNode;
 
         config();
 
@@ -33,7 +32,6 @@ public class WidthComponent extends HBox {
         });
 
         getChildren().addAll(title, tf);
-
     }
 
     private void loadNodeWidthInTextField(Node node) {

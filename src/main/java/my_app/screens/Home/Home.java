@@ -1,17 +1,12 @@
 package my_app.screens.Home;
 
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.leftside.LeftSide;
 
 public class Home extends BorderPane {
-    SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     public CanvaComponent canva = new CanvaComponent();
 
@@ -35,7 +30,7 @@ public class Home extends BorderPane {
 
         // setCenter(this.canva);
         setCenter(editor);
-        setRight(new RightSide(visualNodeSelected));
+        setRight(new RightSide());
 
         // setStyle("-fx-background-color:red");
 

@@ -1,6 +1,5 @@
 package my_app.components.canvaComponent;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -12,9 +11,9 @@ public class HeightComponent extends HBox {
     Text title = new Text("Height:");
     TextField tf = new TextField();
 
-    public HeightComponent(ObjectProperty<Node> selectedNode) {
+    public HeightComponent(Node selectedNode) {
 
-        Node node = selectedNode.get();
+        Node node = selectedNode;
 
         config();
 

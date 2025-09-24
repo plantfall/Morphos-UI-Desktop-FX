@@ -1,7 +1,5 @@
 package my_app.components.canvaComponent;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -13,6 +11,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import my_app.contexts.ComponentsContext;
 import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
@@ -20,14 +19,14 @@ import my_app.screens.Home.Home.VisualNodeCallback;
 
 public class CanvaComponent extends Pane implements ViewContract<CanvaComponentData> {
 
-    ObjectProperty<Node> currentState = new SimpleObjectProperty<>(this);
-
     public CanvaComponent() {
 
         config();
 
         setOnMouseClicked(e -> {
             if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
+                ComponentsContext.visualNodeSelected.set(this);
+
                 System.out.println("Canva selecionado");
             }
         });
@@ -159,14 +158,15 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
         father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
                 applyUrl,
-                new WidthComponent(currentState),
-                new HeightComponent(currentState));
+                new WidthComponent(this),
+                new HeightComponent(this));
 
     }
 
     @Override
     public void settings(Pane father) {
-
+        System.out.println("clear ");
+        father.getChildren().clear();
     }
 
     void config() {
@@ -187,6 +187,8 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         setStyle("-fx-background-color:%s;".formatted(Commons.CanvaBgColorDefault));
 
         setId(String.valueOf(System.currentTimeMillis()));
+
+        ComponentsContext.visualNodeSelected.set(this);
     }
 
     @Override
@@ -230,27 +232,26 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
 
     @Override
     public void applyData(CanvaComponentData data) {
-        var node = (Pane) currentState.get();
 
         // Aplicando as informações extraídas ao CanvaComponent
-        node.setPrefWidth(data.width);
-        node.setPrefHeight(data.height);
+        setPrefWidth(data.width);
+        setPrefHeight(data.height);
 
-        node.setId(data.identification);
+        setId(data.identification);
 
         // Ajustando o padding
-        node.setPadding(
+        setPadding(
                 new Insets(data.padding_top, data.padding_right, data.padding_bottom, data.padding_left));
 
         var bgType = data.bg_type;
         var bgContent = data.bgContent;
         // Definindo o fundo com base no tipo
         if (bgType.equals("color")) {
-            node.setStyle("-fx-background-color:%s;".formatted(
+            setStyle("-fx-background-color:%s;".formatted(
                     bgContent));
         } else if (bgType.equals("image")) {
             // Para imagem, você pode fazer algo como isso:
-            node.setStyle("-fx-background-image: url('" + bgContent + "');" +
+            setStyle("-fx-background-image: url('" + bgContent + "');" +
                     "-fx-background-size: cover; -fx-background-position: center;");
         }
     }

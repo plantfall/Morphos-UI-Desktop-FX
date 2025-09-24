@@ -1,13 +1,14 @@
 package my_app.components;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import my_app.data.ViewContract;
 
 public class NodeWrapper {
-    private ViewContract currentNode;
+    private ViewContract<Node> currentNode;
 
-    public NodeWrapper(ViewContract node) {
+    public NodeWrapper(ViewContract<Node> node) {
         this.currentNode = node;
     }
 
