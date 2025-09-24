@@ -41,7 +41,7 @@ public class ShowComponentScene extends Scene {
         Menu menu = new Menu();
         MenuItem is = new MenuItem("Save");
 
-        menu.setOnAction(ev -> {
+        is.setOnAction(ev -> {
             Node currentNode = home.canva;
 
             componentsContext.addCustomComponent(currentNode, mainCanva);
