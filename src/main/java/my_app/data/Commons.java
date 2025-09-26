@@ -15,6 +15,7 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
+import my_app.components.flexComponent.FlexComponent;
 import my_app.components.inputComponents.InputComponent;
 
 public class Commons {
@@ -132,6 +133,10 @@ public class Commons {
 
             if (node instanceof CustomComponent component) {
                 jsonTarget.custom_components.add(component.getData());
+            }
+
+            if (node instanceof FlexComponent component) {
+                jsonTarget.flex_componentes.add(component.getData());
             }
         }
 

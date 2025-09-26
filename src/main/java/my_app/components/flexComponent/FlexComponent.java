@@ -45,17 +45,6 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
 
         setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
-
-        ComponentsContext.idOfComponentSelected.addListener((_a, _b, newId) -> {
-            System.out.println("newId: " + newId);
-
-            if (newId.equals(this.getId())) {
-                // String novoEstilo = Commons.UpdateEspecificStyle(this.getStyle(),
-                // "-fx-background-color", "red");
-                // this.setStyle(novoEstilo);
-            }
-
-        });
     }
 
     @Override
@@ -82,8 +71,13 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
             childType = "text_component";
         }
 
+        if (currentChild.get().equals("Text")) {
+            childType = "text_component";
+        }
+
         return new FlexComponentData(
                 childType,
+                null,
                 this.getId(),
                 orientation_);
         // String style = getStyle();

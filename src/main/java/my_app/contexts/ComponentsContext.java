@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.animation.KeyFrame;
@@ -58,8 +59,7 @@ public class ComponentsContext {
 
         var canvaChildren = mainCanvaComponent.getChildren();
 
-        var op = componentsList.stream().filter(it -> it.self.identification.equals(itemIdentification))
-                .findFirst();
+        var op = searchNodeById(itemIdentification);
 
         op.ifPresentOrElse(state -> {
             // lookin for custom component in main canva
@@ -84,6 +84,14 @@ public class ComponentsContext {
         },
                 null);
 
+    }
+
+    public Optional<StateJson> searchNodeById(String nodeId) {
+
+        var op = componentsList.stream().filter(it -> it.self.identification.equals(nodeId))
+                .findFirst();
+
+        return op;
     }
 
     public void selectNode(Node node) {
