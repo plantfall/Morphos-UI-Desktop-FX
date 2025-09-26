@@ -69,17 +69,18 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
 
         if (currentChild.get().equals("Text")) {
             childType = "text_component";
-        }
-
-        if (currentChild.get().equals("Text")) {
-            childType = "text_component";
+        } else {
+            childType = "custom_component";
         }
 
         return new FlexComponentData(
                 childType,
-                null,
+                getChildren().getFirst().getId(),
                 this.getId(),
-                orientation_);
+                orientation_,
+                (int) getLayoutX(),
+                (int) getLayoutY());
+
         // String style = getStyle();
 
         // String text = this.getText();
@@ -98,6 +99,13 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
 
     @Override
     public void applyData(FlexComponentData data) {
+
+        this.setLayoutX(data.x());
+        this.setLayoutY(data.y());
+
+        this.setOrientation(data.orientation().equals("column") ? Orientation.VERTICAL : Orientation.HORIZONTAL);
+
+        this.setId(data.identification());
 
         // this.setText(data.text());
         // this.setId(data.identification());

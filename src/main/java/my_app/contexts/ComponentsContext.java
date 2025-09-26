@@ -26,6 +26,7 @@ import my_app.components.flexComponent.FlexComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
+import my_app.data.FlexComponentData;
 import my_app.data.ImageComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.StateJson;
@@ -61,12 +62,9 @@ public class ComponentsContext {
 
         var op = searchNodeById(itemIdentification);
 
-        op.ifPresentOrElse(state -> {
+        op.ifPresent(state -> {
             // lookin for custom component in main canva
-            Node target = canvaChildren.stream()
-                    .filter(n -> itemIdentification.equals(n.getId()))
-                    .findFirst()
-                    .orElse(null);
+            var target = searchNodeByIdInMainCanva(itemIdentification, canvaChildren);
             // 2. finded in main canva so, selected
             if (target != null) {
                 selectNode(target);
@@ -81,8 +79,7 @@ public class ComponentsContext {
                 mainCanvaComponent.setOnClickMethodToNode(customComponent, this::selectNode);
             }
 
-        },
-                null);
+        });
 
     }
 
@@ -92,6 +89,16 @@ public class ComponentsContext {
                 .findFirst();
 
         return op;
+    }
+
+    public Node searchNodeByIdInMainCanva(String nodeId, ObservableList<Node> canvaChildren) {
+        // lookin for custom component in main canva
+        var target = canvaChildren.stream()
+                .filter(n -> nodeId.equals(n.getId()))
+                .findFirst()
+                .orElse(null);
+
+        return target;
     }
 
     public void selectNode(Node node) {
@@ -184,6 +191,26 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                // subItemsContext.addItem("component", data.self.identification);
+            }
+
+            for (FlexComponentData data : state.flex_componentes) {
+                var comp = new FlexComponent();
+
+                canvaComponent.addElementDragable(comp, this::selectNode);
+
+                comp.applyData(data);
+
+                // como o custom component já existe no canva, posso adicionar ele aqui se
+                // pertencer tbm ao flex component
+                var target = searchNodeByIdInMainCanva(
+                        data.childId(), canvaComponent.getChildren());
+
+                if (target != null) {
+                    comp.getChildren().clear();
+                    comp.getChildren().add(target);
+                }
+
                 // subItemsContext.addItem("component", data.self.identification);
             }
 
