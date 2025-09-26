@@ -48,6 +48,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
         enableDrag(node, relX, relY);
 
         getChildren().add(node);
+
     }
 
     public void addElementDragable(Node node) {

@@ -16,6 +16,8 @@ import my_app.data.ViewContract;
 
 public class InputComponent extends TextField implements ViewContract<InputComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
+    public boolean inCanva;
+    public String canvaId;
 
     public InputComponent(String content) {
         super(content);
@@ -62,7 +64,8 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
         double x = this.getLayoutX();
         double y = this.getLayoutY();
 
-        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y, this.getId());
+        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y, this.getId(), inCanva,
+                canvaId);
     }
 
     @Override

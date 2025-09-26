@@ -9,6 +9,8 @@ public record TextComponentData(
                 String fontSize,
                 String color,
                 String font_weight,
-                String identification) implements Serializable {
+                String identification,
+                boolean in_canva,
+                String canva_id) implements Serializable {
 
 }

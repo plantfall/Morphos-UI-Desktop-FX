@@ -1,10 +1,6 @@
 package my_app.scenes.MainScene;
 
 import java.io.File;
-import java.util.Arrays;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -25,20 +21,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import my_app.components.CustomComponent;
-import my_app.components.ImageComponent;
-import my_app.components.TextComponent;
-import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.ComponentsContext;
-import my_app.contexts.SubItemsContext;
-import my_app.data.ButtonComponentData;
-import my_app.data.StateJson;
 import my_app.data.Commons;
-import my_app.data.ImageComponentData;
-import my_app.data.InputComponentData;
-import my_app.data.TextComponentData;
 import my_app.screens.Home.Home;
 import my_app.screens.ShowCode.ShowCode;
 
@@ -48,7 +33,7 @@ public class MainScene extends Scene {
     static Home home = new Home(false);
     static Stage stage = new Stage();
 
-    final static String FileName = "state.json";
+    final static String FileName = "state copy.json";
 
     // Scene mainScene = new Scene(mainView, 1200, 650);
     public MainScene() {

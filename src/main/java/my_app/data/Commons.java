@@ -132,7 +132,7 @@ public class Commons {
             }
 
             if (node instanceof CustomComponent component) {
-                jsonTarget.custom_components.add(component.getData());
+                // jsonTarget.custom_components.add(component.getData());
             }
 
             if (node instanceof FlexComponent component) {

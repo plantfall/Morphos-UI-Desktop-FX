@@ -49,7 +49,7 @@ public class ChildComponent extends HBox {
             op.ifPresent(state -> {
                 // reconstruimos o node
                 CustomComponent customComponent = new CustomComponent();
-                customComponent.applyData(state);
+                // customComponent.applyData(state);
 
                 // agor vou adiiconar como filho
                 flowpane.getChildren().clear();

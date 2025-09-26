@@ -28,8 +28,10 @@ import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
 import my_app.data.FlexComponentData;
 import my_app.data.ImageComponentData;
+import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.StateJson;
+import my_app.data.StateJson_v2;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
@@ -44,9 +46,97 @@ public class ComponentsContext {
 
     SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
+    @Deprecated
     public ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
 
-    public ObservableList<ViewContract> nodes = FXCollections.observableArrayList(new ArrayList<>());
+    public ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
+    //
+
+    public void loadJsonState(File file, CanvaComponent canvaComponent) {
+        ObjectMapper om = new ObjectMapper();
+        var children = canvaComponent.getChildren();
+        children.clear();
+
+        if (!file.exists())
+            return;
+
+        if (file.length() == 0)
+            return;
+
+        try {
+            var state = om.readValue(file, StateJson_v2.class);
+            for (TextComponentData data : state.text_componentes) {
+                TextComponent comp = new TextComponent(data.text());
+                comp.applyData(data);
+                nodes.add(comp);
+
+                subItemsContext.addItem("text", data.identification());
+            }
+
+            // Restaura os botões
+            for (ButtonComponentData data : state.button_componentes) {
+                ButtonComponent comp = new ButtonComponent();
+
+                comp.applyData(data);
+                nodes.add(comp);
+                subItemsContext.addItem("button", data.identification());
+            }
+
+            // Restaura as imagens
+            for (ImageComponentData data : state.image_components) {
+                ImageComponent comp = new ImageComponent();
+
+                comp.applyData(data);
+                nodes.add(comp);
+                subItemsContext.addItem("image", data.identification());
+            }
+
+            // Restaura inputs
+            for (InputComponentData data : state.input_components) {
+                InputComponent comp = new InputComponent("");
+
+                comp.applyData(data);
+                nodes.add(comp);
+                subItemsContext.addItem("input", data.identification());
+            }
+
+            for (InnerComponentData data : state.custom_components) {
+                var comp = new CustomComponent();
+
+                comp.applyData(data);
+                nodes.add(comp);
+
+                subItemsContext.addItem("component", data.identification());
+            }
+
+            // for (FlexComponentData data : state.flex_componentes) {
+            // var comp = new FlexComponent();
+
+            // canvaComponent.addElementDragable(comp, this::selectNode);
+
+            // comp.applyData(data);
+
+            // // como o custom component já existe no canva, posso adicionar ele aqui se
+            // // pertencer tbm ao flex component
+            // var target = searchNodeByIdInMainCanva(
+            // data.childId(), canvaComponent.getChildren());
+
+            // if (target != null) {
+            // comp.getChildren().clear();
+            // comp.getChildren().add(target);
+
+            // }
+
+            // // subItemsContext.addItem("component", data.self.identification);
+            // }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //
 
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
 
@@ -77,7 +167,7 @@ public class ComponentsContext {
 
                 CustomComponent customComponent = new CustomComponent();
 
-                customComponent.applyData(state);
+                // customComponent.applyData(state);
                 mainCanvaComponent.addElementDragable(customComponent);
                 mainCanvaComponent.setOnClickMethodToNode(customComponent, this::selectNode);
             }
@@ -86,9 +176,17 @@ public class ComponentsContext {
 
     }
 
+    @Deprecated
     public Optional<StateJson> searchNodeById(String nodeId) {
 
         var op = componentsList.stream().filter(it -> it.self.identification.equals(nodeId))
+                .findFirst();
+
+        return op;
+    }
+
+    public Optional<Node> searchNodeByIdInNodesList(String nodeId) {
+        var op = nodes.stream().filter(it -> it.getId().equals(nodeId))
                 .findFirst();
 
         return op;
@@ -130,104 +228,7 @@ public class ComponentsContext {
         timeline.play();
     }
 
-    public void loadJsonState(File file, CanvaComponent canvaComponent) {
-        ObjectMapper om = new ObjectMapper();
-        var children = canvaComponent.getChildren();
-        children.clear();
-
-        if (!file.exists())
-            return;
-
-        if (file.exists() && file.length() == 0)
-            return;
-
-        try {
-
-            var state = om.readValue(file, StateJson.class);
-
-            // Restaura os dados do próprio Canva
-            canvaComponent.applyData(state.self);
-
-            // Restaura os textos
-            for (TextComponentData data : state.text_componentes) {
-                TextComponent comp = new TextComponent("");
-
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("text", data.identification());
-            }
-
-            // Restaura os botões
-            for (ButtonComponentData data : state.button_componentes) {
-                ButtonComponent comp = new ButtonComponent();
-
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("button", data.identification());
-            }
-
-            // Restaura as imagens
-            for (ImageComponentData data : state.image_components) {
-                ImageComponent comp = new ImageComponent();
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("image", data.identification());
-            }
-
-            // Restaura inputs
-            for (InputComponentData data : state.input_components) {
-                InputComponent comp = new InputComponent("");
-
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("input", data.identification());
-            }
-
-            // custom_cumponentes dentro do Canva principal
-            for (StateJson data : state.custom_components) {
-                var comp = new CustomComponent();
-
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-                nodes.add(comp);
-                // subItemsContext.addItem("component", data.self.identification);
-            }
-
-            for (FlexComponentData data : state.flex_componentes) {
-                var comp = new FlexComponent();
-
-                canvaComponent.addElementDragable(comp, this::selectNode);
-
-                comp.applyData(data);
-
-                // como o custom component já existe no canva, posso adicionar ele aqui se
-                // pertencer tbm ao flex component
-                var target = searchNodeByIdInMainCanva(
-                        data.childId(), canvaComponent.getChildren());
-
-                if (target != null) {
-                    comp.getChildren().clear();
-                    comp.getChildren().add(target);
-
-                }
-
-                // subItemsContext.addItem("component", data.self.identification);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    @Deprecated
     public void loadJsonCustomComponents(File file) {
         ObjectMapper om = new ObjectMapper();
 

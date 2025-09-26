@@ -3,8 +3,7 @@ package my_app.data;
 import java.io.Serializable;
 
 //canvaProps
-@Deprecated
-public class CanvaComponentData implements Serializable {
+public class CanvaProps implements Serializable {
 
     public int padding_top;
     public int padding_right;
@@ -18,10 +17,10 @@ public class CanvaComponentData implements Serializable {
     public int x;
     public int y;
 
-    public CanvaComponentData() {
+    public CanvaProps() {
     }
 
-    public CanvaComponentData(
+    public CanvaProps(
             int padding_top,
             int padding_right,
             int padding_bottom,

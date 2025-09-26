@@ -19,6 +19,8 @@ import my_app.data.ViewContract;
 public class ButtonComponent extends Button implements ViewContract<ButtonComponentData> {
 
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
+    public boolean inCanva;
+    public String canvaId;
 
     public ButtonComponent() {
         super();
@@ -108,7 +110,9 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         String borderRadius = Commons.getValueOfSpecificField(style, "-fx-border-radius");
 
         return new ButtonComponentData(text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
-                x, y, paddingTop, paddingRight, paddingBottom, paddingLeft, this.getId());
+                x, y, paddingTop, paddingRight, paddingBottom, paddingLeft, this.getId(),
+                inCanva,
+                canvaId);
 
     }
 
@@ -136,5 +140,7 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
 
         node.setLayoutX(data.x());
         node.setLayoutY(data.y());
+
     }
+
 }

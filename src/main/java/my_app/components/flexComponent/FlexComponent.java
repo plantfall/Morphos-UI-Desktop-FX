@@ -13,11 +13,15 @@ import my_app.components.LayoutPositionComponent;
 import my_app.components.TextComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.FlexComponentData;
+import my_app.data.InnerComponentData;
 import my_app.data.ViewContract;
 
 public class FlexComponent extends FlowPane implements ViewContract<FlexComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
     SimpleStringProperty currentChild = new SimpleStringProperty("Text");
+
+    public boolean inCanva;
+    public String canvaId;
 
     public FlexComponent() {
         var defaultComponents = new ArrayList<TextComponent>();
@@ -73,14 +77,17 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
             childType = "custom_component";
         }
 
+        var childData = new InnerComponentData();
+
         return new FlexComponentData(
+                this.getId(),
                 childType,
                 getChildren().getFirst().getId(),
-                this.getId(),
+                childData,
                 orientation_,
                 (int) getLayoutX(),
                 (int) getLayoutY(),
-                (int) this.getPrefWrapLength());
+                (int) this.getPrefWrapLength(), inCanva, canvaId);
     }
 
     @Override

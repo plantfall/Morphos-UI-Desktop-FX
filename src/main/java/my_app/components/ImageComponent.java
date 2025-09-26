@@ -14,7 +14,8 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
     final int size = 100;
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
-
+    public boolean inCanva;
+    public String canvaId;
     // BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public ImageComponent() {
@@ -83,7 +84,9 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
         boolean preserveRatio = this.isPreserveRatio();
 
-        return new ImageComponentData(url, width, height, x, y, preserveRatio, this.getId());
+        return new ImageComponentData(url, width, height, x, y, preserveRatio, this.getId(),
+                inCanva,
+                canvaId);
     }
 
     @Override
