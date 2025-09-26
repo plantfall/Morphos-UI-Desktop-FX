@@ -41,16 +41,16 @@ public class ComponentsContext {
 
     private static ComponentsContext instance;
 
-    public static SimpleStringProperty idOfComponentSelected = new SimpleStringProperty("");
     public static SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
 
     SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
-    @Deprecated
-    public ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
-
     public ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
     //
+
+    public static boolean CurrentNodeIsSelected(String nodeId) {
+        return visualNodeSelected.get().getId().equals(nodeId);
+    }
 
     public void loadJsonState(File file, CanvaComponent canvaComponent) {
         ObjectMapper om = new ObjectMapper();
@@ -176,7 +176,7 @@ public class ComponentsContext {
 
         var canvaChildren = mainCanvaComponent.getChildren();
 
-        var op = searchNodeById(itemIdentification);
+        var op = searchNodeByIdInNodesList(itemIdentification);
 
         op.ifPresent(state -> {
             // lookin for custom component in main canva
@@ -199,15 +199,6 @@ public class ComponentsContext {
 
     }
 
-    @Deprecated
-    public Optional<StateJson> searchNodeById(String nodeId) {
-
-        var op = componentsList.stream().filter(it -> it.self.identification.equals(nodeId))
-                .findFirst();
-
-        return op;
-    }
-
     public Optional<Node> searchNodeByIdInNodesList(String nodeId) {
         var op = nodes.stream().filter(it -> it.getId().equals(nodeId))
                 .findFirst();
@@ -227,7 +218,6 @@ public class ComponentsContext {
 
     public void selectNode(Node node) {
         visualNodeSelected.set(node);
-        ComponentsContext.idOfComponentSelected.set(node.getId());
 
         shake(node);
         System.out.println("Selecionado: " + node);

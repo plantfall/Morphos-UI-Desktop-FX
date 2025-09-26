@@ -63,12 +63,12 @@ public class Option extends VBox {
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
 
-        ComponentsContext.idOfComponentSelected.addListener((obs, oldId, newId) -> {
+        ComponentsContext.visualNodeSelected.addListener((obs, oldId, newNode) -> {
             for (Node n : subItems.getChildren()) {
                 if (n instanceof HBox hbox) {
                     Label lbl = (Label) hbox.getChildren().get(0);
                     String text = lbl.getText().replace("• ", ""); // remove o bullet
-                    if (text.equals(newId)) {
+                    if (text.equals(newNode.getId())) {
                         hbox.setStyle("-fx-background-color: red;");
                     } else {
                         // não sobrescreve a seleção amarela
@@ -111,13 +111,13 @@ public class Option extends VBox {
         });
 
         subItemBox.setOnMouseEntered(e -> {
-            if (!ComponentsContext.idOfComponentSelected.get().equals(itemId)) {
+            if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: #2D2A6E;");
             }
         });
 
         subItemBox.setOnMouseExited(e -> {
-            if (!ComponentsContext.idOfComponentSelected.get().equals(itemId)) {
+            if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: transparent;");
             }
         });

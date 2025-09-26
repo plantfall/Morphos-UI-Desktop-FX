@@ -44,7 +44,7 @@ public class ChildComponent extends HBox {
             // aqui vou alterar o child de TextComponent -> componente clicado
             // if(newVal.equals(""))
 
-            var op = componentsContext.searchNodeById(newVal);
+            var op = componentsContext.searchNodeByIdInNodesList(newVal);
 
             op.ifPresent(state -> {
                 // reconstruimos o node
