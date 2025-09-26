@@ -79,26 +79,13 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
                 this.getId(),
                 orientation_,
                 (int) getLayoutX(),
-                (int) getLayoutY());
-
-        // String style = getStyle();
-
-        // String text = this.getText();
-        // String fontWeight = Commons.getValueOfSpecificField(style,
-        // "-fx-font-weight");
-        // double x = this.getLayoutX();
-        // double y = this.getLayoutY();
-
-        // String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
-        // String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
-
-        // return new TextComponentData(text, x, y, fontSize, textFill, fontWeight,
-        // this.getId());
-
+                (int) getLayoutY(),
+                (int) this.getPrefWrapLength());
     }
 
     @Override
     public void applyData(FlexComponentData data) {
+        getChildren().clear();
 
         this.setLayoutX(data.x());
         this.setLayoutY(data.y());
@@ -106,6 +93,10 @@ public class FlexComponent extends FlowPane implements ViewContract<FlexComponen
         this.setOrientation(data.orientation().equals("column") ? Orientation.VERTICAL : Orientation.HORIZONTAL);
 
         this.setId(data.identification());
+
+        currentChild.set(data.childId());
+
+        this.setPrefWrapLength(data.pref_length_of_wrap());
 
         // this.setText(data.text());
         // this.setId(data.identification());

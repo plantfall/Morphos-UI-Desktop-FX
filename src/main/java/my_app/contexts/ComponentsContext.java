@@ -31,6 +31,7 @@ import my_app.data.ImageComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.StateJson;
 import my_app.data.TextComponentData;
+import my_app.data.ViewContract;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.Home;
 
@@ -44,6 +45,8 @@ public class ComponentsContext {
     SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
     public ObservableList<StateJson> componentsList = FXCollections.observableList(new ArrayList<>());
+
+    public ObservableList<ViewContract> nodes = FXCollections.observableArrayList(new ArrayList<>());
 
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
 
@@ -152,6 +155,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                nodes.add(comp);
                 subItemsContext.addItem("text", data.identification());
             }
 
@@ -162,6 +166,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                nodes.add(comp);
                 subItemsContext.addItem("button", data.identification());
             }
 
@@ -171,6 +176,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                nodes.add(comp);
                 subItemsContext.addItem("image", data.identification());
             }
 
@@ -181,6 +187,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                nodes.add(comp);
                 subItemsContext.addItem("input", data.identification());
             }
 
@@ -191,6 +198,7 @@ public class ComponentsContext {
                 canvaComponent.addElementDragable(comp, this::selectNode);
 
                 comp.applyData(data);
+                nodes.add(comp);
                 // subItemsContext.addItem("component", data.self.identification);
             }
 
@@ -209,6 +217,7 @@ public class ComponentsContext {
                 if (target != null) {
                     comp.getChildren().clear();
                     comp.getChildren().add(target);
+
                 }
 
                 // subItemsContext.addItem("component", data.self.identification);

@@ -8,5 +8,6 @@ public record FlexComponentData(
                 String identification,
                 String orientation, // "row" || "column"
                 int x,
-                int y) implements Serializable {
+                int y,
+                int pref_length_of_wrap) implements Serializable {
 }
