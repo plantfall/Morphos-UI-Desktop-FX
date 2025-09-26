@@ -153,24 +153,24 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
 
         this.currentState = data;
 
-        this.setId(data.identification());
+        this.setId(data.identification);
 
-        this.setLayoutX(data.x());
-        this.setLayoutY(data.y());
+        this.setLayoutX(data.x);
+        this.setLayoutY(data.y);
 
         // Aplicando as informações extraídas ao CanvaComponent
-        this.setPrefWidth(data.width());
-        this.setPrefHeight(data.height());
+        this.setPrefWidth(data.width);
+        this.setPrefHeight(data.height);
 
         // Ajustando o padding
         this.setPadding(
-                new Insets(data.padding_top(),
-                        data.padding_right(),
-                        data.padding_bottom(),
-                        data.padding_left()));
+                new Insets(data.padding_top,
+                        data.padding_right,
+                        data.padding_bottom,
+                        data.padding_left));
 
-        var bgType = data.bg_type();
-        var bgContent = data.bgContent();
+        var bgType = data.bg_type;
+        var bgContent = data.bgContent;
         // Definindo o fundo com base no tipo
         if (bgType.equals("color")) {
             this.setStyle("-fx-background-color:%s;".formatted(
@@ -181,21 +181,21 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
                     "-fx-background-size: cover; -fx-background-position: center;");
         }
 
-        for (ButtonComponentData data_ : data.button_componentes()) {
+        for (ButtonComponentData data_ : data.button_componentes) {
             var node = new ButtonComponent(data_.text());
             node.applyData(data_);
             node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
-        for (TextComponentData data_ : data.text_componentes()) {
+        for (TextComponentData data_ : data.text_componentes) {
             var node = new TextComponent(data_.text());
             node.applyData(data_);
             node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
-        for (ImageComponentData data_ : data.image_components()) {
+        for (ImageComponentData data_ : data.image_components) {
             var node = new ImageComponent(data_.url());
             node.applyData(data_);
             node.setOnMouseClicked((e) -> componentsContext.selectNode(node));

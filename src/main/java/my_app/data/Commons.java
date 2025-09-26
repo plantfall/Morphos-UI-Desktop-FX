@@ -111,7 +111,7 @@ public class Commons {
 
         StateJson jsonTarget = new StateJson();
 
-        jsonTarget.self = canva.getData();
+        // jsonTarget.self = canva.getData();
 
         for (Node node : children) {
 

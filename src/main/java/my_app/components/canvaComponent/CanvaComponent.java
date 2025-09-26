@@ -11,13 +11,14 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import my_app.components.TextComponent;
 import my_app.contexts.ComponentsContext;
-import my_app.data.CanvaComponentData;
+import my_app.data.CanvaProps;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 
-public class CanvaComponent extends Pane implements ViewContract<CanvaComponentData> {
+public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
     public CanvaComponent() {
 
@@ -192,7 +193,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
     }
 
     @Override
-    public CanvaComponentData getData() {
+    public CanvaProps getData() {
 
         String canvastyle = this.getStyle();
 
@@ -225,13 +226,13 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
             bgType = "image";
         }
 
-        return new CanvaComponentData(
+        return new CanvaProps(
                 paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
                 bgContent, this.getId(), 0, 0);
     }
 
     @Override
-    public void applyData(CanvaComponentData data) {
+    public void applyData(CanvaProps data) {
 
         // Aplicando as informações extraídas ao CanvaComponent
         setPrefWidth(data.width);
@@ -254,5 +255,9 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaComponentD
             setStyle("-fx-background-image: url('" + bgContent + "');" +
                     "-fx-background-size: cover; -fx-background-position: center;");
         }
+    }
+
+    public void addElement(Node comp) {
+        getChildren().add(comp);
     }
 }

@@ -54,23 +54,26 @@ public class ComponentsContext {
 
     public void loadJsonState(File file, CanvaComponent canvaComponent) {
         ObjectMapper om = new ObjectMapper();
-        var children = canvaComponent.getChildren();
-        children.clear();
+        canvaComponent.getChildren().clear();
 
-        if (!file.exists())
-            return;
-
-        if (file.length() == 0)
+        if (!file.exists() || file.length() == 0)
             return;
 
         try {
             var state = om.readValue(file, StateJson_v2.class);
+            canvaComponent.applyData(state.canva);
+
             for (TextComponentData data : state.text_componentes) {
                 TextComponent comp = new TextComponent(data.text());
                 comp.applyData(data);
                 nodes.add(comp);
 
                 subItemsContext.addItem("text", data.identification());
+
+                if (data.in_canva()) {
+                    canvaComponent.addElement(comp);
+                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                }
             }
 
             // Restaura os botões
@@ -80,6 +83,11 @@ public class ComponentsContext {
                 comp.applyData(data);
                 nodes.add(comp);
                 subItemsContext.addItem("button", data.identification());
+
+                if (data.in_canva()) {
+                    canvaComponent.addElement(comp);
+                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                }
             }
 
             // Restaura as imagens
@@ -89,6 +97,11 @@ public class ComponentsContext {
                 comp.applyData(data);
                 nodes.add(comp);
                 subItemsContext.addItem("image", data.identification());
+
+                if (data.in_canva()) {
+                    canvaComponent.addElement(comp);
+                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                }
             }
 
             // Restaura inputs
@@ -98,6 +111,11 @@ public class ComponentsContext {
                 comp.applyData(data);
                 nodes.add(comp);
                 subItemsContext.addItem("input", data.identification());
+
+                if (data.in_canva()) {
+                    canvaComponent.addElement(comp);
+                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                }
             }
 
             for (InnerComponentData data : state.custom_components) {
@@ -106,7 +124,12 @@ public class ComponentsContext {
                 comp.applyData(data);
                 nodes.add(comp);
 
-                subItemsContext.addItem("component", data.identification());
+                subItemsContext.addItem("component", data.identification);
+
+                if (data.in_canva) {
+                    canvaComponent.addElement(comp);
+                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                }
             }
 
             // for (FlexComponentData data : state.flex_componentes) {
@@ -228,32 +251,32 @@ public class ComponentsContext {
         timeline.play();
     }
 
-    @Deprecated
-    public void loadJsonCustomComponents(File file) {
-        ObjectMapper om = new ObjectMapper();
+    // @Deprecated
+    // public void loadJsonCustomComponents(File file) {
+    // ObjectMapper om = new ObjectMapper();
 
-        if (!file.exists())
-            return;
+    // if (!file.exists())
+    // return;
 
-        if (file.exists() && file.length() == 0)
-            return;
+    // if (file.exists() && file.length() == 0)
+    // return;
 
-        try {
-            StateJson[] componentsArray = om.readValue(file, StateJson[].class);
+    // try {
+    // StateJson[] componentsArray = om.readValue(file, StateJson[].class);
 
-            var list = new ArrayList<>(Arrays.asList(componentsArray));
+    // var list = new ArrayList<>(Arrays.asList(componentsArray));
 
-            list.forEach(it -> {
-                componentsList.add(it);
-                subItemsContext.addItem("component", it.self.identification);
+    // list.forEach(it -> {
+    // componentsList.add(it);
+    // subItemsContext.addItem("component", it.self.identification);
 
-                System.out.println("aqui: " + it.self.identification);
-            });
+    // System.out.println("aqui: " + it.self.identification);
+    // });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     public void saveStateInJsonFile(File file, CanvaComponent mainCanvaComponent) {
         StateJson data = Commons.CreateStateData(mainCanvaComponent);
