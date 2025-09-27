@@ -15,7 +15,7 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.components.flexComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnItens;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;

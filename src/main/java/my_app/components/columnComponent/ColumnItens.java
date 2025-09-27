@@ -1,8 +1,9 @@
-package my_app.components.flexComponent;
+package my_app.components.columnComponent;
 
 import java.util.ArrayList;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
@@ -13,7 +14,10 @@ import javafx.scene.layout.VBox;
 import my_app.components.CustomComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextComponent;
+import my_app.components.shared.ItemsAmountPreviewComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.data.ColumnComponentData;
+import my_app.data.Commons;
 import my_app.data.InnerComponentData;
 import my_app.data.ViewContract;
 
@@ -26,23 +30,19 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
     // A propriedade agora armazena o ID do componente filho (ex: "Text" ou ID do
     // CustomComponent)
     SimpleStringProperty currentChild = new SimpleStringProperty("Text");
-
-    public boolean inCanva;
-    public String canvaId;
+    public SimpleIntegerProperty childrenAmountState = new SimpleIntegerProperty(3);
 
     public ColumnItens() {
         // Configuração inicial como VBox
         setSpacing(5);
         setStyle("-fx-background-color:red;");
 
-        // ** VBox não precisa de PrefWrapLength.
-        // Ele deve expandir para preencher a largura do pai. **
         setAlignment(Pos.CENTER);
         setPrefWidth(Region.USE_COMPUTED_SIZE); // Permite que o VBox se ajuste ao conteúdo/pai
 
         // Adiciona 3 filhos TextComponent padrão inicialmente
         var defaultComponents = new ArrayList<TextComponent>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < childrenAmountState.get(); i++) {
             defaultComponents.add(new TextComponent("Item de Coluna " + i));
         }
         getChildren().addAll(defaultComponents);
@@ -51,16 +51,48 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
         currentState.set(this);
     }
 
+    // -------------------------------------------------------------------
+    // NOVO MÉTODO: Lógica Centralizada para Recriar os Filhos
+    // -------------------------------------------------------------------
+
+    public void recreateChildren() {
+        int amount = childrenAmountState.get();
+        String currentChildId = currentChild.get();
+
+        // Limpa todos os filhos existentes
+        getChildren().clear();
+
+        if (currentChildId.equals("Text")) {
+            // Recriação de TextComponent
+            for (int i = 0; i < amount; i++) {
+                getChildren().add(new TextComponent("Item de Coluna " + i));
+            }
+        } else {
+            // Recriação de CustomComponents (Deep Copy)
+            var op = ComponentsContext.SearchNodeByIdInNodesList(currentChildId);
+
+            op.ifPresent(existingNode -> {
+                if (existingNode instanceof CustomComponent custom) {
+                    InnerComponentData data = custom.getData();
+
+                    var copies = new ArrayList<Node>();
+                    for (int i = 0; i < amount; i++) {
+                        CustomComponent newCopy = new CustomComponent();
+                        newCopy.applyData(data);
+                        newCopy.setId(System.currentTimeMillis() + "_copy" + i);
+                        copies.add(newCopy);
+                    }
+                    getChildren().addAll(copies);
+                }
+            });
+        }
+    }
+
     @Override
     public void appearance(Pane father) {
-        // Reduzimos as opções de aparência, já que VBox/HBox são mais simples
         father.getChildren().setAll(
-                // Removido OrientationComponent e PrefLenghtComponent
-                new ChildHandlerComponent(this, currentChild)
-        // new VGapComponent(this), // Componente para alterar o espaçamento vertical
-        // new WidthComponent(this),
-        // new HeightComponent(this)
-        );
+                new ChildHandlerComponent(this, currentChild),
+                new ItemsAmountPreviewComponent(this));
     }
 
     @Override
@@ -90,6 +122,8 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
             }
         }
 
+        var location = Commons.NodeInCanva(this);
+
         // Retorna o novo ColumnComponentData
         return new ColumnComponentData(
                 this.getId(),
@@ -98,7 +132,8 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
                 childData,
                 (int) getLayoutX(),
                 (int) getLayoutY(),
-                inCanva, canvaId);
+                location.inCanva(),
+                location.fatherId());
     }
 
     @Override
@@ -111,8 +146,6 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
         this.setId(data.identification());
         currentChild.set(data.childId());
-
-        // Se a orientação original era "column", o VBox já lida com isso.
 
         // Lógica de recriação dos filhos (semelhante ao ChildComponent listener)
         if (data.childId().equals("Text")) {

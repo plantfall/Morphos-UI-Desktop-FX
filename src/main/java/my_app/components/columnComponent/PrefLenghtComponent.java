@@ -1,4 +1,4 @@
-package my_app.components.flexComponent;
+package my_app.components.columnComponent;
 
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;

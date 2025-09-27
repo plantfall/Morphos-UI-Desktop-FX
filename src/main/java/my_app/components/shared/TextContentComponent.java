@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.components.shared;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 
 public class TextContentComponent extends HBox {

@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.components.shared;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
