@@ -11,8 +11,6 @@ import my_app.data.ViewContract;
 
 public class TextComponent extends Text implements ViewContract<TextComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
-    public boolean inCanva;
-    public String canvaId;
 
     public TextComponent(String content) {
         super(content);
@@ -57,9 +55,12 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
         String fontSize = Commons.getValueOfSpecificField(style, "-fx-font-size");
         String textFill = Commons.getValueOfSpecificField(style, "-fx-fill");
 
+        // usar aqui
+        var location = Commons.NodeInCanva(this);
+
         return new TextComponentData(text, x, y, fontSize, textFill, fontWeight, this.getId(),
-                inCanva,
-                canvaId);
+                location.inCanva(),
+                location.fatherId());
     }
 
     @Override

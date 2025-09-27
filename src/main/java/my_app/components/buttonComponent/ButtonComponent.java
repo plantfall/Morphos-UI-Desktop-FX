@@ -11,7 +11,6 @@ import my_app.components.FontSizeComponent;
 import my_app.components.FontWeightComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextContentComponent;
-import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
@@ -19,8 +18,6 @@ import my_app.data.ViewContract;
 public class ButtonComponent extends Button implements ViewContract<ButtonComponentData> {
 
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
-    public boolean inCanva;
-    public String canvaId;
 
     public ButtonComponent() {
         super();
@@ -109,10 +106,12 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         int paddingLeft = (int) padding.getLeft();
         String borderRadius = Commons.getValueOfSpecificField(style, "-fx-border-radius");
 
+        var location = Commons.NodeInCanva(this);
+
         return new ButtonComponentData(text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
                 x, y, paddingTop, paddingRight, paddingBottom, paddingLeft, this.getId(),
-                inCanva,
-                canvaId);
+                location.inCanva(),
+                location.fatherId());
 
     }
 

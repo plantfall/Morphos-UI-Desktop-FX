@@ -12,7 +12,6 @@
     "x": 0,
     "y": 0
   },
-
   "text_componentes": [
     {
       "text": "Alunos",
@@ -24,93 +23,66 @@
       "identification": "1758893501105",
       "in_canva": true,
       "canva_id": "1758552551596"
-    }
-  ],
-
-  "flex_components": [
+    },
     {
-      "identification": "1758894264947",
-      "childType": "custom_component",
-      "childId": "1758549077100",
-      "child": {
-        "padding_top": 0,
-        "padding_right": 0,
-        "padding_bottom": 0,
-        "padding_left": 0,
-        "width": 370.0,
-        "height": 250.0,
-        "bg_type": "color",
-        "bgContent": "#669966",
-        "identification": "1758549077100",
-        "x": 0,
-        "y": 0,
-        "in_canva": false,
-        "canva_id": null,
-
-        "text_componentes": [
-          {
-            "text": "Im new here",
-            "layout_x": 152.522265625,
-            "layout_y": 117.21953125,
-            "fontSize": "16",
-            "color": "black",
-            "font_weight": "normal",
-            "identification": "1758549078599",
-            "in_canva": true,
-            "canva_id": "1758549077100"
-          }
-        ],
-        "button_componentes": [],
-        "image_components": [],
-        "input_components": [],
-        "flex_componentes": [],
-        "custom_components": []
-      },
-      "orientation": "column",
-      "x": 44,
-      "y": 405,
-      "pref_length_of_wrap": 100
+      "text": "Alunos 2",
+      "layout_x": 442.922,
+      "layout_y": 147.5,
+      "fontSize": "16",
+      "color": "#e64d4d",
+      "font_weight": "normal",
+      "identification": "1758893501106",
+      "in_canva": true,
+      "canva_id": "1758552551596"
     }
   ],
-
-  "custom_components": [
+  "button_componentes": [
     {
-      "padding_top": 0,
-      "padding_right": 0,
-      "padding_bottom": 0,
-      "padding_left": 0,
-      "width": 370.0,
-      "height": 250.0,
-      "bg_type": "color",
-      "bgContent": "#669966",
-      "identification": "1758549077abc",
-      "x": 0,
-      "y": 0,
-      "in_canva": false,
-      "canva_id": null,
-
-      "text_componentes": [
-        {
-          "text": "Im new here",
-          "layout_x": 152.522265625,
-          "layout_y": 117.21953125,
-          "fontSize": "16",
-          "color": "black",
-          "font_weight": "normal",
-          "identification": "1758549078599",
-          "in_canva": true,
-          "canva_id": "1758549077abc"
-        }
-      ],
-      "button_componentes": [],
-      "image_components": [],
-      "input_components": [],
-      "flex_componentes": [],
-      "custom_components": []
+      "text": "brasil",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "#000000",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#ffff4d",
+      "x": 432.80000000000007,
+      "y": 161.60000000000002,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "padding_left": 10,
+      "identification": "1758983203337",
+      "in_canva": true,
+      "canva_id": "1758552551596"
     }
   ],
-
-  "button_componentes": [],
-  "image_components": [],
-  "input_components": []
+  "image_components": [
+    {
+      "url": "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
+      "width": 500.0,
+      "height": 200.0,
+      "x": 6.000000000000028,
+      "y": 9.999999999999986,
+      "preserve_ratio": true,
+      "identification": "1758983339743",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    }
+  ],
+  "input_components": [
+    {
+      "text": "",
+      "placeholder": "Digite seu email",
+      "font_weight": "normal",
+      "font_size": "16",
+      "color": "black",
+      "x": 432.80000000000007,
+      "y": 221.59999999999997,
+      "identification": "1758983481680",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    }
+  ],
+  "flex_components": [],
+  "custom_components": []
 }

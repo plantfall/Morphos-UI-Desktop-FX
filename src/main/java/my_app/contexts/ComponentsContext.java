@@ -6,15 +6,10 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.util.Duration;
 import my_app.components.CustomComponent;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
@@ -27,7 +22,6 @@ import my_app.data.Commons;
 import my_app.data.ImageComponentData;
 import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
-import my_app.data.StateJson;
 import my_app.data.StateJson_v2;
 import my_app.data.TextComponentData;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
@@ -157,6 +151,7 @@ public class ComponentsContext {
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
 
         String nodeId = customComponent.getId();
+        nodes.add(customComponent); // Adiciona à lista mestre
         subItemsContext.addItem("component", nodeId);
 
         // mainCanva.addElementDragable(customComponent);
@@ -186,8 +181,6 @@ public class ComponentsContext {
 
     public static void AddComponent(String type, Home home) {
         SubItemsContext subItemsContext = SubItemsContext.getInstance();
-
-        CanvaComponent canvaComponent = home.canva;
 
         if (type == null || type.isBlank())
             return;
@@ -284,19 +277,66 @@ public class ComponentsContext {
     // }
     // }
 
-    public void saveStateInJsonFile(File file, CanvaComponent mainCanvaComponent) {
-        StateJson data = Commons.CreateStateData(mainCanvaComponent);
-        Commons.WriteJsonInDisc(file, data);
+    public static void SaveStateInJsonFile_v2(File file, CanvaComponent mainCanvaComponent) {
+        try {
+            // Gera o StateJson_v2 a partir dos Nodes e do CanvaComponent
+            StateJson_v2 data = CreateStateData(mainCanvaComponent);
+
+            // Usa Commons para escrever os dados no disco
+            Commons.WriteJsonInDisc(file, data);
+
+            System.out.println("Estado salvo com sucesso no arquivo: " + file.getAbsolutePath());
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar o estado no arquivo JSON.");
+            e.printStackTrace();
+        }
     }
 
-    static void animateOnEntry(Node node) {
-        ScaleTransition st = new ScaleTransition(Duration.millis(400), node);
-        st.setFromX(0.5);
-        st.setFromY(0.5);
-        st.setToX(1);
-        st.setToY(1);
+    // Supondo que você precise do CanvaComponent para salvar os dados dele (width,
+    // height, bg, etc.)
+    static StateJson_v2 CreateStateData(CanvaComponent canva) {
+        StateJson_v2 jsonTarget = new StateJson_v2();
 
-        st.play();
+        // 1. Salva as propriedades do CanvaComponent
+        jsonTarget.canva = canva.getData();
+
+        // 2. Itera sobre a lista de todos os nós (nodes)
+        for (Node node : nodes) {
+
+            if (node instanceof TextComponent component) {
+                // O .getData() deve retornar um TextComponentData que inclui a flag 'in_canva'
+                jsonTarget.text_componentes.add(component.getData());
+            }
+
+            if (node instanceof ButtonComponent component) {
+                jsonTarget.button_componentes.add(component.getData());
+            }
+
+            if (node instanceof ImageComponent component) {
+                jsonTarget.image_components.add(component.getData());
+            }
+
+            if (node instanceof InputComponent component) {
+                jsonTarget.input_components.add(component.getData());
+            }
+
+            // Se o FlexComponent for uma composição de outros nós, ele deve serializar seus
+            // filhos internamente.
+            // if (node instanceof FlexComponent component) {
+            // jsonTarget.flex_componentes.add(component.getData());
+            // }
+
+            // CustomComponent, se for salvo como InnerComponentData.
+            // Verifique se o getData() dele é compatível com InnerComponentData.
+            // **Atenção:** Se ele for uma instância que contém outros componentes,
+            // sua lógica de getData() deve ser recursiva (salvar seus filhos).
+            if (node instanceof CustomComponent component) {
+                // Supondo que getData() retorne InnerComponentData ou StateJson_v2 completo
+                jsonTarget.custom_components.add(component.getData());
+            }
+        }
+
+        return jsonTarget;
     }
 
     //

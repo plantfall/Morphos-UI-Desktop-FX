@@ -7,12 +7,11 @@
     "width": 800.0,
     "height": 600.0,
     "bg_type": "color",
-    "bgContent": "#d6d2e4ff",
+    "bgContent": "#e64d4d",
     "identification": "1758552551596",
     "x": 0,
     "y": 0
   },
-
   "text_componentes": [
     {
       "text": "Alunos",
@@ -25,66 +24,106 @@
       "in_canva": true,
       "canva_id": "1758552551596"
     },
-
     {
       "text": "Alunos 2",
-      "layout_x": 397.322,
-      "layout_y": 227.5,
+      "layout_x": 442.922,
+      "layout_y": 147.5,
+      "fontSize": "16",
+      "color": "#e64d4d",
+      "font_weight": "normal",
+      "identification": "1758893501106",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    },
+    {
+      "text": "Im new here",
+      "layout_x": 40.52226562499999,
+      "layout_y": 59.61953125000001,
       "fontSize": "16",
       "color": "black",
       "font_weight": "normal",
-      "identification": "1758893501106",
+      "identification": "1758986183578",
+      "in_canva": false,
+      "canva_id": null
+    },
+    {
+      "text": "Im new here",
+      "layout_x": 162.12226562499995,
+      "layout_y": 56.419531250000006,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal",
+      "identification": "1758987733796",
       "in_canva": false,
       "canva_id": null
     }
   ],
-
-  "flex_components": [
+  "button_componentes": [
     {
-      "identification": "1758894264947",
-      "childType": "custom_component",
-      "childId": "1758549077100",
-      "child": {
-        "padding_top": 0,
-        "padding_right": 0,
-        "padding_bottom": 0,
-        "padding_left": 0,
-        "width": 370.0,
-        "height": 250.0,
-        "bg_type": "color",
-        "bgContent": "#669966",
-        "identification": "1758549077100",
-        "x": 0,
-        "y": 0,
-        "in_canva": false,
-        "canva_id": null,
-
-        "text_componentes": [
-          {
-            "text": "Im new here",
-            "layout_x": 152.522265625,
-            "layout_y": 117.21953125,
-            "fontSize": "16",
-            "color": "black",
-            "font_weight": "normal",
-            "identification": "1758549078599",
-            "in_canva": true,
-            "canva_id": "1758549077100"
-          }
-        ],
-        "button_componentes": [],
-        "image_components": [],
-        "input_components": [],
-        "flex_componentes": [],
-        "custom_components": []
-      },
-      "orientation": "column",
-      "x": 44,
-      "y": 405,
-      "pref_length_of_wrap": 100
+      "text": "brasil",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "#000000",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#ffff4d",
+      "x": 432.80000000000007,
+      "y": 161.60000000000002,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "padding_left": 10,
+      "identification": "1758983203337",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    },
+    {
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 262.0593780517578,
+      "y": 53.79999923706055,
+      "padding_top": 0,
+      "padding_right": 0,
+      "padding_bottom": 0,
+      "padding_left": 0,
+      "identification": "1758986186033",
+      "in_canva": false,
+      "canva_id": null
     }
   ],
-
+  "image_components": [
+    {
+      "url": "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
+      "width": 500.0,
+      "height": 200.0,
+      "x": 6.000000000000028,
+      "y": 9.999999999999986,
+      "preserve_ratio": true,
+      "identification": "1758983339743",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    }
+  ],
+  "input_components": [
+    {
+      "text": "",
+      "placeholder": "Digite seu email",
+      "font_weight": "normal",
+      "font_size": "16",
+      "color": "black",
+      "x": 432.80000000000007,
+      "y": 221.59999999999997,
+      "identification": "1758983481680",
+      "in_canva": true,
+      "canva_id": "1758552551596"
+    }
+  ],
+  "flex_components": [],
   "custom_components": [
     {
       "padding_top": 0,
@@ -92,26 +131,25 @@
       "padding_bottom": 0,
       "padding_left": 0,
       "width": 370.0,
-      "height": 250.0,
+      "height": 100.0,
       "bg_type": "color",
-      "bgContent": "#669966",
-      "identification": "1758549077abc",
-      "x": 0,
-      "y": 0,
-      "in_canva": false,
-      "canva_id": null,
-
+      "bgContent": "#4d8080",
+      "identification": "1758987737978",
+      "x": 371,
+      "y": 288,
+      "in_canva": true,
+      "canva_id": "1758552551596",
       "text_componentes": [
         {
           "text": "Im new here",
-          "layout_x": 152.522265625,
-          "layout_y": 117.21953125,
+          "layout_x": 162.12226562499995,
+          "layout_y": 56.419531250000006,
           "fontSize": "16",
           "color": "black",
           "font_weight": "normal",
-          "identification": "1758549078599",
-          "in_canva": true,
-          "canva_id": "1758549077abc"
+          "identification": "1758987733796",
+          "in_canva": false,
+          "canva_id": null
         }
       ],
       "button_componentes": [],
@@ -120,9 +158,5 @@
       "flex_componentes": [],
       "custom_components": []
     }
-  ],
-
-  "button_componentes": [],
-  "image_components": [],
-  "input_components": []
+  ]
 }

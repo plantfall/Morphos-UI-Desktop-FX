@@ -7,16 +7,9 @@ import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import my_app.components.CustomComponent;
-import my_app.components.ImageComponent;
-import my_app.components.TextComponent;
-import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.components.flexComponent.FlexComponent;
-import my_app.components.inputComponents.InputComponent;
 
 public class Commons {
 
@@ -105,41 +98,16 @@ public class Commons {
         }
     }
 
-    @Deprecated
-    public static StateJson CreateStateData(CanvaComponent canva) {
-        ObservableList<Node> children = canva.getChildren();
+    public record NodeInCanva(boolean inCanva, String fatherId) {
+    }
 
-        StateJson jsonTarget = new StateJson();
-
-        // jsonTarget.self = canva.getData();
-
-        for (Node node : children) {
-
-            if (node instanceof TextComponent component) {
-                jsonTarget.text_componentes.add(component.getData());
-            }
-
-            if (node instanceof ButtonComponent component) {
-                jsonTarget.button_componentes.add(component.getData());
-            }
-
-            if (node instanceof ImageComponent component) {
-                jsonTarget.image_components.add(component.getData());
-            }
-
-            if (node instanceof InputComponent component) {
-                jsonTarget.input_components.add(component.getData());
-            }
-
-            if (node instanceof CustomComponent component) {
-                // jsonTarget.custom_components.add(component.getData());
-            }
-
-            if (node instanceof FlexComponent component) {
-                jsonTarget.flex_componentes.add(component.getData());
-            }
+    public static NodeInCanva NodeInCanva(Node node) {
+        if (node.getParent() instanceof CanvaComponent canva) {
+            // Caso POSITIVO: Retorna TRUE com o ID do Canva pai
+            return new NodeInCanva(true, canva.getId());
         }
 
-        return jsonTarget;
+        return new NodeInCanva(false, null);
     }
+
 }

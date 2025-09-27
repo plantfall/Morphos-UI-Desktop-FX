@@ -1,5 +1,7 @@
 package my_app.components;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,144 +16,99 @@ import my_app.components.canvaComponent.WidthComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
-import my_app.data.CanvaComponentData;
 import my_app.data.Commons;
-import my_app.data.StateJson;
+import my_app.data.FlexComponentData;
 import my_app.data.ImageComponentData;
 import my_app.data.InnerComponentData;
+import my_app.data.InputComponentData;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 
 public class CustomComponent extends Pane implements ViewContract<InnerComponentData> {
 
-    InnerComponentData currentState;
     ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     public CustomComponent() {
-
-    }
-
-    @Override
-    public void appearance(Pane father) {
-        // Color Picker
-        ColorPicker bgColorPicker = new ColorPicker(
-                Color.web(
-                        Commons.getValueOfSpecificField(getStyle(), "-fx-background-color")));
-        bgColorPicker.setOnAction(e -> {
-            Color c = bgColorPicker.getValue();
-
-            setStyle("-fx-background-color:%s;".formatted(
-                    Commons.ColortoHex(c)));
-        });
-
-        // Botão para escolher imagem do sistema
-        Button chooseImgBtn = new Button("Escolher Imagem...");
-        chooseImgBtn.setOnAction(e -> {
-            javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
-            fc.getExtensionFilters().addAll(
-                    new javafx.stage.FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
-            var file = fc.showOpenDialog(null);
-            if (file != null) {
-                setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
-                        "-fx-background-size: cover; -fx-background-position: center;");
-            }
-        });
-
-        // Campo para URL
-        TextField urlField = new TextField();
-        urlField.setPromptText("Cole a URL da imagem");
-        Button applyUrl = new Button("Aplicar URL");
-        applyUrl.setOnAction(e -> {
-            String url = urlField.getText();
-            if (url != null && !url.isBlank()) {
-                setStyle("-fx-background-image: url('" + url + "'); " +
-                        "-fx-background-size: cover; -fx-background-position: center;");
-            }
-        });
-
-        father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
-                applyUrl,
-                new WidthComponent(this),
-                new HeightComponent(this));
-    }
-
-    @Override
-    public void settings(Pane father) {
-        father.getChildren().setAll(new Text("Empty"));
+        this.setId(System.currentTimeMillis() + "");
     }
 
     @Override
     public InnerComponentData getData() {
+        String canvastyle = this.getStyle();
 
-        return null;
+        Insets padding = this.getPadding();
+        int paddingTop = (int) padding.getTop();
+        int paddingRight = (int) padding.getRight();
+        int paddingBottom = (int) padding.getBottom();
+        int paddingLeft = (int) padding.getLeft();
 
-        // String canvastyle = this.getStyle();
+        double width = this.getPrefWidth();
+        double height = this.getPrefHeight();
 
-        // Insets padding = this.getPadding();
-        // int paddingTop = (int) padding.getTop();
-        // int paddingRight = (int) padding.getRight();
-        // int paddingBottom = (int) padding.getBottom();
-        // int paddingLeft = (int) padding.getLeft();
+        String bgType = "";
+        String bgContent = "";
+        if (Commons.getValueOfSpecificField(canvastyle,
+                "-fx-background-image").isEmpty()) {
+            bgContent = Commons.getValueOfSpecificField(canvastyle,
+                    "-fx-background-color");
+            bgType = "color";
+        } else {
+            var bgImage = Commons.getValueOfSpecificField(canvastyle,
+                    "-fx-background-image");// url('" + url +
+            // "');
 
-        // double width = this.getPrefWidth();
-        // double height = this.getPrefHeight();
+            var right = bgImage.split("(")[1];
+            var left = right.split(")")[0];
 
-        // String bgType = "";
-        // String bgContent = "";
-        // if (Commons.getValueOfSpecificField(canvastyle,
-        // "-fx-background-image").isEmpty()) {
-        // bgContent = Commons.getValueOfSpecificField(canvastyle,
-        // "-fx-background-color");
-        // bgType = "color";
-        // } else {
-        // var bgImage = Commons.getValueOfSpecificField(canvastyle,
-        // "-fx-background-image");// url('" + url +
-        // // "');
+            bgContent = left;
+            bgType = "image";
+        }
 
-        // var right = bgImage.split("(")[1];
-        // var left = right.split(")")[0];
+        var textComponentsData = new ArrayList<TextComponentData>();
+        var btnComponentsData = new ArrayList<ButtonComponentData>();
+        var imgComponentsData = new ArrayList<ImageComponentData>();
+        var inputComponentsData = new ArrayList<InputComponentData>();
+        var flexComponentsData = new ArrayList<FlexComponentData>();
+        var customComponentsData = new ArrayList<InnerComponentData>();
 
-        // bgContent = left;
-        // bgType = "image";
-        // }
+        for (Node node : getChildren()) {
 
-        // currentState.self = new CanvaComponentData(
-        // paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
-        // bgContent, this.getId(),
-        // (int) this.getLayoutX(),
-        // (int) this.getLayoutY());
+            if (node instanceof TextComponent component) {
+                textComponentsData.add(component.getData());
+            }
 
-        // for (Node node : getChildren()) {
+            if (node instanceof ButtonComponent component) {
+                btnComponentsData.add(component.getData());
+            }
 
-        // if (node instanceof TextComponent component) {
-        // currentState.text_componentes.add(component.getData());
-        // }
+            if (node instanceof ImageComponent component) {
+                imgComponentsData.add(component.getData());
+            }
 
-        // if (node instanceof ButtonComponent component) {
-        // currentState.button_componentes.add(component.getData());
-        // }
+            if (node instanceof InputComponent component) {
+                inputComponentsData.add(component.getData());
+            }
 
-        // if (node instanceof ImageComponent component) {
-        // currentState.image_components.add(component.getData());
-        // }
+            if (node instanceof CustomComponent component) {
+                customComponentsData.add(component.getData());
+            }
+        }
 
-        // if (node instanceof InputComponent component) {
-        // currentState.input_components.add(component.getData());
-        // }
+        var location = Commons.NodeInCanva(this);
 
-        // if (node instanceof CustomComponent component) {
-        // currentState.custom_components.add(component.getData());
-        // }
-        // }
-
-        // return currentState;
+        return new InnerComponentData(paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
+                bgContent, this.getId(), (int) getLayoutX(), (int) getLayoutY(), location.inCanva(),
+                location.fatherId(),
+                textComponentsData,
+                btnComponentsData,
+                imgComponentsData,
+                inputComponentsData,
+                flexComponentsData,
+                customComponentsData);
     }
 
-    @Deprecated
     @Override
     public void applyData(InnerComponentData data) {
-
-        this.currentState = data;
 
         this.setId(data.identification);
 
@@ -203,59 +160,63 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
         }
     }
 
-    // @Deprecated
-    // @Override
-    // public void applyData(StateJson data) {
+    @Override
+    public void appearance(Pane father) {
 
-    // this.currentState = data;
+        // 1. Obter o valor da cor.
+        String currentColor = Commons.getValueOfSpecificField(getStyle(), "-fx-background-color");
 
-    // var self = data.self;
-    // this.setId(self.identification);
+        // 2. Definir a cor inicial. Se a string for vazia, usa um valor seguro
+        // (#ffffff).
+        Color initialColor = Color.web(
+                currentColor.isEmpty() ? "#ffffff" : currentColor);
 
-    // this.setLayoutX(data.self.x);
-    // this.setLayoutY(data.self.y);
+        // Color Picker
+        ColorPicker bgColorPicker = new ColorPicker(initialColor);
+        bgColorPicker.setOnAction(e -> {
+            Color c = bgColorPicker.getValue();
 
-    // // Aplicando as informações extraídas ao CanvaComponent
-    // this.setPrefWidth(self.width);
-    // this.setPrefHeight(self.height);
+            // Commons.UpdateEspecificStyle(getStyle(), "-fx-background-color",
+            // Commons.ColortoHex(c));
 
-    // // Ajustando o padding
-    // this.setPadding(
-    // new Insets(self.padding_top, self.padding_right, self.padding_bottom,
-    // self.padding_left));
+            setStyle("-fx-background-color:%s;".formatted(
+                    Commons.ColortoHex(c)));
+        });
 
-    // var bgType = self.bg_type;
-    // var bgContent = self.bgContent;
-    // // Definindo o fundo com base no tipo
-    // if (bgType.equals("color")) {
-    // this.setStyle("-fx-background-color:%s;".formatted(
-    // bgContent));
-    // } else if (bgType.equals("image")) {
-    // // Para imagem, você pode fazer algo como isso:
-    // this.setStyle("-fx-background-image: url('" + bgContent + "');" +
-    // "-fx-background-size: cover; -fx-background-position: center;");
-    // }
+        // Botão para escolher imagem do sistema
+        Button chooseImgBtn = new Button("Escolher Imagem...");
+        chooseImgBtn.setOnAction(e -> {
+            javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+            fc.getExtensionFilters().addAll(
+                    new javafx.stage.FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
+            var file = fc.showOpenDialog(null);
+            if (file != null) {
+                setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
+                        "-fx-background-size: cover; -fx-background-position: center;");
+            }
+        });
 
-    // for (ButtonComponentData data_ : data.button_componentes) {
-    // var node = new ButtonComponent(data_.text());
-    // node.applyData(data_);
-    // node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
-    // getChildren().add(node);
-    // }
+        // Campo para URL
+        TextField urlField = new TextField();
+        urlField.setPromptText("Cole a URL da imagem");
+        Button applyUrl = new Button("Aplicar URL");
+        applyUrl.setOnAction(e -> {
+            String url = urlField.getText();
+            if (url != null && !url.isBlank()) {
+                setStyle("-fx-background-image: url('" + url + "'); " +
+                        "-fx-background-size: cover; -fx-background-position: center;");
+            }
+        });
 
-    // for (TextComponentData data_ : data.text_componentes) {
-    // var node = new TextComponent(data_.text());
-    // node.applyData(data_);
-    // node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
-    // getChildren().add(node);
-    // }
+        father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
+                applyUrl,
+                new WidthComponent(this),
+                new HeightComponent(this));
+    }
 
-    // for (ImageComponentData data_ : data.image_components) {
-    // var node = new ImageComponent(data_.url());
-    // node.applyData(data_);
-    // node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
-    // getChildren().add(node);
-    // }
-    // }
+    @Override
+    public void settings(Pane father) {
+        father.getChildren().setAll(new Text("Empty"));
+    }
 
 }

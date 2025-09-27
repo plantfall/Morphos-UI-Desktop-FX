@@ -3,6 +3,7 @@ package my_app.components;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import my_app.data.Commons;
 import my_app.data.ImageComponentData;
 import my_app.data.ViewContract;
 import javafx.beans.property.ObjectProperty;
@@ -14,9 +15,6 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
     final int size = 100;
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
-    public boolean inCanva;
-    public String canvaId;
-    // BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public ImageComponent() {
         config();
@@ -83,10 +81,11 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
         double y = this.getLayoutY();
 
         boolean preserveRatio = this.isPreserveRatio();
+        var location = Commons.NodeInCanva(this);
 
         return new ImageComponentData(url, width, height, x, y, preserveRatio, this.getId(),
-                inCanva,
-                canvaId);
+                location.inCanva(),
+                location.fatherId());
     }
 
     @Override

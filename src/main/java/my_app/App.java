@@ -1,12 +1,9 @@
 package my_app;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.application.Application;
@@ -17,7 +14,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import my_app.contexts.ComponentsContext;
-import my_app.data.StateJson;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
 
@@ -29,8 +25,6 @@ public class App extends Application {
     public static Font FONT_MEDIUM;
     public static Font FONT_SEMIBOLD;
     public static Font FONT_BOLD;
-
-    public static List<StateJson> ComponentsList = new ArrayList<>();
 
     @Override
     public void init() {

@@ -73,11 +73,11 @@ public class MainScene extends Scene {
     }
 
     private static void saveSceneInJsonFile(File file, CanvaComponent mainCanva) {
-        componentsContext.saveStateInJsonFile(file, mainCanva);
+        ComponentsContext.SaveStateInJsonFile_v2(file, mainCanva);
     }
 
     private static void loadSceneFromJsonFile(File file) {
-        componentsContext.loadJsonState(file, home.canva);
+        ComponentsContext.loadJsonState(file, home.canva);
     }
 
     private static void reviewJavaCode(ObservableList<Node> children) {

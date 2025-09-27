@@ -23,7 +23,7 @@ public class InnerComponentData implements Serializable {
         public List<ImageComponentData> image_components;
         public List<InputComponentData> input_components;
         public List<FlexComponentData> flex_componentes;
-        public List<StateJson_v2> custom_components;
+        public List<InnerComponentData> custom_components;
 
         // Construtor vazio
         public InnerComponentData() {
@@ -49,7 +49,7 @@ public class InnerComponentData implements Serializable {
                         List<ImageComponentData> image_components,
                         List<InputComponentData> input_components,
                         List<FlexComponentData> flex_componentes,
-                        List<StateJson_v2> custom_components) {
+                        List<InnerComponentData> custom_components) {
 
                 this.padding_top = padding_top;
                 this.padding_right = padding_right;
