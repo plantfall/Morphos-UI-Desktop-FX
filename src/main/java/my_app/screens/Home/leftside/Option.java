@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.screens.Home.Home;
@@ -113,7 +114,7 @@ public class Option extends VBox {
         }
 
         subItemBox.setOnMouseClicked(e -> {
-            componentsContext.onClickOnSubItem(itemId, this.type, home.canva);
+            onClickOnSubItem(itemId, this.type, home.canva);
         });
 
         subItemBox.setOnMouseEntered(e -> {
@@ -130,4 +131,26 @@ public class Option extends VBox {
 
         return subItemBox;
     }
+
+    void onClickOnSubItem(String itemIdentification, String type,
+            CanvaComponent mainCanvaComponent) {
+
+        var canvaChildren = mainCanvaComponent.getChildren();
+
+        var op = ComponentsContext.SearchNodeByIdInNodesList(itemIdentification);
+
+        op.ifPresent(state -> {
+            // lookin for custom component in main canva
+            var target = ComponentsContext.SearchNodeByIdInMainCanva(itemIdentification, canvaChildren);
+            // 2. finded in main canva so, selected
+            if (target != null) {
+                ComponentsContext.SelectNode(target);
+            } else {
+                // if not, just add in canva
+                mainCanvaComponent.addElementDragable(op.get(), false);
+            }
+        });
+
+    }
+
 }

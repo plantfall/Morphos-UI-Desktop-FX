@@ -146,39 +146,6 @@ public class ComponentsContext {
 
     }
 
-    //
-
-    public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
-
-        String nodeId = customComponent.getId();
-        nodes.add(customComponent); // Adiciona à lista mestre
-        subItemsContext.addItem("component", nodeId);
-
-        // mainCanva.addElementDragable(customComponent);
-
-        // animateOnEntry(customComponent);
-    }
-
-    public void onClickOnSubItem(String itemIdentification, String type, CanvaComponent mainCanvaComponent) {
-
-        var canvaChildren = mainCanvaComponent.getChildren();
-
-        var op = searchNodeByIdInNodesList(itemIdentification);
-
-        op.ifPresent(state -> {
-            // lookin for custom component in main canva
-            var target = searchNodeByIdInMainCanva(itemIdentification, canvaChildren);
-            // 2. finded in main canva so, selected
-            if (target != null) {
-                SelectNode(target);
-            } else {
-                // if not, just add in canva
-                mainCanvaComponent.addElementDragable(op.get(), false);
-            }
-        });
-
-    }
-
     public static void AddComponent(String type, Home home) {
         SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
@@ -228,14 +195,20 @@ public class ComponentsContext {
         }
     }
 
-    public Optional<Node> searchNodeByIdInNodesList(String nodeId) {
+    public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
+        String nodeId = customComponent.getId();
+        nodes.add(customComponent); // Adiciona à lista mestre
+        subItemsContext.addItem("component", nodeId);
+    }
+
+    public static Optional<Node> SearchNodeByIdInNodesList(String nodeId) {
         var op = nodes.stream().filter(it -> it.getId().equals(nodeId))
                 .findFirst();
 
         return op;
     }
 
-    public Node searchNodeByIdInMainCanva(String nodeId, ObservableList<Node> canvaChildren) {
+    public static Node SearchNodeByIdInMainCanva(String nodeId, ObservableList<Node> canvaChildren) {
         // lookin for custom component in main canva
         var target = canvaChildren.stream()
                 .filter(n -> nodeId.equals(n.getId()))
@@ -249,33 +222,6 @@ public class ComponentsContext {
         nodeSelected.set(node);
         System.out.println("Selecionado: " + node);
     }
-
-    // @Deprecated
-    // public void loadJsonCustomComponents(File file) {
-    // ObjectMapper om = new ObjectMapper();
-
-    // if (!file.exists())
-    // return;
-
-    // if (file.exists() && file.length() == 0)
-    // return;
-
-    // try {
-    // StateJson[] componentsArray = om.readValue(file, StateJson[].class);
-
-    // var list = new ArrayList<>(Arrays.asList(componentsArray));
-
-    // list.forEach(it -> {
-    // componentsList.add(it);
-    // subItemsContext.addItem("component", it.self.identification);
-
-    // System.out.println("aqui: " + it.self.identification);
-    // });
-
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
 
     public static void SaveStateInJsonFile_v2(File file, CanvaComponent mainCanvaComponent) {
         try {
@@ -292,8 +238,6 @@ public class ComponentsContext {
         }
     }
 
-    // Supondo que você precise do CanvaComponent para salvar os dados dele (width,
-    // height, bg, etc.)
     static StateJson_v2 CreateStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
 
@@ -338,8 +282,6 @@ public class ComponentsContext {
 
         return jsonTarget;
     }
-
-    //
 
     public static ComponentsContext getInstance() {
         if (instance == null) {
