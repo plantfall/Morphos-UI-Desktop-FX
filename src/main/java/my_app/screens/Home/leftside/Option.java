@@ -14,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.screens.Home.Home;
@@ -52,6 +51,7 @@ public class Option extends VBox {
         items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
+                    System.out.println("item added id: " + items.getLast());
                     loadSubItems();
                 }
             }
@@ -63,7 +63,8 @@ public class Option extends VBox {
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
 
-        ComponentsContext.visualNodeSelected.addListener((obs, oldId, newNode) -> {
+        ComponentsContext.nodeSelected.addListener((obs, oldId, newNode) -> {
+
             for (Node n : subItems.getChildren()) {
                 if (n instanceof HBox hbox) {
                     Label lbl = (Label) hbox.getChildren().get(0);
@@ -105,6 +106,11 @@ public class Option extends VBox {
 
         subItemBox.getChildren().add(subLabel);
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
+
+        // Checa o estado atual NA HORA DA CRIAÇÃO
+        if (ComponentsContext.CurrentNodeIsSelected(itemId)) {
+            subItemBox.setStyle("-fx-background-color: red;");
+        }
 
         subItemBox.setOnMouseClicked(e -> {
             componentsContext.onClickOnSubItem(itemId, this.type, home.canva);

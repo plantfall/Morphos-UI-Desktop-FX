@@ -38,7 +38,7 @@ public class RightSide extends VBox {
     BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public RightSide() {
-        ObjectProperty<Node> selectedNode = ComponentsContext.visualNodeSelected;
+        ObjectProperty<Node> selectedNode = ComponentsContext.nodeSelected;
 
         this.selectedNode = selectedNode;
 

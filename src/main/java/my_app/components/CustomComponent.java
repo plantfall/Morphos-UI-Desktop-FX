@@ -184,21 +184,21 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
         for (ButtonComponentData data_ : data.button_componentes) {
             var node = new ButtonComponent(data_.text());
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
+            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
             getChildren().add(node);
         }
 
         for (TextComponentData data_ : data.text_componentes) {
             var node = new TextComponent(data_.text());
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
+            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
             getChildren().add(node);
         }
 
         for (ImageComponentData data_ : data.image_components) {
             var node = new ImageComponent(data_.url());
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
+            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
             getChildren().add(node);
         }
     }

@@ -1,5 +1,9 @@
 package my_app.components.canvaComponent;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -11,6 +15,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import my_app.components.TextComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.CanvaProps;
@@ -26,7 +31,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         setOnMouseClicked(e -> {
             if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
-                ComponentsContext.visualNodeSelected.set(this);
+                ComponentsContext.nodeSelected.set(this);
 
                 System.out.println("Canva selecionado");
             }
@@ -52,17 +57,52 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
     }
 
-    public void addElementDragable(Node node) {
+    public void addElementDragable(Node node, boolean putInCenter) {
         // posição inicial centralizada
         double relX = 0.5;
         double relY = 0.5;
 
-        node.setLayoutX((getWidth() - node.prefWidth(-1)) * relX);
-        node.setLayoutY((getHeight() - node.prefHeight(-1)) * relY);
+        if (putInCenter) {
+            node.setLayoutX((getWidth() - node.prefWidth(-1)) * relX);
+            node.setLayoutY((getHeight() - node.prefHeight(-1)) * relY);
+        }
 
         enableDrag(node, relX, relY);
 
+        node.setOnMouseClicked(e -> {
+            ComponentsContext.SelectNode(node);
+            Shake(node);
+        });
+
+        ComponentsContext.SelectNode(node);
+        AnimateOnEntry(node);
+
         getChildren().add(node);
+    }
+
+    static void AnimateOnEntry(Node node) {
+        ScaleTransition st = new ScaleTransition(Duration.millis(400), node);
+        st.setFromX(0.5);
+        st.setFromY(0.5);
+        st.setToX(1);
+        st.setToY(1);
+
+        st.play();
+    }
+
+    // achacoalhar
+    static void Shake(Node node) {
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), 0)),
+                new KeyFrame(Duration.millis(100), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(200), new KeyValue(node.translateXProperty(), 1)),
+                new KeyFrame(Duration.millis(300), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(400), new KeyValue(node.translateXProperty(), 1)),
+                new KeyFrame(Duration.millis(500), new KeyValue(node.translateXProperty(), -1)),
+                new KeyFrame(Duration.millis(600), new KeyValue(node.translateXProperty(), 0)));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 
     public void setOnClickMethodToNode(Node node, VisualNodeCallback callback) {
@@ -189,7 +229,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         setId(String.valueOf(System.currentTimeMillis()));
 
-        ComponentsContext.visualNodeSelected.set(this);
+        ComponentsContext.nodeSelected.set(this);
     }
 
     @Override

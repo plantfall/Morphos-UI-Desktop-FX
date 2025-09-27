@@ -24,6 +24,18 @@
       "identification": "1758893501105",
       "in_canva": true,
       "canva_id": "1758552551596"
+    },
+
+    {
+      "text": "Alunos 2",
+      "layout_x": 397.322,
+      "layout_y": 227.5,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal",
+      "identification": "1758893501106",
+      "in_canva": false,
+      "canva_id": null
     }
   ],
 

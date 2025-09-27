@@ -9,14 +9,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.App;
-import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.Home;
 
 public class OptionHeader extends HBox {
     Label label = new Label();
     Button btnAdd = new Button();
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     public OptionHeader(
             String type,
@@ -31,7 +29,7 @@ public class OptionHeader extends HBox {
         getChildren().add(btnAdd);
 
         btnAdd.setOnAction(ev -> {
-            componentsContext.addComponent(type, home);
+            ComponentsContext.AddComponent(type, home);
         });
 
         var icon = FontIcon.of(

@@ -2,7 +2,6 @@ package my_app.contexts;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +11,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -26,14 +24,12 @@ import my_app.components.flexComponent.FlexComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
-import my_app.data.FlexComponentData;
 import my_app.data.ImageComponentData;
 import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.StateJson;
 import my_app.data.StateJson_v2;
 import my_app.data.TextComponentData;
-import my_app.data.ViewContract;
 import my_app.scenes.ShowComponentScene.ShowComponentScene;
 import my_app.screens.Home.Home;
 
@@ -41,18 +37,18 @@ public class ComponentsContext {
 
     private static ComponentsContext instance;
 
-    public static SimpleObjectProperty<Node> visualNodeSelected = new SimpleObjectProperty<>();
+    public static SimpleObjectProperty<Node> nodeSelected = new SimpleObjectProperty<>();
 
-    SubItemsContext subItemsContext = SubItemsContext.getInstance();
+    static SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
-    public ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
+    public static ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
     //
 
     public static boolean CurrentNodeIsSelected(String nodeId) {
-        return visualNodeSelected.get().getId().equals(nodeId);
+        return nodeSelected.get().getId().equals(nodeId);
     }
 
-    public void loadJsonState(File file, CanvaComponent canvaComponent) {
+    public static void loadJsonState(File file, CanvaComponent canvaComponent) {
         ObjectMapper om = new ObjectMapper();
         canvaComponent.getChildren().clear();
 
@@ -71,8 +67,7 @@ public class ComponentsContext {
                 subItemsContext.addItem("text", data.identification());
 
                 if (data.in_canva()) {
-                    canvaComponent.addElement(comp);
-                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                    canvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -85,8 +80,7 @@ public class ComponentsContext {
                 subItemsContext.addItem("button", data.identification());
 
                 if (data.in_canva()) {
-                    canvaComponent.addElement(comp);
-                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                    canvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -99,8 +93,7 @@ public class ComponentsContext {
                 subItemsContext.addItem("image", data.identification());
 
                 if (data.in_canva()) {
-                    canvaComponent.addElement(comp);
-                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                    canvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -113,8 +106,8 @@ public class ComponentsContext {
                 subItemsContext.addItem("input", data.identification());
 
                 if (data.in_canva()) {
-                    canvaComponent.addElement(comp);
-                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                    canvaComponent.addElementDragable(comp, false);
+
                 }
             }
 
@@ -127,8 +120,8 @@ public class ComponentsContext {
                 subItemsContext.addItem("component", data.identification);
 
                 if (data.in_canva) {
-                    canvaComponent.addElement(comp);
-                    canvaComponent.setOnClickMethodToNode(comp, this::selectNode);
+                    canvaComponent.addElementDragable(comp, false);
+
                 }
             }
 
@@ -167,7 +160,6 @@ public class ComponentsContext {
         subItemsContext.addItem("component", nodeId);
 
         // mainCanva.addElementDragable(customComponent);
-        mainCanva.setOnClickMethodToNode(customComponent, this::selectNode);
 
         // animateOnEntry(customComponent);
     }
@@ -183,20 +175,64 @@ public class ComponentsContext {
             var target = searchNodeByIdInMainCanva(itemIdentification, canvaChildren);
             // 2. finded in main canva so, selected
             if (target != null) {
-                selectNode(target);
+                SelectNode(target);
             } else {
-                // if not, just create and add in canva
-                // constroi componente que também é um canva
-
-                CustomComponent customComponent = new CustomComponent();
-
-                // customComponent.applyData(state);
-                mainCanvaComponent.addElementDragable(customComponent);
-                mainCanvaComponent.setOnClickMethodToNode(customComponent, this::selectNode);
+                // if not, just add in canva
+                mainCanvaComponent.addElementDragable(op.get(), false);
             }
-
         });
 
+    }
+
+    public static void AddComponent(String type, Home home) {
+        SubItemsContext subItemsContext = SubItemsContext.getInstance();
+
+        CanvaComponent canvaComponent = home.canva;
+
+        if (type == null || type.isBlank())
+            return;
+
+        Node node = null;
+        var content = "Im new here";
+
+        if (type.equals("Button")) {
+            node = new ButtonComponent(content);
+        } else if (type.equals("Input")) {
+            node = new InputComponent(content);
+
+        } else if (type.equals("Text")) {
+            node = new TextComponent(content);
+
+        } else if (type.equals("Image")) {
+            node = new ImageComponent(ComponentsContext.class.getResource("/assets/images/mago.jpg").toExternalForm());
+
+        } else if (type.equals("Component")) {
+            new ShowComponentScene(home.canva).stage.show();
+            return;
+        } else if (type.equals("Flex items")) {
+            node = new FlexComponent();
+        }
+
+        if (node != null) {
+
+            String nodeId = node.getId();
+            nodes.add(node);
+
+            // 1. Adiciona o nó ao Canva.
+            // Isso executa canvaComponent.addElementDragable(node, true);
+            // QUE POR SUA VEZ CHAMA SelectNode(node);
+            home.canva.addElementDragable(node, true);
+
+            // AGORA o nó está SELECIONADO (estado vermelho = verdadeiro) no
+            // ComponentsContext.
+
+            // 2. ADICIONA O ITEM À SIDEBAR (subItemsContext).
+            // Isso DISPARA o listener no Option e chama loadSubItems().
+            // Como o nó já está selecionado, loadSubItems() criará o item com a cor
+            // vermelha.
+            subItemsContext.addItem(type.toLowerCase(), nodeId);
+
+        }
     }
 
     public Optional<Node> searchNodeByIdInNodesList(String nodeId) {
@@ -216,29 +252,9 @@ public class ComponentsContext {
         return target;
     }
 
-    public void selectNode(Node node) {
-        visualNodeSelected.set(node);
-
-        shake(node);
+    public static void SelectNode(Node node) {
+        nodeSelected.set(node);
         System.out.println("Selecionado: " + node);
-
-        System.out.println("estilo do compponente selecionado: ");
-        System.out.println(node.getStyle());
-    }
-
-    // achacoalhar
-    void shake(Node node) {
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), 0)),
-                new KeyFrame(Duration.millis(100), new KeyValue(node.translateXProperty(), -1)),
-                new KeyFrame(Duration.millis(200), new KeyValue(node.translateXProperty(), 1)),
-                new KeyFrame(Duration.millis(300), new KeyValue(node.translateXProperty(), -1)),
-                new KeyFrame(Duration.millis(400), new KeyValue(node.translateXProperty(), 1)),
-                new KeyFrame(Duration.millis(500), new KeyValue(node.translateXProperty(), -1)),
-                new KeyFrame(Duration.millis(600), new KeyValue(node.translateXProperty(), 0)));
-        timeline.setCycleCount(1);
-        timeline.play();
     }
 
     // @Deprecated
@@ -273,47 +289,7 @@ public class ComponentsContext {
         Commons.WriteJsonInDisc(file, data);
     }
 
-    public void addComponent(String type, Home home) {
-        SubItemsContext subItemsContext = SubItemsContext.getInstance();
-
-        CanvaComponent canvaComponent = home.canva;
-
-        if (type == null || type.isBlank())
-            return;
-
-        Node node = null;
-        var content = "Im new here";
-
-        if (type.equals("Button")) {
-            node = new ButtonComponent(content);
-        } else if (type.equals("Input")) {
-            node = new InputComponent(content);
-
-        } else if (type.equals("Text")) {
-            node = new TextComponent(content);
-
-        } else if (type.equals("Image")) {
-            node = new ImageComponent(getClass().getResource("/assets/images/mago.jpg").toExternalForm());
-
-        } else if (type.equals("Component")) {
-            new ShowComponentScene(home.canva).stage.show();
-            return;
-        } else if (type.equals("Flex items")) {
-            node = new FlexComponent();
-        }
-
-        if (node != null) {
-            String nodeId = node.getId();
-            subItemsContext.addItem(type.toLowerCase(), nodeId);
-
-            canvaComponent.addElementDragable(node);
-            canvaComponent.setOnClickMethodToNode(node, this::selectNode);
-
-            animateOnEntry(node);
-        }
-    }
-
-    void animateOnEntry(Node node) {
+    static void animateOnEntry(Node node) {
         ScaleTransition st = new ScaleTransition(Duration.millis(400), node);
         st.setFromX(0.5);
         st.setFromY(0.5);
