@@ -12,7 +12,7 @@
     "x": 0,
     "y": 0
   },
-  "text_componentes": [
+  "text_components": [
     {
       "text": "Alunos",
       "layout_x": 48.12226562500007,
@@ -36,7 +36,7 @@
       "canva_id": "1758552551596"
     }
   ],
-  "button_componentes": [
+  "button_components": [
     {
       "text": "brasil",
       "fontSize": "16",
@@ -83,6 +83,6 @@
       "canva_id": "1758552551596"
     }
   ],
-  "flex_components": [],
+  "column_components": [],
   "custom_components": []
 }

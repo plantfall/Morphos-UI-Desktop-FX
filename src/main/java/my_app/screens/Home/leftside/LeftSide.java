@@ -22,7 +22,7 @@ import my_app.screens.Home.Home;
 public class LeftSide extends VBox {
 
         Text title = new Text("Visual Elements");
-        List<String> optionsText = List.of("Text", "Button", "Input", "Image", "Component", "Flex items");
+        List<String> optionsText = List.of("Text", "Button", "Input", "Image", "Component", "Column items");
         IntegerProperty indexSelecionado = new SimpleIntegerProperty(-1);
 
         List<Option> options = new ArrayList<>();

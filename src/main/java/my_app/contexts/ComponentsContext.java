@@ -15,7 +15,7 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.components.flexComponent.FlexComponent;
+import my_app.components.flexComponent.ColumnItens;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.Commons;
@@ -53,7 +53,7 @@ public class ComponentsContext {
             var state = om.readValue(file, StateJson_v2.class);
             canvaComponent.applyData(state.canva);
 
-            for (TextComponentData data : state.text_componentes) {
+            for (TextComponentData data : state.text_components) {
                 TextComponent comp = new TextComponent(data.text());
                 comp.applyData(data);
                 nodes.add(comp);
@@ -66,7 +66,7 @@ public class ComponentsContext {
             }
 
             // Restaura os botões
-            for (ButtonComponentData data : state.button_componentes) {
+            for (ButtonComponentData data : state.button_components) {
                 ButtonComponent comp = new ButtonComponent();
 
                 comp.applyData(data);
@@ -169,8 +169,8 @@ public class ComponentsContext {
         } else if (type.equals("Component")) {
             new ShowComponentScene(home.canva).stage.show();
             return;
-        } else if (type.equals("Flex items")) {
-            node = new FlexComponent();
+        } else if (type.equals("Column items")) {
+            node = new ColumnItens();
         }
 
         if (node != null) {
@@ -249,11 +249,11 @@ public class ComponentsContext {
 
             if (node instanceof TextComponent component) {
                 // O .getData() deve retornar um TextComponentData que inclui a flag 'in_canva'
-                jsonTarget.text_componentes.add(component.getData());
+                jsonTarget.text_components.add(component.getData());
             }
 
             if (node instanceof ButtonComponent component) {
-                jsonTarget.button_componentes.add(component.getData());
+                jsonTarget.button_components.add(component.getData());
             }
 
             if (node instanceof ImageComponent component) {

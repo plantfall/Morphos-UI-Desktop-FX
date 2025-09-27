@@ -16,8 +16,8 @@ import my_app.components.canvaComponent.WidthComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
+import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
-import my_app.data.FlexComponentData;
 import my_app.data.ImageComponentData;
 import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
@@ -68,7 +68,7 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
         var btnComponentsData = new ArrayList<ButtonComponentData>();
         var imgComponentsData = new ArrayList<ImageComponentData>();
         var inputComponentsData = new ArrayList<InputComponentData>();
-        var flexComponentsData = new ArrayList<FlexComponentData>();
+        var columnComponentsData = new ArrayList<ColumnComponentData>();
         var customComponentsData = new ArrayList<InnerComponentData>();
 
         for (Node node : getChildren()) {
@@ -103,7 +103,7 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
                 btnComponentsData,
                 imgComponentsData,
                 inputComponentsData,
-                flexComponentsData,
+                columnComponentsData,
                 customComponentsData);
     }
 
@@ -138,14 +138,14 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
                     "-fx-background-size: cover; -fx-background-position: center;");
         }
 
-        for (ButtonComponentData data_ : data.button_componentes) {
+        for (ButtonComponentData data_ : data.button_components) {
             var node = new ButtonComponent(data_.text());
             node.applyData(data_);
             node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
             getChildren().add(node);
         }
 
-        for (TextComponentData data_ : data.text_componentes) {
+        for (TextComponentData data_ : data.text_components) {
             var node = new TextComponent(data_.text());
             node.applyData(data_);
             node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));

@@ -12,7 +12,7 @@
     "x": 0,
     "y": 0
   },
-  "text_componentes": [
+  "text_components": [
     {
       "text": "Alunos",
       "layout_x": 48.12226562500007,
@@ -58,7 +58,7 @@
       "canva_id": null
     }
   ],
-  "button_componentes": [
+  "button_components": [
     {
       "text": "brasil",
       "fontSize": "16",
@@ -123,7 +123,7 @@
       "canva_id": "1758552551596"
     }
   ],
-  "flex_components": [],
+  "column_components": [],
   "custom_components": [
     {
       "padding_top": 0,
@@ -139,7 +139,7 @@
       "y": 288,
       "in_canva": true,
       "canva_id": "1758552551596",
-      "text_componentes": [
+      "text_components": [
         {
           "text": "Im new here",
           "layout_x": 162.12226562499995,
@@ -152,10 +152,10 @@
           "canva_id": null
         }
       ],
-      "button_componentes": [],
+      "button_components": [],
       "image_components": [],
       "input_components": [],
-      "flex_componentes": [],
+      "column_components": [],
       "custom_components": []
     }
   ]

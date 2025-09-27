@@ -18,11 +18,11 @@ public class InnerComponentData implements Serializable {
         public int y;
         public boolean in_canva;
         public String canva_id;
-        public List<TextComponentData> text_componentes;
-        public List<ButtonComponentData> button_componentes;
+        public List<TextComponentData> text_components;
+        public List<ButtonComponentData> button_components;
         public List<ImageComponentData> image_components;
         public List<InputComponentData> input_components;
-        public List<FlexComponentData> flex_componentes;
+        public List<ColumnComponentData> column_components;
         public List<InnerComponentData> custom_components;
 
         // Construtor vazio
@@ -45,10 +45,10 @@ public class InnerComponentData implements Serializable {
                         boolean in_canva,
                         String canva_id,
                         List<TextComponentData> text_componentes,
-                        List<ButtonComponentData> button_componentes,
+                        List<ButtonComponentData> button_components,
                         List<ImageComponentData> image_components,
                         List<InputComponentData> input_components,
-                        List<FlexComponentData> flex_componentes,
+                        List<ColumnComponentData> column_components,
                         List<InnerComponentData> custom_components) {
 
                 this.padding_top = padding_top;
@@ -64,11 +64,11 @@ public class InnerComponentData implements Serializable {
                 this.y = y;
                 this.in_canva = in_canva;
                 this.canva_id = canva_id;
-                this.text_componentes = text_componentes;
-                this.button_componentes = button_componentes;
+                this.text_components = text_componentes;
+                this.button_components = button_components;
                 this.image_components = image_components;
                 this.input_components = input_components;
-                this.flex_componentes = flex_componentes;
+                this.column_components = column_components;
                 this.custom_components = custom_components;
         }
 }
