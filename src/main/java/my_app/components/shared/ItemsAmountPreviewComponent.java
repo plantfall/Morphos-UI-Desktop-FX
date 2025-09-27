@@ -15,13 +15,9 @@ public class ItemsAmountPreviewComponent extends HBox {
     Text title = new Text("Children amount(preview):");
     TextField tf = new TextField();
 
-    // Referência direta ao ColumnItens para acessar o método de recriação
-    private final ColumnItens columnTarget;
-
     // A propriedade agora é local, mas precisamos saber quem é o alvo
     // (columnTarget)
     public ItemsAmountPreviewComponent(ColumnItens columnTarget) {
-        this.columnTarget = columnTarget;
 
         config();
 
@@ -45,7 +41,7 @@ public class ItemsAmountPreviewComponent extends HBox {
                 if (newAmount > 100)
                     newAmount = 100; // Limite de 100
                 if (newAmount < 1)
-                    newAmount = 1; // Mínimo de 1
+                    newAmount = 0; // Mínimo de 0
 
                 // Garante que o TextField e o State estejam sincronizados
                 tf.setText(String.valueOf(newAmount));

@@ -1,20 +1,13 @@
-package my_app.components.columnComponent;
-
-import java.util.ArrayList;
+package my_app.components.shared;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.CustomComponent;
-import my_app.components.TextComponent;
+import my_app.components.columnComponent.ColumnItens;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
-import my_app.data.InnerComponentData;
 
 public class ChildHandlerComponent extends HBox {
     Text title = new Text("Child component:");

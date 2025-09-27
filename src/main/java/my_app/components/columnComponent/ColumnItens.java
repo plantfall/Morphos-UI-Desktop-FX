@@ -14,7 +14,9 @@ import javafx.scene.layout.VBox;
 import my_app.components.CustomComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextComponent;
+import my_app.components.shared.ChildHandlerComponent;
 import my_app.components.shared.ItemsAmountPreviewComponent;
+import my_app.components.shared.OnEmptyComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
@@ -31,6 +33,10 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
     // CustomComponent)
     SimpleStringProperty currentChild = new SimpleStringProperty("Text");
     public SimpleIntegerProperty childrenAmountState = new SimpleIntegerProperty(3);
+
+    // NOVO: Propriedade para armazenar o Componente a ser exibido quando a lista
+    // está vazia
+    ObjectProperty<Node> onEmptyComponentState = new SimpleObjectProperty<>();
 
     public ColumnItens() {
         // Configuração inicial como VBox
@@ -57,10 +63,27 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
     public void recreateChildren() {
         int amount = childrenAmountState.get();
-        String currentChildId = currentChild.get();
 
-        // Limpa todos os filhos existentes
+        // 1. Limpa todos os filhos existentes
         getChildren().clear();
+
+        if (amount == 0) {
+            // SE A QUANTIDADE FOR ZERO, exibe o componente de placeholder
+            Node emptyNode = onEmptyComponentState.get();
+            if (emptyNode != null) {
+                // Remove o nó de seu pai anterior (se existir) para evitar Parent Exception
+                if (emptyNode.getParent() != null) {
+                    ((Pane) emptyNode.getParent()).getChildren().remove(emptyNode);
+                }
+                getChildren().add(emptyNode);
+            }
+            return; // Encerra a função, pois o placeholder foi adicionado
+        }
+
+        // 2. SE A QUANTIDADE FOR MAIOR QUE ZERO, continua com a lógica normal de
+        // criação
+
+        String currentChildId = currentChild.get();
 
         if (currentChildId.equals("Text")) {
             // Recriação de TextComponent
@@ -92,7 +115,8 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
     public void appearance(Pane father) {
         father.getChildren().setAll(
                 new ChildHandlerComponent(this, currentChild),
-                new ItemsAmountPreviewComponent(this));
+                new ItemsAmountPreviewComponent(this),
+                new OnEmptyComponent(this, onEmptyComponentState));
     }
 
     @Override
