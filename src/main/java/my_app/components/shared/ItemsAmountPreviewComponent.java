@@ -31,7 +31,7 @@ public class ItemsAmountPreviewComponent extends HBox {
                 String cleanVal = newVal.replaceAll("[^\\d]", "");
                 if (cleanVal.isEmpty()) {
                     // Impede que o campo fique vazio (mínimo 1 item, por exemplo)
-                    tf.setText("1");
+                    tf.setText("0");
                     return;
                 }
 

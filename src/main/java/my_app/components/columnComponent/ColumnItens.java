@@ -38,6 +38,9 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
     // está vazia
     ObjectProperty<Node> onEmptyComponentState = new SimpleObjectProperty<>();
 
+    // NOVO: Armazena o ID do CustomComponent selecionado para "On Empty"
+    public SimpleStringProperty onEmptyChildId = new SimpleStringProperty("None");
+
     public ColumnItens() {
         // Configuração inicial como VBox
         setSpacing(5);
