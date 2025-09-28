@@ -12,80 +12,42 @@ import my_app.contexts.SubItemsContext;
 public class ChildHandlerComponent extends HBox {
     Text title = new Text("Child component:");
 
-    // Remova os campos não utilizados se possível
-    // String[] orientationList = { "Row", "Column" };
-
     SubItemsContext context = SubItemsContext.getInstance();
-    // ComponentsContext componentsContext = ComponentsContext.getInstance(); // Não
-    // está sendo usado
 
     public ChildHandlerComponent(ColumnItens nodeTarget, SimpleStringProperty currentChild) {
         var combo = new ComboBox<String>();
 
         config();
 
-        // 1. **Adiciona o item "Text" padrão**
-        // A string "Text" (com 'T' maiúsculo) é usada como o ID/nome para o componente
-        // Text
-        // simples, conforme sua lógica em ColumnItens.
-        combo.getItems().add("Text");
+        combo.getItems().clear();
+        combo.getItems().add("Text"); // Adiciona o tipo padrão
 
-        // 2. **Adiciona todos os Custom/Named Components**
-        // Iteramos sobre todos os grupos de dados (Map<Tipo, Lista<IDs>>)
+        // Itera sobre os GRUPOS de componentes (Ex: "text", "button", "column items")
         for (var entry : context.getAllData().entrySet()) {
-            String componentType = entry.getKey(); // Ex: "button", "input", "component", "column items"
+            String componentType = entry.getKey();
 
-            // O tipo "text" (minúsculo) é a lista de TextComponents com IDs reais.
-            // Para evitar duplicidade e confusão com o item padrão "Text" (Maiúsculo),
-            // podemos ignorar o grupo "text" (minúsculo) ou decidir qual usar.
-            // Pelo seu JSON, os filhos de ColumnItens parecem ser Componentes Customizados
-            // (que você chama de "component" ou "custom" na sidebar) E o Text Component
-            // Padrão.
+            // FILTRO 2 (OPCIONAL, mas RECOMENDADO): Impede que qualquer ColumnItens seja
+            // filho.
+            // Se o tipo for "column items", pula o grupo inteiro.
+            if (componentType.equals("column items")) {
+                continue;
+            }
 
-            // Vamos focar nos componentes Customizados (que geralmente são contêineres ou
-            // designs complexos que o usuário criou para reutilizar).
-
-            // Se você quer apenas **Custom Components** e o **Text Padrão**, mantenha a
-            // lógica original,
-            // mas talvez mudando o nome para maior clareza.
-            // O que você realmente quer são os componentes que o usuário pode
-            // **reutilizar**
-            // como filhos. Assumimos que são os "component" (CustomComponent) e "column
-            // items".
-
-            // Se você quer *TODOS* os itens da sidebar, você faria:
+            // Itera sobre todos os IDs dentro desse grupo
             for (SimpleStringProperty idProperty : entry.getValue()) {
-                // Adiciona o ID/nome de identificação do componente
-                combo.getItems().add(idProperty.get());
+                String id = idProperty.get();
+
+                // FILTRO 1: Impede que a própria ColumnItens seja adicionada à lista
+                if (id.equals(nodeTarget.getId())) {
+                    continue;
+                }
+
+                combo.getItems().add(id);
             }
         }
 
-        // **Alternativa Recomendada (Mais específica ao contexto de Coluna):**
-        // Geralmente, uma coluna só pode ter componentes que são reutilizáveis (Custom
-        // Componentes),
-        // outras colunas, ou componentes simples (Text, Button, etc.).
-        // Se você deseja listar todos os IDs **e tipos**, a lista de IDs de todos os
-        // Custom Components
-        // (como "1759102023348", "1759102056980") está espalhada pelo dataMap.
-
-        // Para trazer **todos os IDs** que foram adicionados à sidebar:
-
-        combo.getItems().clear(); // Limpa itens anteriores
-        combo.getItems().add("Text"); // Adiciona o tipo padrão
-
-        // Itera sobre todos os valores em todos os grupos (listas de IDs)
-        context.getAllData().values().forEach(idList -> {
-            for (SimpleStringProperty idProperty : idList) {
-                String id = idProperty.get();
-                // Verifica se o ID já não é o valor atual para evitar duplicidade
-                if (!id.equals(currentChild.get())) {
-                    combo.getItems().add(id);
-                }
-            }
-        });
-
-        // Garante que o item atual, mesmo que não esteja em 'nodes' ainda, esteja na
-        // lista
+        // Garante que o item atualmente selecionado esteja na lista (mesmo que seja o
+        // Text Padrão)
         if (!combo.getItems().contains(currentChild.get())) {
             combo.getItems().add(currentChild.get());
         }
@@ -94,7 +56,6 @@ public class ChildHandlerComponent extends HBox {
         combo.setValue(currentChild.get());
 
         combo.valueProperty().addListener((obs, old, newVal) -> {
-            // ... (restante do código de listener permanece o mesmo)
             if (newVal != null && !newVal.equals(old)) {
                 currentChild.set(newVal);
                 nodeTarget.recreateChildren();
