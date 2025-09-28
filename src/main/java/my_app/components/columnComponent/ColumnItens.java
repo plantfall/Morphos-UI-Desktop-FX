@@ -146,6 +146,11 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
             }
         }
 
+        InnerComponentData alternativeChildData = new InnerComponentData();
+        if (onEmptyComponentState.get() instanceof CustomComponent custom) {
+            alternativeChildData = custom.getData();
+        }
+
         var location = Commons.NodeInCanva(this);
 
         // Retorna o novo ColumnComponentData
@@ -154,10 +159,12 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
                 childType,
                 currentChild.get(), // childId é o ID/nome do tipo de componente atual
                 childData,
+                alternativeChildData,
                 (int) getLayoutX(),
                 (int) getLayoutY(),
                 location.inCanva(),
-                location.fatherId());
+                location.fatherId(),
+                childrenAmountState.get());
     }
 
     @Override
@@ -171,21 +178,23 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
         this.setId(data.identification());
         currentChild.set(data.childId());
 
-        // Lógica de recriação dos filhos (semelhante ao ChildComponent listener)
-        if (data.childId().equals("Text")) {
-            // Recriar os filhos TextComponent padrão
-            for (int i = 0; i < 3; i++) {
-                getChildren().add(new TextComponent("Item de Coluna " + i));
-            }
+        // 1
+        childrenAmountState.set(data.pref_child_amount_for_preview());
+
+        // 2. Restaurar o componente alternativo (On Empty)
+        if (data.alternative_child() != null && !data.alternative_child().equals(new InnerComponentData())) {
+            // Criamos uma nova instância do componente vazio a partir dos dados salvos
+            CustomComponent emptyCopy = new CustomComponent();
+            emptyCopy.applyData(data.alternative_child());
+            onEmptyComponentState.set(emptyCopy);
         } else {
-            // Recriar CustomComponents
-            InnerComponentData childData = data.child();
-            for (int i = 0; i < 3; i++) {
-                CustomComponent newCopy = new CustomComponent();
-                newCopy.applyData(childData);
-                newCopy.setId(System.currentTimeMillis() + "" + i); // Novo ID
-                getChildren().add(newCopy);
-            }
+            onEmptyComponentState.set(null);
         }
+
+        // 3. Chamar a lógica centralizada para reconstruir o estado VISUAL
+        // Isso garantirá que o número correto de filhos e/ou o componente vazio sejam
+        // exibidos.
+        recreateChildren();
+
     }
 }

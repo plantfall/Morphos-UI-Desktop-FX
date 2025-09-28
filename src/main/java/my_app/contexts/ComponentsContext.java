@@ -18,6 +18,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.columnComponent.ColumnItens;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
+import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
 import my_app.data.ImageComponentData;
 import my_app.data.InnerComponentData;
@@ -116,6 +117,19 @@ public class ComponentsContext {
                 if (data.in_canva) {
                     canvaComponent.addElementDragable(comp, false);
 
+                }
+            }
+
+            for (ColumnComponentData data : state.column_components) {
+                var comp = new ColumnItens();
+
+                comp.applyData(data);
+                nodes.add(comp);
+
+                subItemsContext.addItem("column items", data.identification());
+
+                if (data.in_canva()) {
+                    canvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -266,9 +280,6 @@ public class ComponentsContext {
 
             // Se o FlexComponent for uma composição de outros nós, ele deve serializar seus
             // filhos internamente.
-            // if (node instanceof FlexComponent component) {
-            // jsonTarget.flex_componentes.add(component.getData());
-            // }
 
             // CustomComponent, se for salvo como InnerComponentData.
             // Verifique se o getData() dele é compatível com InnerComponentData.
@@ -278,6 +289,11 @@ public class ComponentsContext {
                 // Supondo que getData() retorne InnerComponentData ou StateJson_v2 completo
                 jsonTarget.custom_components.add(component.getData());
             }
+
+            if (node instanceof ColumnItens component) {
+                jsonTarget.column_components.add(component.getData());
+            }
+
         }
 
         return jsonTarget;

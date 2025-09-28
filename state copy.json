@@ -123,7 +123,84 @@
       "canva_id": "1758552551596"
     }
   ],
-  "column_components": [],
+  "column_components": [
+    {
+      "identification": "1759096970386",
+      "childType": "text_component",
+      "childId": "Text",
+      "child": {
+        "padding_top": 0,
+        "padding_right": 0,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "width": 370.0,
+        "height": 100.0,
+        "bg_type": "color",
+        "bgContent": "#4d8080",
+        "identification": "1758987737978_copy",
+        "x": 0,
+        "y": 0,
+        "in_canva": false,
+        "canva_id": null,
+        "text_components": [
+          {
+            "text": "Im new here",
+            "layout_x": 162.12226562499995,
+            "layout_y": 56.419531250000006,
+            "fontSize": "16",
+            "color": "black",
+            "font_weight": "normal",
+            "identification": "1758987733796",
+            "in_canva": false,
+            "canva_id": null
+          }
+        ],
+        "button_components": [],
+        "image_components": [],
+        "input_components": [],
+        "column_components": [],
+        "custom_components": []
+      },
+      "alternative_child": {
+        "padding_top": 0,
+        "padding_right": 0,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "width": 370.0,
+        "height": 100.0,
+        "bg_type": "color",
+        "bgContent": "#4d8080",
+        "identification": "1758987737978_copy",
+        "x": 0,
+        "y": 0,
+        "in_canva": false,
+        "canva_id": null,
+        "text_components": [
+          {
+            "text": "Im new here",
+            "layout_x": 162.12226562499995,
+            "layout_y": 56.419531250000006,
+            "fontSize": "16",
+            "color": "black",
+            "font_weight": "normal",
+            "identification": "1758987733796",
+            "in_canva": false,
+            "canva_id": null
+          }
+        ],
+        "button_components": [],
+        "image_components": [],
+        "input_components": [],
+        "column_components": [],
+        "custom_components": []
+      },
+      "x": 46,
+      "y": 412,
+      "in_canva": true,
+      "canva_id": "1758552551596",
+      "pref_child_amount_for_preview": 0
+    }
+  ],
   "custom_components": [
     {
       "padding_top": 0,
@@ -135,8 +212,8 @@
       "bg_type": "color",
       "bgContent": "#4d8080",
       "identification": "1758987737978",
-      "x": 371,
-      "y": 288,
+      "x": 409,
+      "y": 8,
       "in_canva": true,
       "canva_id": "1758552551596",
       "text_components": [
