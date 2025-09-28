@@ -15,5 +15,5 @@ public class StateJson_v2 implements Serializable {
         // ADICIONADA: Nova lista de componentes de Coluna
         public List<ColumnComponentData> column_components = new ArrayList<>();
 
-        public List<InnerComponentData> custom_components = new ArrayList<>();
+        public List<CustomComponentData> custom_components = new ArrayList<>();
 }

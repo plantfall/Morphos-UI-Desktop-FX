@@ -20,8 +20,8 @@ import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
+import my_app.data.CustomComponentData;
 import my_app.data.ImageComponentData;
-import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.StateJson_v2;
 import my_app.data.TextComponentData;
@@ -106,7 +106,7 @@ public class ComponentsContext {
                 }
             }
 
-            for (InnerComponentData data : state.custom_components) {
+            for (CustomComponentData data : state.custom_components) {
                 var comp = new CustomComponent();
 
                 comp.applyData(data);
@@ -132,27 +132,6 @@ public class ComponentsContext {
                     canvaComponent.addElementDragable(comp, false);
                 }
             }
-
-            // for (FlexComponentData data : state.flex_componentes) {
-            // var comp = new FlexComponent();
-
-            // canvaComponent.addElementDragable(comp, this::selectNode);
-
-            // comp.applyData(data);
-
-            // // como o custom component já existe no canva, posso adicionar ele aqui se
-            // // pertencer tbm ao flex component
-            // var target = searchNodeByIdInMainCanva(
-            // data.childId(), canvaComponent.getChildren());
-
-            // if (target != null) {
-            // comp.getChildren().clear();
-            // comp.getChildren().add(target);
-
-            // }
-
-            // // subItemsContext.addItem("component", data.self.identification);
-            // }
 
         } catch (Exception e) {
             e.printStackTrace();

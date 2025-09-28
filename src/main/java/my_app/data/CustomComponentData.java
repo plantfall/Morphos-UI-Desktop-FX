@@ -1,10 +1,9 @@
 package my_app.data;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class InnerComponentData implements Serializable {
-
+public class CustomComponentData implements ComponentData {
+        public String type = "component";
         public int padding_top;
         public int padding_right;
         public int padding_bottom;
@@ -23,14 +22,14 @@ public class InnerComponentData implements Serializable {
         public List<ImageComponentData> image_components;
         public List<InputComponentData> input_components;
         public List<ColumnComponentData> column_components;
-        public List<InnerComponentData> custom_components;
+        public List<CustomComponentData> custom_components;
 
         // Construtor vazio
-        public InnerComponentData() {
+        public CustomComponentData() {
         }
 
         // Construtor com todos os argumentos
-        public InnerComponentData(
+        public CustomComponentData(
                         int padding_top,
                         int padding_right,
                         int padding_bottom,
@@ -49,7 +48,7 @@ public class InnerComponentData implements Serializable {
                         List<ImageComponentData> image_components,
                         List<InputComponentData> input_components,
                         List<ColumnComponentData> column_components,
-                        List<InnerComponentData> custom_components) {
+                        List<CustomComponentData> custom_components) {
 
                 this.padding_top = padding_top;
                 this.padding_right = padding_right;
@@ -70,5 +69,15 @@ public class InnerComponentData implements Serializable {
                 this.input_components = input_components;
                 this.column_components = column_components;
                 this.custom_components = custom_components;
+        }
+
+        @Override
+        public String type() {
+                return type;
+        }
+
+        @Override
+        public String identification() {
+                return identification;
         }
 }

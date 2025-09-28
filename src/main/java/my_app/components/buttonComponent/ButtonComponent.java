@@ -108,7 +108,9 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
 
         var location = Commons.NodeInCanva(this);
 
-        return new ButtonComponentData(text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
+        return new ButtonComponentData(
+                "button",
+                text, fontSize, fontWeight, color, borderWidth, borderRadius, bgColor,
                 x, y, paddingTop, paddingRight, paddingBottom, paddingLeft, this.getId(),
                 location.inCanva(),
                 location.fatherId());

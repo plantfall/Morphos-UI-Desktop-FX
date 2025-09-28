@@ -18,13 +18,13 @@ import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
+import my_app.data.CustomComponentData;
 import my_app.data.ImageComponentData;
-import my_app.data.InnerComponentData;
 import my_app.data.InputComponentData;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
 
-public class CustomComponent extends Pane implements ViewContract<InnerComponentData> {
+public class CustomComponent extends Pane implements ViewContract<CustomComponentData> {
 
     ComponentsContext componentsContext = ComponentsContext.getInstance();
 
@@ -33,7 +33,7 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
     }
 
     @Override
-    public InnerComponentData getData() {
+    public CustomComponentData getData() {
         String canvastyle = this.getStyle();
 
         Insets padding = this.getPadding();
@@ -69,7 +69,7 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
         var imgComponentsData = new ArrayList<ImageComponentData>();
         var inputComponentsData = new ArrayList<InputComponentData>();
         var columnComponentsData = new ArrayList<ColumnComponentData>();
-        var customComponentsData = new ArrayList<InnerComponentData>();
+        var customComponentsData = new ArrayList<CustomComponentData>();
 
         for (Node node : getChildren()) {
 
@@ -96,7 +96,7 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
 
         var location = Commons.NodeInCanva(this);
 
-        return new InnerComponentData(paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
+        return new CustomComponentData(paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, bgType,
                 bgContent, this.getId(), (int) getLayoutX(), (int) getLayoutY(), location.inCanva(),
                 location.fatherId(),
                 textComponentsData,
@@ -108,9 +108,9 @@ public class CustomComponent extends Pane implements ViewContract<InnerComponent
     }
 
     @Override
-    public void applyData(InnerComponentData data) {
+    public void applyData(CustomComponentData data) {
 
-        this.setId(data.identification);
+        this.setId(data.identification());
 
         this.setLayoutX(data.x);
         this.setLayoutY(data.y);

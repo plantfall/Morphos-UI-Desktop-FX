@@ -1,8 +1,7 @@
 package my_app.data;
 
-import java.io.Serializable;
-
 public record TextComponentData(
+                String type, // NOVO: "text"
                 String text,
                 double layout_x,
                 double layout_y,
@@ -11,6 +10,10 @@ public record TextComponentData(
                 String font_weight,
                 String identification,
                 boolean in_canva,
-                String canva_id) implements Serializable {
-
+                String canva_id) implements ComponentData {
+        public TextComponentData {
+                // Inicializa o tipo automaticamente
+                if (type == null)
+                        type = "text";
+        }
 }

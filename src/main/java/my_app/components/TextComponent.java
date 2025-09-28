@@ -62,7 +62,9 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
         // usar aqui
         var location = Commons.NodeInCanva(this);
 
-        return new TextComponentData(text, x, y, fontSize, textFill, fontWeight, this.getId(),
+        return new TextComponentData(
+                "text",
+                text, x, y, fontSize, textFill, fontWeight, this.getId(),
                 location.inCanva(),
                 location.fatherId());
     }

@@ -20,6 +20,12 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
     public InputComponent(String content) {
         super(content);
 
+    }
+
+    public InputComponent() {
+    }
+
+    void config() {
         setStyle("-fx-text-fill:black;-fx-font-size:%s;-fx-font-weight:normal;"
                 .formatted(
                         Commons.FontSizeDefault
@@ -64,7 +70,8 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
 
         var location = Commons.NodeInCanva(this);
 
-        return new InputComponentData(text, placeholder, fontWeight, fontSize, color, x, y, this.getId(),
+        return new InputComponentData(
+                "input", text, placeholder, fontWeight, fontSize, color, x, y, this.getId(),
                 location.inCanva(),
                 location.fatherId());
     }

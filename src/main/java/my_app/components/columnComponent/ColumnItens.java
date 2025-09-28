@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import my_app.components.CustomComponent;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.TextComponent;
 import my_app.components.shared.ChildHandlerComponent;
@@ -20,7 +19,8 @@ import my_app.components.shared.OnEmptyComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ColumnComponentData;
 import my_app.data.Commons;
-import my_app.data.InnerComponentData;
+import my_app.data.ComponentData;
+import my_app.data.ComponentFactory;
 import my_app.data.ViewContract;
 
 // ColumnItens.java
@@ -37,9 +37,6 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
     // NOVO: Propriedade para armazenar o Componente a ser exibido quando a lista
     // está vazia
     ObjectProperty<Node> onEmptyComponentState = new SimpleObjectProperty<>();
-
-    // NOVO: Armazena o ID do CustomComponent selecionado para "On Empty"
-    public SimpleStringProperty onEmptyChildId = new SimpleStringProperty("None");
 
     public ColumnItens() {
         // Configuração inicial como VBox
@@ -83,28 +80,30 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
             return; // Encerra a função, pois o placeholder foi adicionado
         }
 
-        // 2. SE A QUANTIDADE FOR MAIOR QUE ZERO, continua com a lógica normal de
-        // criação
-
+        // 2. SE A QUANTIDADE FOR MAIOR QUE ZERO...
         String currentChildId = currentChild.get();
 
         if (currentChildId.equals("Text")) {
-            // Recriação de TextComponent
+            // Recriação de TextComponent (O estado padrão é criado aqui, sem dados salvos)
             for (int i = 0; i < amount; i++) {
                 getChildren().add(new TextComponent("Item de Coluna " + i));
             }
         } else {
-            // Recriação de CustomComponents (Deep Copy)
+            // Recriação de CustomComponents (DEEP COPY)
             var op = ComponentsContext.SearchNodeByIdInNodesList(currentChildId);
 
             op.ifPresent(existingNode -> {
-                if (existingNode instanceof CustomComponent custom) {
-                    InnerComponentData data = custom.getData();
+                // ** Universalização: Usamos ViewContract e a Fábrica **
+                if (existingNode instanceof ViewContract existingView) {
+
+                    ComponentData originalData = (ComponentData) existingView.getData(); // Pega os dados originais
 
                     var copies = new ArrayList<Node>();
                     for (int i = 0; i < amount; i++) {
-                        CustomComponent newCopy = new CustomComponent();
-                        newCopy.applyData(data);
+                        // Criamos uma nova cópia do nó a partir dos dados originais
+                        Node newCopy = ComponentFactory.createNodeFromData(originalData);
+
+                        // Aplicamos o ID da cópia
                         newCopy.setId(System.currentTimeMillis() + "_copy" + i);
                         copies.add(newCopy);
                     }
@@ -133,36 +132,36 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
         // O tipo do componente filho atual
         String childType = currentChild.get().equals("Text") ? "text_component" : "custom_component";
 
-        // Obter os dados do PRIMEIRO filho para salvar o estado que deve ser recriado
-        InnerComponentData childData = new InnerComponentData();
+        // NOVO: Usamos ComponentData como tipo de retorno
+        ComponentData childData = null;
         if (!getChildren().isEmpty()) {
             Node firstChild = getChildren().getFirst();
-            if (firstChild instanceof CustomComponent custom) {
-                childData = custom.getData();
-            } else if (firstChild instanceof TextComponent text) {
-                // Se o filho for TextComponent, você precisa de um método para obter o
-                // InnerComponentData
-                // ou apenas guardar o TextComponentData
-                // Para manter a compatibilidade, vamos assumir que você tem uma forma de
-                // serializar o estado do filho.
-                // Como não temos o TextComponentData aqui, usaremos um placeholder.
+
+            // ** Refatoração: Usamos a interface ViewContract **
+            if (firstChild instanceof ViewContract viewContract) {
+                // Chamamos getData() no componente para obter o ComponentData específico
+                childData = (ComponentData) viewContract.getData();
             }
         }
 
-        InnerComponentData alternativeChildData = new InnerComponentData();
-        if (onEmptyComponentState.get() instanceof CustomComponent custom) {
-            alternativeChildData = custom.getData();
+        ComponentData alternativeChildData = null;
+        Node emptyNode = onEmptyComponentState.get();
+        if (emptyNode instanceof ViewContract viewContract) {
+            // Chamamos getData() no placeholder para obter o ComponentData específico
+            alternativeChildData = (ComponentData) viewContract.getData();
         }
 
         var location = Commons.NodeInCanva(this);
 
         // Retorna o novo ColumnComponentData
         return new ColumnComponentData(
+                // NOVO: Adicione o tipo aqui
+                "column items",
                 this.getId(),
                 childType,
-                currentChild.get(), // childId é o ID/nome do tipo de componente atual
+                currentChild.get(),
                 childData,
-                alternativeChildData,
+                alternativeChildData, // Agora aceita qualquer ComponentData
                 (int) getLayoutX(),
                 (int) getLayoutY(),
                 location.inCanva(),
@@ -180,23 +179,21 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
         this.setId(data.identification());
         currentChild.set(data.childId());
-
-        // 1
         childrenAmountState.set(data.pref_child_amount_for_preview());
 
         // 2. Restaurar o componente alternativo (On Empty)
-        if (data.alternative_child() != null && !data.alternative_child().equals(new InnerComponentData())) {
-            // Criamos uma nova instância do componente vazio a partir dos dados salvos
-            CustomComponent emptyCopy = new CustomComponent();
-            emptyCopy.applyData(data.alternative_child());
+        if (data.alternative_child() != null) {
+            // Recriamos o nó (Node) a partir dos dados (ComponentData)
+            Node emptyCopy = ComponentFactory.createNodeFromData(data.alternative_child());
+
+            // É essencial que o ComponentFactory também lide com a aplicação dos dados
+            // no nó criado.
             onEmptyComponentState.set(emptyCopy);
         } else {
             onEmptyComponentState.set(null);
         }
 
-        // 3. Chamar a lógica centralizada para reconstruir o estado VISUAL
-        // Isso garantirá que o número correto de filhos e/ou o componente vazio sejam
-        // exibidos.
+        // 3. Chamar a lógica centralizada (permanece igual)
         recreateChildren();
 
     }
