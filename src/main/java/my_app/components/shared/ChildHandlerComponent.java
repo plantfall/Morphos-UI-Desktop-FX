@@ -1,15 +1,18 @@
 package my_app.components.shared;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import my_app.components.columnComponent.ColumnItens;
-import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 
 public class ChildHandlerComponent extends HBox {
+
     Text title = new Text("Child component:");
 
     SubItemsContext context = SubItemsContext.getInstance();
@@ -19,38 +22,39 @@ public class ChildHandlerComponent extends HBox {
 
         config();
 
-        combo.getItems().clear();
-        combo.getItems().add("Text"); // Adiciona o tipo padrão
+        // Usamos Set para evitar duplicados
+        Set<String> uniqueItems = new HashSet<>();
+        uniqueItems.add("Text"); // adiciona o item padrão
 
-        // Itera sobre os GRUPOS de componentes (Ex: "text", "button", "column items")
+        // Itera sobre os GRUPOS de componentes
         for (var entry : context.getAllData().entrySet()) {
             String componentType = entry.getKey();
 
-            // FILTRO 2 (OPCIONAL, mas RECOMENDADO): Impede que qualquer ColumnItens seja
-            // filho.
-            // Se o tipo for "column items", pula o grupo inteiro.
+            // Filtro 2: ignora ColumnItens
             if (componentType.equals("column items")) {
                 continue;
             }
 
-            // Itera sobre todos os IDs dentro desse grupo
+            // Itera sobre os IDs desse grupo
             for (SimpleStringProperty idProperty : entry.getValue()) {
                 String id = idProperty.get();
 
-                // FILTRO 1: Impede que a própria ColumnItens seja adicionada à lista
+                // Filtro 1: ignora o próprio nodeTarget
                 if (id.equals(nodeTarget.getId())) {
                     continue;
                 }
 
-                combo.getItems().add(id);
+                uniqueItems.add(id); // garante unicidade
             }
         }
 
-        // Garante que o item atualmente selecionado esteja na lista (mesmo que seja o
-        // Text Padrão)
-        if (!combo.getItems().contains(currentChild.get())) {
-            combo.getItems().add(currentChild.get());
+        // Garante que o item atual também esteja na lista
+        if (currentChild.get() != null && !currentChild.get().isEmpty()) {
+            uniqueItems.add(currentChild.get());
         }
+
+        // Adiciona todos ao combo de uma vez
+        combo.getItems().setAll(uniqueItems);
 
         // Mantém o valor selecionado
         combo.setValue(currentChild.get());
