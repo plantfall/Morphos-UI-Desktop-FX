@@ -37,7 +37,6 @@ public class ComponentsContext {
     static SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
     public static ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
-    //
 
     public static boolean CurrentNodeIsSelected(String nodeId) {
         return nodeSelected.get().getId().equals(nodeId);
@@ -46,9 +45,12 @@ public class ComponentsContext {
     public static void loadJsonState(File file, CanvaComponent canvaComponent) {
         ObjectMapper om = new ObjectMapper();
         canvaComponent.getChildren().clear();
+        nodes.clear();
+        subItemsContext.clearAllItems();
 
-        if (!file.exists() || file.length() == 0)
+        if (!file.exists() || file.length() == 0) {
             return;
+        }
 
         try {
             var state = om.readValue(file, StateJson_v2.class);
@@ -142,8 +144,9 @@ public class ComponentsContext {
     public static void AddComponent(String type, Home home) {
         SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
-        if (type == null || type.isBlank())
+        if (type == null || type.isBlank()) {
             return;
+        }
 
         Node node = null;
         var content = "Im new here";
@@ -178,7 +181,6 @@ public class ComponentsContext {
 
             // AGORA o nó está SELECIONADO (estado vermelho = verdadeiro) no
             // ComponentsContext.
-
             // 2. ADICIONA O ITEM À SIDEBAR (subItemsContext).
             // Isso DISPARA o listener no Option e chama loadSubItems().
             // Como o nó já está selecionado, loadSubItems() criará o item com a cor
@@ -259,7 +261,6 @@ public class ComponentsContext {
 
             // Se o FlexComponent for uma composição de outros nós, ele deve serializar seus
             // filhos internamente.
-
             // CustomComponent, se for salvo como InnerComponentData.
             // Verifique se o getData() dele é compatível com InnerComponentData.
             // **Atenção:** Se ele for uma instância que contém outros componentes,

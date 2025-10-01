@@ -26,9 +26,12 @@ public class SubItemsContext {
     // public ObservableList<SimpleStringProperty> getItemsByType(String type) {
     // return dataMap.getOrDefault(type, FXCollections.observableArrayList());
     // }
-
     public ObservableMap<String, ObservableList<SimpleStringProperty>> getAllData() {
         return dataMap;
+    }
+
+    public void clearAllItems() {
+        dataMap.clear();
     }
 
     public static SubItemsContext getInstance() {

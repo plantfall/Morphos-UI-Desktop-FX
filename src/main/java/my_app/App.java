@@ -34,7 +34,6 @@ public class App extends Application {
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
 
         // loadSubItemsOfCustomComponents();
-
         ComponentsContext.getInstance();
     }
 
@@ -51,7 +50,6 @@ public class App extends Application {
 
         // Botão muda para DataScene
         // componentData.setOnAction(e -> primaryStage.setScene(dataScene));
-
         setup(mainScene); // seta ícone, título etc.
         this.primaryStage.show();
     }
@@ -59,7 +57,7 @@ public class App extends Application {
     private void definirJanelaFromArquivo() {
         // Lê configuração do arquivo
         Map<String, Double> config = lerConfiguracao(
-                "C:\\Users\\Eliezer\\Documents\\DEV\\JAVA\\JAVA-FX-PROJECTS\\basic-desktop-builder\\gui_config.txt");
+                "C:\\Users\\3855-2278\\Documents\\dev\\JAVA\\JAVA-FX-PROJECTS\\basic-desktop-builder\\gui_config.txt");
 
         int monitorIndex = config.get("monitor").intValue();
         double x = config.get("x");
