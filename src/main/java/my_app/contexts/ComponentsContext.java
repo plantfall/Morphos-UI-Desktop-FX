@@ -151,21 +151,21 @@ public class ComponentsContext {
         Node node = null;
         var content = "Im new here";
 
-        if (type.equals("Button")) {
+        if (type.equalsIgnoreCase("Button")) {
             node = new ButtonComponent(content);
-        } else if (type.equals("Input")) {
+        } else if (type.equalsIgnoreCase("Input")) {
             node = new InputComponent(content);
 
-        } else if (type.equals("Text")) {
+        } else if (type.equalsIgnoreCase("Text")) {
             node = new TextComponent(content);
 
-        } else if (type.equals("Image")) {
+        } else if (type.equalsIgnoreCase("Image")) {
             node = new ImageComponent(ComponentsContext.class.getResource("/assets/images/mago.jpg").toExternalForm());
 
-        } else if (type.equals("Component")) {
+        } else if (type.equalsIgnoreCase("Component")) {
             new ShowComponentScene(home.canva).stage.show();
             return;
-        } else if (type.equals("Column items")) {
+        } else if (type.equalsIgnoreCase("Column items")) {
             node = new ColumnItens();
         }
 

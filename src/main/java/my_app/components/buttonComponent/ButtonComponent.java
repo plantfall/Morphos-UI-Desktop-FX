@@ -60,6 +60,35 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         // });
     }
 
+        @Override
+    public void applyData(ButtonComponentData data) {
+        var node = (Button) currentState.get();
+
+        node.setId(data.identification());
+        node.setText(data.text());
+
+        String paddings = "%s %s %s %s"
+                .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left());
+
+        this.setPadding(new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left()));
+
+        node.setStyle(
+                "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
+                        .formatted(
+                                data.bgColor(),
+                                paddings,
+                                data.fontWeight(),
+                                data.borderRadius(),
+                                data.borderRadius(),
+                                data.color(),
+                                data.fontSize(),
+                                data.borderWidth()));
+
+        node.setLayoutX(data.x());
+        node.setLayoutY(data.y());
+
+    }
+
     @Override
     public void appearance(Pane father) {
         father.getChildren().setAll(
@@ -117,31 +146,6 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
 
     }
 
-    @Override
-    public void applyData(ButtonComponentData data) {
-        var node = (Button) currentState.get();
 
-        node.setId(data.identification());
-        node.setText(data.text());
-
-        String paddings = "%s %s %s %s"
-                .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left());
-
-        node.setStyle(
-                "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
-                        .formatted(
-                                data.bgColor(),
-                                paddings,
-                                data.fontWeight(),
-                                data.borderRadius(),
-                                data.borderRadius(),
-                                data.color(),
-                                data.fontSize(),
-                                data.borderWidth()));
-
-        node.setLayoutX(data.x());
-        node.setLayoutY(data.y());
-
-    }
 
 }

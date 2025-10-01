@@ -14,17 +14,22 @@ import my_app.contexts.SubItemsContext;
 public class ChildHandlerComponent extends HBox {
 
     Text title = new Text("Child component:");
+    ComboBox<String> combo = new ComboBox<>();
 
     SubItemsContext context = SubItemsContext.getInstance();
 
-    public ChildHandlerComponent(ColumnItens nodeTarget, SimpleStringProperty currentChild) {
-        var combo = new ComboBox<String>();
+    public ChildHandlerComponent(
+            String title,
+            ColumnItens nodeTarget,
+            SimpleStringProperty currentNodeId) {
+
+        this.title.setText(title);
 
         config();
 
         // Usamos Set para evitar duplicados
         Set<String> uniqueItems = new HashSet<>();
-        uniqueItems.add("Text"); // adiciona o item padrão
+        uniqueItems.add("None"); // adiciona o item padrão
 
         // Itera sobre os GRUPOS de componentes
         for (var entry : context.getAllData().entrySet()) {
@@ -49,24 +54,24 @@ public class ChildHandlerComponent extends HBox {
         }
 
         // Garante que o item atual também esteja na lista
-        if (currentChild.get() != null && !currentChild.get().isEmpty()) {
-            uniqueItems.add(currentChild.get());
+        if (currentNodeId.get() != null && !currentNodeId.get().isEmpty()) {
+            uniqueItems.add(currentNodeId.get());
         }
 
         // Adiciona todos ao combo de uma vez
         combo.getItems().setAll(uniqueItems);
 
         // Mantém o valor selecionado
-        combo.setValue(currentChild.get());
+        combo.setValue(currentNodeId.get());
 
         combo.valueProperty().addListener((obs, old, newVal) -> {
             if (newVal != null && !newVal.equals(old)) {
-                currentChild.set(newVal);
+                currentNodeId.set(newVal);
                 nodeTarget.recreateChildren();
             }
         });
 
-        getChildren().addAll(title, combo);
+        getChildren().addAll(this.title, combo);
     }
 
     void config() {
