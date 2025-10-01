@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +33,8 @@ import my_app.screens.Home.Home;
 public class ComponentsContext {
 
     private static ComponentsContext instance;
+
+     public static final BooleanProperty stateLoaded = new SimpleBooleanProperty(false);
 
     public static SimpleObjectProperty<Node> nodeSelected = new SimpleObjectProperty<>();
 
@@ -135,6 +139,8 @@ public class ComponentsContext {
                 }
             }
 
+            stateLoaded.set(true);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,19 +180,10 @@ public class ComponentsContext {
             String nodeId = node.getId();
             nodes.add(node);
 
-            // 1. Adiciona o nó ao Canva.
-            // Isso executa canvaComponent.addElementDragable(node, true);
-            // QUE POR SUA VEZ CHAMA SelectNode(node);
+            nodeSelected.set(node);
+
             home.canva.addElementDragable(node, true);
-
-            // AGORA o nó está SELECIONADO (estado vermelho = verdadeiro) no
-            // ComponentsContext.
-            // 2. ADICIONA O ITEM À SIDEBAR (subItemsContext).
-            // Isso DISPARA o listener no Option e chama loadSubItems().
-            // Como o nó já está selecionado, loadSubItems() criará o item com a cor
-            // vermelha.
             subItemsContext.addItem(type.toLowerCase(), nodeId);
-
         }
     }
 

@@ -39,7 +39,7 @@ public class Option extends VBox {
     Home home;
 
     public Option(String type, Home home) {
-        this.type = type.toLowerCase();
+        this.type = type.toLowerCase().trim();
         this.home = home;
 
         OptionHeader header = new OptionHeader(type, home, this::handleHeaderClick);
@@ -47,7 +47,13 @@ public class Option extends VBox {
         getChildren().add(header);
         getChildren().add(subItems);
 
+        System.out.println(this.type);
+
+        loadSubItems(); 
+
         var items = context.getItemsByType(this.type);
+        System.out.print("-items---: ");
+        System.out.println(items);
 
         items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
             while (change.next()) {
@@ -63,6 +69,16 @@ public class Option extends VBox {
 
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
+
+           // 3. NOVO LISTENER: Ouve o fim do carregamento do JSON
+        ComponentsContext.stateLoaded.addListener((obs, oldVal, newVal) -> {
+            if (newVal) { // Quando o stateLoaded se torna TRUE
+                System.out.println("JSON carregado! Recarregando subitens para: " + this.type);
+                loadSubItems(); // <--- CHAMADA DE REFRESH AQUI
+            }
+        });
+
+        subItems.managedProperty().bind(expanded);
 
         ComponentsContext.nodeSelected.addListener((obs, oldId, newNode) -> {
 

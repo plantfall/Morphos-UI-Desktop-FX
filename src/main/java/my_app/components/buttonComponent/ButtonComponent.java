@@ -60,7 +60,7 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         // });
     }
 
-        @Override
+    @Override
     public void applyData(ButtonComponentData data) {
         var node = (Button) currentState.get();
 
