@@ -5,7 +5,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -18,6 +17,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.SubItemsContext;
 import my_app.screens.Home.Home;
+import toolkit.Component;
 
 //--Button (OptionHeader)
 //     -btn1 (subItem)
@@ -49,19 +49,10 @@ public class Option extends VBox {
 
         System.out.println(this.type);
 
-        loadSubItems(); 
+        loadSubItems();
 
-        var items = context.getItemsByType(this.type);
-        System.out.print("-items---: ");
-        System.out.println(items);
-
-        items.addListener((ListChangeListener<SimpleStringProperty>) change -> {
-            while (change.next()) {
-                if (change.wasAdded()) {
-                    System.out.println("item added id: " + items.getLast());
-                    loadSubItems();
-                }
-            }
+        SubItemsContext.leftItemsStateRefreshed.addListener((a, b, val) -> {
+            loadSubItems();
         });
 
         subItems.managedProperty().bind(expanded);
@@ -70,27 +61,19 @@ public class Option extends VBox {
         subItems.setPadding(new Insets(5, 0, 0, 20));
         subItems.setSpacing(2);
 
-           // 3. NOVO LISTENER: Ouve o fim do carregamento do JSON
-        ComponentsContext.stateLoaded.addListener((obs, oldVal, newVal) -> {
-            if (newVal) { // Quando o stateLoaded se torna TRUE
-                System.out.println("JSON carregado! Recarregando subitens para: " + this.type);
-                loadSubItems(); // <--- CHAMADA DE REFRESH AQUI
-            }
-        });
-
         subItems.managedProperty().bind(expanded);
 
         ComponentsContext.nodeSelected.addListener((obs, oldId, newNode) -> {
 
             for (Node n : subItems.getChildren()) {
                 if (n instanceof HBox hbox) {
-                    Label lbl = (Label) hbox.getChildren().get(0);
-                    String text = lbl.getText().replace("• ", ""); // remove o bullet
-                    if (text.equals(newNode.getId())) {
+
+                    String preservedId = n.getId();
+                    if (preservedId.equals(newNode.getId())) {
                         hbox.setStyle("-fx-background-color: red;");
                     } else {
                         // não sobrescreve a seleção amarela
-                        if (!text.equals(subItemSelected.get())) {
+                        if (!preservedId.equals(subItemSelected.get())) {
                             hbox.setStyle("-fx-background-color: transparent;");
                         }
                     }
@@ -115,9 +98,12 @@ public class Option extends VBox {
         }
     }
 
+    @Component
     private HBox createSubItemBox(String itemId) {
         HBox subItemBox = new HBox();
         Label subLabel = new Label("• " + itemId);
+        subItemBox.setId(itemId);
+
         subLabel.setFont(Font.font(12));
         subLabel.setTextFill(Color.LIGHTGRAY);
 

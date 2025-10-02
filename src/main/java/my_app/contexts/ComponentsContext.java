@@ -34,7 +34,7 @@ public class ComponentsContext {
 
     private static ComponentsContext instance;
 
-     public static final BooleanProperty stateLoaded = new SimpleBooleanProperty(false);
+    public static final BooleanProperty stateLoaded = new SimpleBooleanProperty(false);
 
     public static SimpleObjectProperty<Node> nodeSelected = new SimpleObjectProperty<>();
 
@@ -140,6 +140,7 @@ public class ComponentsContext {
             }
 
             stateLoaded.set(true);
+            SubItemsContext.refreshSubItems();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,6 +185,7 @@ public class ComponentsContext {
 
             home.canva.addElementDragable(node, true);
             subItemsContext.addItem(type.toLowerCase(), nodeId);
+            SubItemsContext.refreshSubItems();
         }
     }
 
@@ -191,6 +193,7 @@ public class ComponentsContext {
         String nodeId = customComponent.getId();
         nodes.add(customComponent); // Adiciona à lista mestre
         subItemsContext.addItem("component", nodeId);
+        SubItemsContext.refreshSubItems();
     }
 
     public static Optional<Node> SearchNodeByIdInNodesList(String nodeId) {

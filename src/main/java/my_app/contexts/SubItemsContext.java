@@ -1,5 +1,6 @@
 package my_app.contexts;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,12 @@ public class SubItemsContext {
 
     private static SubItemsContext instance;
     private ObservableMap<String, ObservableList<SimpleStringProperty>> dataMap;
+
+    public static SimpleBooleanProperty leftItemsStateRefreshed = new SimpleBooleanProperty(false);
+
+    public static void refreshSubItems() {
+        leftItemsStateRefreshed.set(!leftItemsStateRefreshed.get());
+    }
 
     private SubItemsContext() {
         dataMap = FXCollections.observableHashMap();
