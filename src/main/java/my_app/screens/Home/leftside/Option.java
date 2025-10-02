@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,7 +29,6 @@ public class Option extends VBox {
     ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
 
     SubItemsContext context = SubItemsContext.getInstance();
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
 
     void handleHeaderClick() {
         expanded.set(!expanded.get());
@@ -62,24 +60,6 @@ public class Option extends VBox {
         subItems.setSpacing(2);
 
         subItems.managedProperty().bind(expanded);
-
-        ComponentsContext.nodeSelected.addListener((obs, oldId, newNode) -> {
-
-            for (Node n : subItems.getChildren()) {
-                if (n instanceof HBox hbox) {
-
-                    String preservedId = n.getId();
-                    if (preservedId.equals(newNode.getId())) {
-                        hbox.setStyle("-fx-background-color: red;");
-                    } else {
-                        // não sobrescreve a seleção amarela
-                        if (!preservedId.equals(subItemSelected.get())) {
-                            hbox.setStyle("-fx-background-color: transparent;");
-                        }
-                    }
-                }
-            }
-        });
 
     }
 

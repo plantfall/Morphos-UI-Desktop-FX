@@ -215,6 +215,7 @@ public class ComponentsContext {
 
     public static void SelectNode(Node node) {
         nodeSelected.set(node);
+        SubItemsContext.refreshSubItems();
         System.out.println("Selecionado: " + node);
     }
 
