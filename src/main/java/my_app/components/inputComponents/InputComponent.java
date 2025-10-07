@@ -19,10 +19,11 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
 
     public InputComponent(String content) {
         super(content);
-
+        config();
     }
 
     public InputComponent() {
+        config();
     }
 
     void config() {
@@ -34,6 +35,20 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
 
         setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
+    }
+
+    @Override
+    public void applyData(InputComponentData data) {
+
+        this.setId(data.identification());
+        this.setText(data.text());
+
+        this.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
+                .formatted(data.color(), data.font_size(), data.font_weight()));
+
+        this.setLayoutX(data.x());
+        this.setLayoutY(data.y());
+        this.setPromptText(data.placeholder());
     }
 
     @Override
@@ -76,17 +91,4 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
                 location.fatherId());
     }
 
-    @Override
-    public void applyData(InputComponentData data) {
-
-        this.setId(data.identification());
-        this.setText(data.text());
-
-        this.setStyle("-fx-text-fill:%s;-fx-font-size:%s;-fx-font-weight:%s;"
-                .formatted(data.color(), data.font_size(), data.font_weight()));
-
-        this.setLayoutX(data.x());
-        this.setLayoutY(data.y());
-        this.setPromptText(data.placeholder());
-    }
 }

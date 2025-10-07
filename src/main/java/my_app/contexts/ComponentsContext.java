@@ -52,6 +52,7 @@ public class ComponentsContext {
         nodes.clear();
         subItemsContext.clearAllItems();
 
+        String idOfComponentSelected = null;
         if (!file.exists() || file.length() == 0) {
             return;
         }
@@ -59,6 +60,10 @@ public class ComponentsContext {
         try {
             var state = om.readValue(file, StateJson_v2.class);
             canvaComponent.applyData(state.canva);
+
+            if (state.idOfComponentSelected != null) {
+                idOfComponentSelected = state.idOfComponentSelected;
+            }
 
             for (TextComponentData data : state.text_components) {
                 TextComponent comp = new TextComponent(data.text());
@@ -138,6 +143,8 @@ public class ComponentsContext {
                     canvaComponent.addElementDragable(comp, false);
                 }
             }
+
+            SearchNodeByIdInNodesList(idOfComponentSelected).ifPresent(node -> SelectNode(node));
 
             stateLoaded.set(true);
             SubItemsContext.refreshSubItems();
@@ -234,8 +241,9 @@ public class ComponentsContext {
         }
     }
 
-    static StateJson_v2 CreateStateData(CanvaComponent canva) {
+    private static StateJson_v2 CreateStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
+        jsonTarget.idOfComponentSelected = ComponentsContext.nodeSelected.get().getId();
 
         // 1. Salva as propriedades do CanvaComponent
         jsonTarget.canva = canva.getData();

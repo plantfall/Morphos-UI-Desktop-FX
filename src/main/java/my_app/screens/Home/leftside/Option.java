@@ -1,9 +1,7 @@
 package my_app.screens.Home.leftside;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,9 +22,7 @@ import toolkit.Component;
 public class Option extends VBox {
     BooleanProperty expanded = new SimpleBooleanProperty(false);
     VBox subItems = new VBox();
-    private String type;
-
-    ObjectProperty<String> subItemSelected = new SimpleObjectProperty<>("");
+    String type;
 
     SubItemsContext context = SubItemsContext.getInstance();
 
@@ -122,7 +118,6 @@ public class Option extends VBox {
         var op = ComponentsContext.SearchNodeByIdInNodesList(itemIdentification);
 
         op.ifPresent(state -> {
-            // lookin for custom component in main canva
             var target = ComponentsContext.SearchNodeByIdInMainCanva(itemIdentification, canvaChildren);
             // 2. finded in main canva so, selected
             if (target != null) {
