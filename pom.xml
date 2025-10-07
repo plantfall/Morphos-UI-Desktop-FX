@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>my_app</groupId>
   <artifactId>my_app</artifactId>
@@ -10,8 +11,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
     <javafx.version>17.0.2</javafx.version>
     <main.class>my_app.App</main.class>
   </properties>
@@ -110,6 +111,11 @@
         <configuration>
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
+
+          <compilerArgs>
+            <arg>--enable-preview</arg>
+          </compilerArgs>
+
         </configuration>
       </plugin>
 
@@ -151,6 +157,10 @@
         <version>3.0.0</version>
         <configuration>
           <skipTests>true</skipTests>
+          <compilerArgs>
+            <arg>--enable-preview</arg>
+          </compilerArgs>
+
         </configuration>
       </plugin>
     </plugins>
