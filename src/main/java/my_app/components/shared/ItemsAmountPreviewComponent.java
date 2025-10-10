@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.columnComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnComponent;
 
 // ItemsAmountPreviewComponent.java
 
@@ -17,7 +17,7 @@ public class ItemsAmountPreviewComponent extends HBox {
 
     // A propriedade agora é local, mas precisamos saber quem é o alvo
     // (columnTarget)
-    public ItemsAmountPreviewComponent(ColumnItens columnTarget) {
+    public ItemsAmountPreviewComponent(ColumnComponent columnTarget) {
 
         config();
 

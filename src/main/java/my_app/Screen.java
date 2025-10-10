@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-//here has the purpose of be an entrypoint of code genereated
 public class Screen extends Pane {
     Text text1 = new Text("teste aqui");
     Button button1 = new Button("oi");

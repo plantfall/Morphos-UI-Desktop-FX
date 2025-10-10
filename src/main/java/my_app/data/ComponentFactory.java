@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import my_app.components.CustomComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
-import my_app.components.columnComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnComponent;
 import my_app.components.inputComponents.InputComponent;
 
 public class ComponentFactory {
@@ -46,14 +46,14 @@ public class ComponentFactory {
 
             case "column items":
                 // Em casos de contêineres, evite recursão desnecessária no Factory.
-                // O ColumnItens aplica os dados e recria os filhos internamente.
-                component = new ColumnItens();
+                // O ColumnComponent aplica os dados e recria os filhos internamente.
+                component = new ColumnComponent();
                 ((ViewContract<ColumnComponentData>) component).applyData((ColumnComponentData) data);
                 break;
 
             case "input":
                 // Em casos de contêineres, evite recursão desnecessária no Factory.
-                // O ColumnItens aplica os dados e recria os filhos internamente.
+                // O ColumnComponent aplica os dados e recria os filhos internamente.
                 component = new InputComponent();
                 ((ViewContract<InputComponentData>) component).applyData((InputComponentData) data);
                 break;

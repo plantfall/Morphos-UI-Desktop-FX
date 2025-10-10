@@ -17,7 +17,7 @@ import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.components.columnComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
@@ -132,7 +132,7 @@ public class ComponentsContext {
             }
 
             for (ColumnComponentData data : state.column_components) {
-                var comp = new ColumnItens();
+                var comp = new ColumnComponent();
 
                 comp.applyData(data);
                 nodes.add(comp);
@@ -180,7 +180,7 @@ public class ComponentsContext {
             new ShowComponentScene(home.canva).stage.show();
             return;
         } else if (type.equalsIgnoreCase("Column items")) {
-            node = new ColumnItens();
+            node = new ColumnComponent();
         }
 
         if (node != null) {
@@ -279,7 +279,7 @@ public class ComponentsContext {
                 jsonTarget.custom_components.add(component.getData());
             }
 
-            if (node instanceof ColumnItens component) {
+            if (node instanceof ColumnComponent component) {
                 jsonTarget.column_components.add(component.getData());
             }
 

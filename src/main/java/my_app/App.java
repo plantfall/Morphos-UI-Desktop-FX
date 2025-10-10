@@ -57,7 +57,7 @@ public class App extends Application {
     private void definirJanelaFromArquivo() {
         // Lê configuração do arquivo
         Map<String, Double> config = lerConfiguracao(
-                "C:\\Users\\3855-2278\\Documents\\dev\\JAVA\\JAVA-FX-PROJECTS\\basic-desktop-builder\\gui_config.txt");
+                "C:\\dev\\JAVA\\JAVA-FX-PROJECTS\\basic-desktop-builder\\gui_config.txt");
 
         int monitorIndex = config.get("monitor").intValue();
         double x = config.get("x");

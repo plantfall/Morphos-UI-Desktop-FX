@@ -8,7 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.columnComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnComponent;
 import my_app.contexts.SubItemsContext;
 
 public class ChildHandlerComponent extends HBox {
@@ -20,7 +20,7 @@ public class ChildHandlerComponent extends HBox {
 
     public ChildHandlerComponent(
             String title,
-            ColumnItens nodeTarget,
+            ColumnComponent nodeTarget,
             SimpleStringProperty currentNodeId) {
 
         this.title.setText(title);

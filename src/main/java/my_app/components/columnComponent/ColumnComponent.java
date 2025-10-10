@@ -22,7 +22,7 @@ import my_app.data.ComponentFactory;
 import my_app.data.ViewContract;
 
 // ColumnItens.java
-public class ColumnItens extends VBox implements ViewContract<ColumnComponentData> {
+public class ColumnComponent extends VBox implements ViewContract<ColumnComponentData> {
 
     SimpleStringProperty currentChildIdState = new SimpleStringProperty("None");
     SimpleStringProperty onEmptyComponentState = new SimpleStringProperty("None"); // Novo padrão: "None"
@@ -32,7 +32,7 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
     public SimpleIntegerProperty childrenAmountState = new SimpleIntegerProperty(3);
 
-    public ColumnItens() {
+    public ColumnComponent() {
         // Configuração inicial como VBox
         setSpacing(5);
         setStyle("-fx-background-color:red;");
@@ -93,6 +93,8 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
                     // Cria uma NOVA cópia do nó a partir dos dados originais
                     Node emptyNode = ComponentFactory.createNodeFromData(originalData);
+                    // ⚠️ PASSO CRUCIAL: Torna o placeholder transparente ao mouse
+                    emptyNode.setMouseTransparent(true); // <-- ADICIONAR ESTA LINHA
 
                     // Remove o nó de seu pai anterior e adiciona
                     if (emptyNode.getParent() != null) {
@@ -119,8 +121,11 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
 
                 var copies = new ArrayList<Node>();
                 for (int i = 0; i < amount; i++) {
-                    // Criamos uma nova cópia do nó a partir dos dados originais, só pra visualizacao
+                    // Criamos uma nova cópia do nó a partir dos dados originais, só pra
+                    // visualizacao
                     Node newCopy = ComponentFactory.createNodeFromData(originalData);
+                    // ⚠️ PASSO CRUCIAL: Torna o placeholder transparente ao mouse
+                    newCopy.setMouseTransparent(true); // <-- ADICIONAR ESTA LINHA
 
                     // Aplicamos o ID da cópia
                     copies.add(newCopy);
@@ -136,8 +141,7 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
         father.getChildren().setAll(
                 new ChildHandlerComponent("Child component:", this, currentChildIdState),
                 new ItemsAmountPreviewComponent(this),
-                new ChildHandlerComponent("Component (if empty):", this, onEmptyComponentState)
-        );
+                new ChildHandlerComponent("Component (if empty):", this, onEmptyComponentState));
     }
 
     @Override
@@ -152,7 +156,7 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
         String childId = null;
         if (!getChildren().isEmpty()) {
             Node firstChild = getChildren().getFirst();
-                childId = firstChild.getId();
+            childId = firstChild.getId();
         }
 
         String alternativeChildId = onEmptyComponentState.get().equals("None") ? null : onEmptyComponentState.get();
@@ -163,7 +167,7 @@ public class ColumnItens extends VBox implements ViewContract<ColumnComponentDat
                 // NOVO: Adicione o tipo aqui
                 "column items",
                 this.getId(),
-                //currentChild.get(),
+                // currentChild.get(),
                 childId,
                 alternativeChildId,
                 (int) getLayoutX(),
