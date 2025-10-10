@@ -24,11 +24,9 @@ public class Option extends VBox {
     VBox subItemsContainer = new VBox();
     String type;
 
-    SubItemsContext context = SubItemsContext.getInstance();
+    OptionHeader header;
 
-    void handleHeaderClick() {
-        expanded.set(!expanded.get());
-    }
+    SubItemsContext context = SubItemsContext.getInstance();
 
     Home home;
 
@@ -36,7 +34,7 @@ public class Option extends VBox {
         this.type = type.toLowerCase().trim();
         this.home = home;
 
-        OptionHeader header = new OptionHeader(type, home, this::handleHeaderClick);
+        header = new OptionHeader(type, home, expanded);
 
         getChildren().add(header);
         getChildren().add(subItemsContainer);

@@ -48,7 +48,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         node.setLayoutY((getHeight() - node.prefHeight(-1)) * relY);
 
         // clique = seleciona
-        node.setOnMouseClicked(e -> callback.set(node));
+        node.setOnMouseClicked(_ -> callback.set(node));
 
         enableDrag(node, relX, relY);
 

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -42,6 +43,8 @@ public class ComponentsContext {
 
     public static ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
 
+    public static SimpleStringProperty headerSelected = new SimpleStringProperty(null);
+
     public static boolean CurrentNodeIsSelected(String nodeId) {
         return nodeSelected.get().getId().equals(nodeId);
     }
@@ -61,8 +64,8 @@ public class ComponentsContext {
             var state = om.readValue(file, StateJson_v2.class);
             canvaComponent.applyData(state.canva);
 
-            if (state.idOfComponentSelected != null) {
-                idOfComponentSelected = state.idOfComponentSelected;
+            if (state.id_of_component_selected != null) {
+                idOfComponentSelected = state.id_of_component_selected;
             }
 
             for (TextComponentData data : state.text_components) {
@@ -148,7 +151,7 @@ public class ComponentsContext {
 
             stateLoaded.set(true);
             SubItemsContext.refreshSubItems();
-
+            headerSelected.set(state.type_of_component_selected);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -243,7 +246,8 @@ public class ComponentsContext {
 
     private static StateJson_v2 CreateStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
-        jsonTarget.idOfComponentSelected = ComponentsContext.nodeSelected.get().getId();
+        jsonTarget.id_of_component_selected = ComponentsContext.nodeSelected.get().getId();
+        jsonTarget.type_of_component_selected = ComponentsContext.headerSelected.get();
 
         // 1. Salva as propriedades do CanvaComponent
         jsonTarget.canva = canva.getData();

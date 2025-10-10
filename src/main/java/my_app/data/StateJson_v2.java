@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StateJson_v2 implements Serializable {
-        public String idOfComponentSelected;
+        public String id_of_component_selected;
+        public String type_of_component_selected;
 
         public CanvaProps canva;
         public List<TextComponentData> text_components = new ArrayList<>();
