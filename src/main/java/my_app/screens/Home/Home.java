@@ -4,7 +4,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import my_app.components.canvaComponent.CanvaComponent;
-import my_app.screens.Home.leftside.LeftSide;
+import my_app.screens.Home.components.RightSide;
+import my_app.screens.Home.components.leftside.LeftSide;
 
 public class Home extends BorderPane {
 

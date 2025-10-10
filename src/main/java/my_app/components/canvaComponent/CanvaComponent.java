@@ -53,7 +53,6 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         enableDrag(node, relX, relY);
 
         getChildren().add(node);
-
     }
 
     public void addElementDragable(Node node, boolean putInCenter) {
@@ -73,7 +72,6 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
             Shake(node);
         });
 
-        ComponentsContext.SelectNode(node);
         AnimateOnEntry(node);
 
         getChildren().add(node);

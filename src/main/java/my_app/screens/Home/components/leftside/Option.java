@@ -1,4 +1,4 @@
-package my_app.screens.Home.leftside;
+package my_app.screens.Home.components.leftside;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,7 +21,7 @@ import toolkit.Component;
 
 public class Option extends VBox {
     BooleanProperty expanded = new SimpleBooleanProperty(false);
-    VBox subItems = new VBox();
+    VBox subItemsContainer = new VBox();
     String type;
 
     SubItemsContext context = SubItemsContext.getInstance();
@@ -39,28 +39,23 @@ public class Option extends VBox {
         OptionHeader header = new OptionHeader(type, home, this::handleHeaderClick);
 
         getChildren().add(header);
-        getChildren().add(subItems);
+        getChildren().add(subItemsContainer);
 
         System.out.println(this.type);
-
-        loadSubItems();
 
         SubItemsContext.leftItemsStateRefreshed.addListener((a, b, val) -> {
             loadSubItems();
         });
 
-        subItems.managedProperty().bind(expanded);
-        subItems.visibleProperty().bind(expanded);
+        subItemsContainer.managedProperty().bind(expanded);
+        subItemsContainer.visibleProperty().bind(expanded);
 
-        subItems.setPadding(new Insets(5, 0, 0, 20));
-        subItems.setSpacing(2);
-
-        subItems.managedProperty().bind(expanded);
-
+        subItemsContainer.setPadding(new Insets(5, 0, 0, 20));
+        subItemsContainer.setSpacing(2);
     }
 
     private void loadSubItems() {
-        subItems.getChildren().clear();
+        subItemsContainer.getChildren().clear();
 
         ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
 
@@ -70,7 +65,8 @@ public class Option extends VBox {
 
             HBox subItemBox = createSubItemBox(itemId);
 
-            subItems.getChildren().add(subItemBox);
+            subItemsContainer.getChildren().add(subItemBox);
+
         }
     }
 
@@ -89,6 +85,7 @@ public class Option extends VBox {
         // Checa o estado atual NA HORA DA CRIAÇÃO
         if (ComponentsContext.CurrentNodeIsSelected(itemId)) {
             subItemBox.setStyle("-fx-background-color: red;");
+            expanded.set(true);
         }
 
         subItemBox.setOnMouseClicked(e -> {

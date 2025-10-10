@@ -1,4 +1,4 @@
-package my_app.screens.Home;
+package my_app.screens.Home.components;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;

@@ -1,4 +1,4 @@
-package my_app.screens.Home.leftside;
+package my_app.screens.Home.components.leftside;
 
 import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
 import org.kordamp.ikonli.javafx.FontIcon;
