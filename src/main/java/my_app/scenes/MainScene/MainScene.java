@@ -2,8 +2,6 @@ package my_app.scenes.MainScene;
 
 import java.io.File;
 
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -46,18 +44,16 @@ public class MainScene extends Scene {
         HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
         VBox.setVgrow(mainView.getChildren().get(1), Priority.ALWAYS);
 
-        itemSalvar.setOnAction(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
+        itemSalvar.setOnAction(_ -> saveSceneInJsonFile(new File(FileName), home.canva));
 
-        itemCarregar.setOnAction(ev -> {
+        itemCarregar.setOnAction(_ -> {
             // generateJavaCode(home.canvaChildren());
             loadSceneFromJsonFile(new File(FileName));
         });
 
-        itemShowCode.setOnAction(ev -> {
-            handleShowJavaCode(home.canva.getChildren());
-        });
+        itemShowCode.setOnAction(_ -> handleShowJavaCode(home.canva));
 
-        stage.setOnCloseRequest(ev -> saveSceneInJsonFile(new File(FileName), home.canva));
+        stage.setOnCloseRequest(_ -> saveSceneInJsonFile(new File(FileName), home.canva));
 
         return mainView;
     }
@@ -70,8 +66,8 @@ public class MainScene extends Scene {
         ComponentsContext.loadJsonState(file, home.canva);
     }
 
-    private static void handleShowJavaCode(ObservableList<Node> nodesInCanva) {
-        new ShowCode(nodesInCanva)
+    private static void handleShowJavaCode(CanvaComponent canvaComponent) {
+        new ShowCode(canvaComponent)
                 .abrir();
 
     }

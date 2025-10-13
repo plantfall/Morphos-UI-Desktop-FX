@@ -13,5 +13,15 @@ public class Screen extends Pane {
     TextField input1 = new TextField("picapau");
 
     {
+        getChildren().addAll(text1, button1);
+
+        setup();
+        styles();
+    }
+
+    void setup() {
+    }
+
+    void styles() {
     }
 }
