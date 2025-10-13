@@ -1,11 +1,14 @@
 package my_app.screens.ShowCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.canvaComponent.CanvaComponent;
@@ -19,6 +22,7 @@ public class ShowCodeController {
                 .append("import javafx.scene.control.*;\n")
                 .append("import javafx.scene.text.*;\n")
                 .append("import javafx.scene.image.*;\n")
+                .append("import javafx.scene.image.Image;*;\n")
                 .append("import javafx.scene.layout.*;\n")
                 .append("import javafx.scene.paint.Color;\n")
                 .append("import javafx.stage.Stage;");
@@ -54,7 +58,7 @@ public class ShowCodeController {
         // setup(){
         code.append("\tvoid setup(){\n\t\t");
 
-        String config = "this.setPrefSize(%.0f, %.0f);\n\t".formatted(
+        String config = "this.setPrefSize(%.0f, %.0f);\n\t\t".formatted(
                 canvaComponent.getPrefWidth(),
                 canvaComponent.getPrefHeight());
         code.append(config);
@@ -153,35 +157,26 @@ public class ShowCodeController {
 
         sb.append("\t\tgetChildren().addAll(\n\t\t");
 
-        for (int i = 0; i < nodesInCanva.size(); i++) {
-            Node node = nodesInCanva.get(i);
+        List<String> components = new ArrayList<>();
 
+        for (Node node : nodesInCanva) {
             if (node instanceof TextComponent) {
                 textCount++;
-                String compName = "text%d,\n\t\t".formatted(textCount);
-                sb.append(compName);
-            }
-
-            if (node instanceof Button) {
+                components.add("text" + textCount);
+            } else if (node instanceof Button) {
                 btnCount++;
-                String compName = "button%d,\n\t\t".formatted(btnCount);
-                sb.append(compName);
-            }
-
-            if (node instanceof ImageComponent) {
+                components.add("button" + btnCount);
+            } else if (node instanceof ImageComponent) {
                 imgCount++;
-                String compName = "imgV%d,\n\t\t".formatted(imgCount);
-                // sb.append(compName);
-            }
-
-            if (node instanceof InputComponent) {
+                components.add("imgV" + imgCount);
+            } else if (node instanceof InputComponent) {
                 inputCount++;
-                String compName = "input%d,\n\t\t".formatted(inputCount);
-                sb.append(compName);
+                components.add("input" + inputCount);
             }
         }
 
-        sb.append(");\n");
+        sb.append(String.join(",\n\t\t", components));
+        sb.append("\n\t\t);\n");
 
         callBackCodeStr.accept(sb);
     }
@@ -202,8 +197,8 @@ public class ShowCodeController {
             if (node instanceof TextComponent) {
                 textCount++;
 
-                String setX = String.format(Locale.US, "text%d.setLayoutX(%f);\n\t", textCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "text%d.setLayoutY(%f);\n\t", textCount, node.getLayoutY());
+                String setX = String.format(Locale.US, "text%d.setLayoutX(%f);\n\t\t", textCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "text%d.setLayoutY(%f);\n\t\t", textCount, node.getLayoutY());
 
                 sb.append(setX);
                 sb.append(setY);
@@ -212,38 +207,48 @@ public class ShowCodeController {
             if (node instanceof Button) {
                 btnCount++;
 
-                String setX = String.format(Locale.US, "button%d.setLayoutX(%f);\n\t", btnCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "button%d.setLayoutY(%f);\n\t", btnCount, node.getLayoutY());
+                String setX = String.format(Locale.US, "button%d.setLayoutX(%f);\n\t\t", btnCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "button%d.setLayoutY(%f);\n\t\t", btnCount, node.getLayoutY());
 
                 sb.append(setX);
                 sb.append(setY);
             }
 
-            if (node instanceof ImageComponent) {
-                var component = (ImageComponent) node;
+            if (node instanceof ImageComponent component) {
 
                 imgCount++;
 
-                String setX = String.format(Locale.US, "imgV%d.setLayoutX(%f);\n\t", imgCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "imgV%d.setLayoutY(%f);\n\t", imgCount, node.getLayoutY());
+                String setX = String.format(Locale.US, "imgV%d.setLayoutX(%f);\n\t\t", imgCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "imgV%d.setLayoutY(%f);\n\t\t", imgCount, node.getLayoutY());
 
-                // sb.append(setX);
-                // sb.append(setY);
+                Image img = component.getImage();
 
-                // String btnCreation = "ImageView imgV%d = new
-                // ImageView(\"%s\");\n\t".formatted(imgCount, btnText);
-                // sb.append(btnCreation);
+                String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
 
-                String imgViewCreation = "ImageView imgV%d = new ImageView();\n\t".formatted(imgCount);
+                sb.append(setX);
+                sb.append(setY);
 
-                // sb.append(imgViewCreation);
+                String urlstr = "final var url = \"%s\";\n\t\t".formatted(url);
+
+                sb.append(urlstr);
+                String imgViewCreation = "imgV%d.setImage(new Image(url));\n\t\t".formatted(imgCount, urlstr);
+
+                var h = component.getFitHeight();
+                var w = component.getFitWidth();
+                String wstr = "imgV%d.setFitWidth(%.0f);\n\t\t".formatted(imgCount, w);
+                String hstr = "imgV%d.setFitHeight(%.0f);\n\t\t".formatted(imgCount, h);
+
+                sb.append(wstr);
+                sb.append(hstr);
+
+                sb.append(imgViewCreation);
             }
 
             if (node instanceof InputComponent) {
                 inputCount++;
 
-                String setX = String.format(Locale.US, "input%d.setLayoutX(%f);\n\t", inputCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "input%d.setLayoutY(%f);\n\t", inputCount, node.getLayoutY());
+                String setX = String.format(Locale.US, "input%d.setLayoutX(%f);\n\t\t", inputCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "input%d.setLayoutY(%f);\n\t\t", inputCount, node.getLayoutY());
 
                 sb.append(setX);
                 sb.append(setY);

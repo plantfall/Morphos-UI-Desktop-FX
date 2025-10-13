@@ -96,19 +96,7 @@
       "canva_id": null
     }
   ],
-  "image_components": [
-    {
-      "url": "file:/C:/Users/Eliezer/Documents/DEV/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg",
-      "width": 500.0,
-      "height": 200.0,
-      "x": 6.000000000000028,
-      "y": 9.999999999999986,
-      "preserve_ratio": true,
-      "identification": "1758983339743",
-      "in_canva": true,
-      "canva_id": "1758552551596"
-    }
-  ],
+  "image_components": [],
   "input_components": [
     {
       "text": "",
