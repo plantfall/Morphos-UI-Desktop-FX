@@ -1,9 +1,7 @@
 package my_app.screens.ShowCode;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -21,13 +19,11 @@ public class ShowCodeController {
         imports.append("import javafx.scene.Scene;\n")
                 .append("import javafx.scene.control.*;\n")
                 .append("import javafx.scene.text.*;\n")
-                .append("import javafx.scene.image.*;\n")
-                .append("import javafx.scene.image.Image;*;\n")
+                .append("import javafx.scene.image.ImageView;\n")
                 .append("import javafx.scene.layout.*;\n")
                 .append("import javafx.scene.paint.Color;\n")
                 .append("import javafx.stage.Stage;");
 
-        System.out.println("codigo gerado...\nImports:\n");
         System.out.println(imports.toString());
 
         return imports.toString();
@@ -39,16 +35,141 @@ public class ShowCodeController {
         ObservableList<Node> nodesInCanva = canvaComponent.getChildren();
         // codigo da classe
 
+        var componentsInstances = new ArrayList<String>();
+        var componentsInsideGetChildren = new ArrayList<String>();
+        var componentsInsideMethodSetup = new ArrayList<String>();
+        var componentsInsideMethodStyles = new ArrayList<String>();
+
+        int textCount = 0;
+        int btnCount = 0;
+        int imgCount = 0;
+        int inputCount = 0;
+
+        for (int i = 0; i < nodesInCanva.size(); i++) {
+            Node node = nodesInCanva.get(i);
+
+            if (node instanceof TextComponent) {
+                var component = (TextComponent) node;
+
+                textCount++;
+
+                String textText = component.getText();
+
+                String textCreation = "Text text%d = new Text(\"%s\");".formatted(textCount, textText);
+                componentsInstances.add(textCreation);
+                componentsInsideGetChildren.add("text" + textCount);
+
+                String setX = String.format(Locale.US, "text%d.setLayoutX(%f);", textCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "text%d.setLayoutY(%f);", textCount, node.getLayoutY());
+
+                componentsInsideMethodSetup.add(setX);
+                componentsInsideMethodSetup.add(setY);
+
+                String setStyle = "text%d.setStyle(\"%s\");".formatted(textCount, component.getStyle());
+                componentsInsideMethodStyles.add(setStyle);
+            }
+
+            if (node instanceof Button) {
+                var component = (Button) node;
+
+                btnCount++;
+
+                String btnText = component.getText();
+
+                String btnCreation = "Button button%d = new Button(\"%s\");".formatted(btnCount, btnText);
+                componentsInstances.add(btnCreation);
+                componentsInsideGetChildren.add("button" + btnCount);
+
+                String setX = String.format(Locale.US, "button%d.setLayoutX(%f);", btnCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "button%d.setLayoutY(%f);", btnCount, node.getLayoutY());
+
+                componentsInsideMethodSetup.add(setX);
+                componentsInsideMethodSetup.add(setY);
+
+                String setStyle = "button%d.setStyle(\"%s\");".formatted(btnCount, component.getStyle());
+                componentsInsideMethodStyles.add(setStyle);
+            }
+
+            if (node instanceof ImageComponent component) {
+
+                imgCount++;
+
+                String imgViewCreation = "ImageView imgV%d = new ImageView();".formatted(imgCount);
+                componentsInstances.add(imgViewCreation);
+
+                componentsInsideGetChildren.add("imgV" + imgCount);
+
+                Image img = component.getImage();
+
+                String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
+
+                String urlstr = "final var url = \"%s\";".formatted(url);
+
+                String setX = String.format(Locale.US, "imgV%d.setLayoutX(%f);", imgCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "imgV%d.setLayoutY(%f);", imgCount, node.getLayoutY());
+
+                String setImageStr = "imgV%d.setImage(new Image(url));".formatted(imgCount, urlstr);
+
+                var h = component.getFitHeight();
+                var w = component.getFitWidth();
+                String wstr = "imgV%d.setFitWidth(%.0f);".formatted(imgCount, w);
+                String hstr = "imgV%d.setFitHeight(%.0f);".formatted(imgCount, h);
+
+                // inside setup
+                componentsInsideMethodSetup.add(urlstr);
+                componentsInsideMethodSetup.add(wstr);
+                componentsInsideMethodSetup.add(hstr);
+
+                componentsInsideMethodSetup.add(setImageStr);
+                componentsInsideMethodSetup.add(setX);
+                componentsInsideMethodSetup.add(setY);
+
+                String setStyle = "imgV%d.setStyle(\"%s\");".formatted(imgCount, component.getStyle());
+                componentsInsideMethodStyles.add(setStyle);
+            }
+
+            if (node instanceof InputComponent component) {
+
+                inputCount++;
+
+                String textText = component.getText();
+
+                String textCreation = "TextField input%d = new TextField(\"%s\");".formatted(inputCount, textText);
+                componentsInstances.add(textCreation);
+                componentsInsideGetChildren.add("input" + inputCount);
+
+                String setX = String.format(Locale.US, "input%d.setLayoutX(%f);", inputCount, node.getLayoutX());
+                String setY = String.format(Locale.US, "input%d.setLayoutY(%f);", inputCount, node.getLayoutY());
+                String setPromptText = "input%d.setPromptText(\"%s\");".formatted(inputCount,
+                        component.getPromptText());
+
+                componentsInsideMethodSetup.add(setX);
+                componentsInsideMethodSetup.add(setY);
+                componentsInsideMethodSetup.add(setPromptText);
+
+                String setStyle = "input%d.setStyle(\"%s\");".formatted(inputCount, component.getStyle());
+                componentsInsideMethodStyles.add(setStyle);
+            }
+
+            // Você pode expandir para outros componentes...
+        }
+
         StringBuilder code = new StringBuilder();
         code
-                .append("public class Screen extends Pane {\n\t");
+                .append("class Screen extends Pane {\n\t");
 
-        handleComponentsCreationBellowClass(nodesInCanva, str -> code.append(str));
+        // componentsInstances.
+
+        code.append(String.join("\n\t", componentsInstances));
 
         code.append("\n\t{\n");
         // restante aqui da implementação
 
-        handleComponentsInsideGetChildren(nodesInCanva, str -> code.append(str));
+        // getChildren().addAll(
+        code.append("\n\t\tgetChildren().addAll(\n\t\t");
+        code.append(String.join(",\n\t\t", componentsInsideGetChildren));
+        code.append("\n\t\t);\n");
+        // )
 
         code.append("\t\tsetup();\n");
         code.append("\t\tstyles();\n");
@@ -63,259 +184,20 @@ public class ShowCodeController {
                 canvaComponent.getPrefHeight());
         code.append(config);
 
-        handleComponentsInsideSetupMethod(nodesInCanva, str -> code.append(str));
-        code.append("\t}\n\n");
+        code.append(String.join("\n\t\t", componentsInsideMethodSetup));
+        code.append("\n\t  }\n\n");
         // }
 
         // styles(){
         code.append("\tvoid styles(){\n\t\t");
-        handleComponentsInsideStylesMethod(nodesInCanva, str -> code.append(str));
-        code.append("\t}\n");
+        code.append(String.join("\n\t\t", componentsInsideMethodStyles));
+        code.append("\n\t  }\n\n");
         // }
 
         code.append("}");
 
         System.out.println(code.toString());
         return code.toString();
-    }
-
-    private void handleComponentsCreationBellowClass(ObservableList<Node> nodesInCanva,
-            Consumer<StringBuilder> callBackCodeStr) {
-
-        StringBuilder sb = new StringBuilder();
-
-        int textCount = 0;
-        int btnCount = 0;
-        int imgCount = 0;
-        int inputCount = 0;
-
-        for (int i = 0; i < nodesInCanva.size(); i++) {
-            Node node = nodesInCanva.get(i);
-
-            if (node instanceof TextComponent) {
-                var component = (TextComponent) node;
-
-                textCount++;
-
-                String textText = component.getText();
-
-                String textCreation = "Text text%d = new Text(\"%s\");\n\t".formatted(textCount, textText);
-                sb.append(textCreation);
-            }
-
-            if (node instanceof Button) {
-                var component = (Button) node;
-
-                btnCount++;
-
-                String btnText = component.getText();
-
-                String btnCreation = "Button button%d = new Button(\"%s\");\n\t".formatted(btnCount, btnText);
-                sb.append(btnCreation);
-            }
-
-            if (node instanceof ImageComponent) {
-                var component = (ImageComponent) node;
-
-                imgCount++;
-
-                // String btnCreation = "ImageView imgV%d = new
-                // ImageView(\"%s\");\n\t".formatted(imgCount, btnText);
-                // sb.append(btnCreation);
-
-                String imgViewCreation = "ImageView imgV%d = new ImageView();\n\t".formatted(imgCount);
-
-                sb.append(imgViewCreation);
-            }
-
-            if (node instanceof InputComponent) {
-                var component = (InputComponent) node;
-
-                inputCount++;
-
-                String textText = component.getText();
-
-                String textCreation = "TextField input%d = new TextField(\"%s\");\n\t".formatted(inputCount, textText);
-                sb.append(textCreation);
-            }
-
-            // Você pode expandir para outros componentes...
-        }
-
-        callBackCodeStr.accept(sb);
-    }
-
-    private void handleComponentsInsideGetChildren(ObservableList<Node> nodesInCanva,
-            Consumer<StringBuilder> callBackCodeStr) {
-
-        StringBuilder sb = new StringBuilder();
-
-        int textCount = 0;
-        int btnCount = 0;
-        int imgCount = 0;
-        int inputCount = 0;
-
-        sb.append("\t\tgetChildren().addAll(\n\t\t");
-
-        List<String> components = new ArrayList<>();
-
-        for (Node node : nodesInCanva) {
-            if (node instanceof TextComponent) {
-                textCount++;
-                components.add("text" + textCount);
-            } else if (node instanceof Button) {
-                btnCount++;
-                components.add("button" + btnCount);
-            } else if (node instanceof ImageComponent) {
-                imgCount++;
-                components.add("imgV" + imgCount);
-            } else if (node instanceof InputComponent) {
-                inputCount++;
-                components.add("input" + inputCount);
-            }
-        }
-
-        sb.append(String.join(",\n\t\t", components));
-        sb.append("\n\t\t);\n");
-
-        callBackCodeStr.accept(sb);
-    }
-
-    private void handleComponentsInsideSetupMethod(ObservableList<Node> nodesInCanva,
-            Consumer<StringBuilder> callBackCodeStr) {
-
-        StringBuilder sb = new StringBuilder();
-
-        int textCount = 0;
-        int btnCount = 0;
-        int imgCount = 0;
-        int inputCount = 0;
-
-        for (int i = 0; i < nodesInCanva.size(); i++) {
-            Node node = nodesInCanva.get(i);
-
-            if (node instanceof TextComponent) {
-                textCount++;
-
-                String setX = String.format(Locale.US, "text%d.setLayoutX(%f);\n\t\t", textCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "text%d.setLayoutY(%f);\n\t\t", textCount, node.getLayoutY());
-
-                sb.append(setX);
-                sb.append(setY);
-            }
-
-            if (node instanceof Button) {
-                btnCount++;
-
-                String setX = String.format(Locale.US, "button%d.setLayoutX(%f);\n\t\t", btnCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "button%d.setLayoutY(%f);\n\t\t", btnCount, node.getLayoutY());
-
-                sb.append(setX);
-                sb.append(setY);
-            }
-
-            if (node instanceof ImageComponent component) {
-
-                imgCount++;
-
-                String setX = String.format(Locale.US, "imgV%d.setLayoutX(%f);\n\t\t", imgCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "imgV%d.setLayoutY(%f);\n\t\t", imgCount, node.getLayoutY());
-
-                Image img = component.getImage();
-
-                String url = (img != null && img.getUrl() != null) ? img.getUrl() : "";
-
-                sb.append(setX);
-                sb.append(setY);
-
-                String urlstr = "final var url = \"%s\";\n\t\t".formatted(url);
-
-                sb.append(urlstr);
-                String imgViewCreation = "imgV%d.setImage(new Image(url));\n\t\t".formatted(imgCount, urlstr);
-
-                var h = component.getFitHeight();
-                var w = component.getFitWidth();
-                String wstr = "imgV%d.setFitWidth(%.0f);\n\t\t".formatted(imgCount, w);
-                String hstr = "imgV%d.setFitHeight(%.0f);\n\t\t".formatted(imgCount, h);
-
-                sb.append(wstr);
-                sb.append(hstr);
-
-                sb.append(imgViewCreation);
-            }
-
-            if (node instanceof InputComponent) {
-                inputCount++;
-
-                String setX = String.format(Locale.US, "input%d.setLayoutX(%f);\n\t\t", inputCount, node.getLayoutX());
-                String setY = String.format(Locale.US, "input%d.setLayoutY(%f);\n\t\t", inputCount, node.getLayoutY());
-
-                sb.append(setX);
-                sb.append(setY);
-
-            }
-
-            // Você pode expandir para outros componentes...
-        }
-
-        callBackCodeStr.accept(sb);
-    }
-
-    private void handleComponentsInsideStylesMethod(ObservableList<Node> nodesInCanva,
-            Consumer<StringBuilder> callBackCodeStr) {
-
-        StringBuilder sb = new StringBuilder();
-
-        int textCount = 0;
-        int btnCount = 0;
-        int imgCount = 0;
-        int inputCount = 0;
-
-        for (int i = 0; i < nodesInCanva.size(); i++) {
-            Node node = nodesInCanva.get(i);
-
-            if (node instanceof TextComponent) {
-                var component = (TextComponent) node;
-
-                textCount++;
-
-                String setStyle = "text%d.setStyle(\"%s\");\n\t\t".formatted(textCount, component.getStyle());
-
-                sb.append(setStyle);
-            }
-
-            if (node instanceof Button) {
-                var component = (Button) node;
-
-                btnCount++;
-
-                String setStyle = "button%d.setStyle(\"%s\");\n\t\t".formatted(btnCount, component.getStyle());
-
-                sb.append(setStyle);
-            }
-
-            if (node instanceof ImageComponent) {
-                var component = (ImageComponent) node;
-
-                imgCount++;
-                String setStyle = "imgV%d.setStyle(\"%s\");\n\t\t".formatted(imgCount, component.getStyle());
-
-                sb.append(setStyle);
-            }
-
-            if (node instanceof InputComponent) {
-                var component = (InputComponent) node;
-
-                inputCount++;
-
-                String setStyle = "input%d.setStyle(\"%s\");\n\t\t".formatted(inputCount, component.getStyle());
-
-                sb.append(setStyle);
-            }
-
-        }
-
-        callBackCodeStr.accept(sb);
     }
 
 }

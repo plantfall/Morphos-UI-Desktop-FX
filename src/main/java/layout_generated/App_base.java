@@ -35,7 +35,6 @@ class Screen extends Pane {
     Button button1 = new Button("Abrir chamado");
     ImageView imgV1 = new ImageView();
     TextField input1 = new TextField("");
-
     {
         getChildren().addAll(
                 text1,
@@ -52,21 +51,23 @@ class Screen extends Pane {
         text1.setLayoutY(40.019531);
         button1.setLayoutX(84.000000);
         button1.setLayoutY(59.000000);
-        imgV1.setLayoutX(653.000000);
-        imgV1.setLayoutY(27.000000);
         final var url = "file:/C:/dev/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg";
         imgV1.setFitWidth(100);
         imgV1.setFitHeight(100);
         imgV1.setImage(new Image(url));
+        imgV1.setLayoutX(653.000000);
+        imgV1.setLayoutY(27.000000);
         input1.setLayoutX(86.000000);
         input1.setLayoutY(126.000000);
+        input1.setPromptText("digite seu nome");
     }
 
     void styles() {
         text1.setStyle("-fx-fill:black;-fx-font-size:16;-fx-font-weight:normal;");
         button1.setStyle(
-                "-fx-background-color:#664db3;-fx-padding:10;-fx-font-weight:normal;-fx-background-radius:3;-fx-border-radius:3;-fx-text-fill:white;-fx-font-size: 16;-fx-border-width: 0;");
+                "-fx-background-color:#664db3;-fx-padding:10 10 10 10;-fx-font-weight:normal;-fx-background-radius:3;-fx-border-radius:3;-fx-text-fill:white;-fx-font-size: 16;-fx-border-width: 0;");
         imgV1.setStyle("");
-        input1.setStyle("-fx-text-fill: #4d8080;-fx-font-size: 13;-fx-font-weight:normal;");
+        input1.setStyle("-fx-text-fill:#4d8080;-fx-font-size:13;-fx-font-weight:normal;");
     }
+
 }
