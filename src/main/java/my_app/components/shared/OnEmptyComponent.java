@@ -1,7 +1,7 @@
 package my_app.components.shared;
 
 import javafx.beans.property.SimpleStringProperty;
-import my_app.components.columnComponent.ColumnItens;
+import my_app.components.columnComponent.ColumnComponent;
 
 // OnEmptyComponent Refatorado (FINAL)
 public class OnEmptyComponent extends BaseChildSelectorComponent {
@@ -9,7 +9,7 @@ public class OnEmptyComponent extends BaseChildSelectorComponent {
     private final SimpleStringProperty onEmptyComponentState;
 
     // A assinatura do construtor deve ser atualizada para SimpleStringProperty
-    public OnEmptyComponent(ColumnItens nodeTarget, SimpleStringProperty onEmptyComponentState) {
+    public OnEmptyComponent(ColumnComponent nodeTarget, SimpleStringProperty onEmptyComponentState) {
 
         // Passa o rótulo e o valor inicial (que é apenas o ID)
         super(nodeTarget, "On Empty:", onEmptyComponentState.get());
@@ -27,7 +27,7 @@ public class OnEmptyComponent extends BaseChildSelectorComponent {
     }
 
     @Override
-    protected void setupChangeListener(ColumnItens nodeTarget) {
+    protected void setupChangeListener(ColumnComponent nodeTarget) {
         // O listener agora simplesmente seta o ID na SimpleStringProperty.
         combo.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {

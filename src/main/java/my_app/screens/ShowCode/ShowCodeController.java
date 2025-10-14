@@ -176,6 +176,8 @@ public class ShowCodeController {
 
         code.append("\t}\n\n");
 
+        // p.setBack
+
         // setup(){
         code.append("\tvoid setup(){\n\t\t");
 
@@ -184,12 +186,18 @@ public class ShowCodeController {
                 canvaComponent.getPrefHeight());
         code.append(config);
 
+        // String config = "this.setPrefSize(%.0f, %.0f);\n\t\t".formatted(
+        // canvaComponent.getPrefWidth(),
+        // canvaComponent.getPrefHeight());
+        // code.append(config);
+
         code.append(String.join("\n\t\t", componentsInsideMethodSetup));
         code.append("\n\t  }\n\n");
         // }
 
         // styles(){
         code.append("\tvoid styles(){\n\t\t");
+        code.append("setStyle(\"%s\");\n\t\t".formatted(canvaComponent.getStyle()));
         code.append(String.join("\n\t\t", componentsInsideMethodStyles));
         code.append("\n\t  }\n\n");
         // }

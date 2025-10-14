@@ -1,15 +1,17 @@
 package my_app.components;
 
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import my_app.data.Commons;
-import my_app.data.ImageComponentData;
-import my_app.data.ViewContract;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import my_app.components.shared.HeightComponent;
+import my_app.components.shared.PreserveRatioComponent;
+import my_app.components.shared.WidthComponent;
+import my_app.data.Commons;
+import my_app.data.ImageComponentData;
+import my_app.data.ViewContract;
 
 public class ImageComponent extends ImageView implements ViewContract<ImageComponentData> {
 
@@ -21,11 +23,13 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
     }
 
     public ImageComponent(String sourcePath) {
-        super(new Image(sourcePath));
+        super(new Image(sourcePath, true));
+        // 'true' ativa carregamento assíncrono
         config();
     }
 
     void config() {
+
         setFitWidth(size);
         setFitHeight(size);
         setPreserveRatio(true);
@@ -36,37 +40,17 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
     @Override
     public void appearance(Pane father) {
-
-        Text title = new Text("Image Appearance");
-
-        father.getChildren().setAll(title);
+        father.getChildren().setAll(
+                new WidthComponent(this),
+                new HeightComponent(this),
+                new PreserveRatioComponent(this));
     }
 
     @Override
     public void settings(Pane father) {
 
-        var widthRow = new ItemRowComponent("Width", String.valueOf(getFitWidth()), newVal -> {
-            if (!newVal.isBlank()) {
-                try {
-                    double v = Double.parseDouble(newVal);
-                    setFitWidth(v);
-                } catch (NumberFormatException ignored) {
-                }
-            }
-        });
-
-        var heightRow = new ItemRowComponent("Height", String.valueOf(getFitWidth()), newVal -> {
-            if (!newVal.isBlank()) {
-                try {
-                    double v = Double.parseDouble(newVal);
-                    setFitHeight(v);
-                } catch (NumberFormatException ignored) {
-                }
-            }
-        });
-
         father.getChildren().setAll(
-                new LayoutPositionComponent(currentState), widthRow, heightRow);
+                new LayoutPositionComponent(currentState));
     }
 
     @Override

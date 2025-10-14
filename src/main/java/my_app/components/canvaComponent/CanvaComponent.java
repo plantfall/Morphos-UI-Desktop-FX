@@ -16,6 +16,8 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import my_app.components.shared.HeightComponent;
+import my_app.components.shared.WidthComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.CanvaProps;
 import my_app.data.Commons;

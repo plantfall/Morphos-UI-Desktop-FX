@@ -11,9 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import my_app.components.buttonComponent.ButtonComponent;
-import my_app.components.canvaComponent.HeightComponent;
-import my_app.components.canvaComponent.WidthComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.components.shared.HeightComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
@@ -210,7 +209,7 @@ public class CustomComponent extends Pane implements ViewContract<CustomComponen
 
         father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
                 applyUrl,
-                new WidthComponent(this),
+                new my_app.components.shared.WidthComponent(this),
                 new HeightComponent(this));
     }
 
