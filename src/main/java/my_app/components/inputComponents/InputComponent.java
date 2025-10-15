@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import my_app.components.LayoutPositionComponent;
+import my_app.components.shared.ButtonRemoverComponent;
 import my_app.components.shared.FontColorPicker;
 import my_app.components.shared.FontSizeComponent;
 import my_app.components.shared.FontWeightComponent;
@@ -58,7 +59,8 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
                 new FontSizeComponent(currentState),
-                new PromptTextComponent(currentState));
+                new PromptTextComponent(currentState),
+                new ButtonRemoverComponent(this));
     }
 
     @Override

@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import my_app.components.LayoutPositionComponent;
+import my_app.components.shared.ButtonRemoverComponent;
 import my_app.components.shared.ChildHandlerComponent;
 import my_app.components.shared.ItemsAmountPreviewComponent;
 import my_app.contexts.ComponentsContext;
@@ -85,7 +86,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
             }
 
             // Busca o nó original pelo ID e faz a DEEP COPY
-            var op = ComponentsContext.SearchNodeByIdInNodesList(emptyComponentId);
+            var op = ComponentsContext.SearchNodeById(emptyComponentId);
 
             op.ifPresent(existingNode -> {
                 if (existingNode instanceof ViewContract existingView) {
@@ -111,7 +112,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
         String currentChildId = currentChildIdState.get();
 
         // Recriação de CustomComponents (DEEP COPY)
-        var op = ComponentsContext.SearchNodeByIdInNodesList(currentChildId);
+        var op = ComponentsContext.SearchNodeById(currentChildId);
 
         op.ifPresent(existingNode -> {
             // ** Universalização: Usamos ViewContract e a Fábrica **
@@ -141,7 +142,8 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
         father.getChildren().setAll(
                 new ChildHandlerComponent("Child component:", this, currentChildIdState),
                 new ItemsAmountPreviewComponent(this),
-                new ChildHandlerComponent("Component (if empty):", this, onEmptyComponentState));
+                new ChildHandlerComponent("Component (if empty):", this, onEmptyComponentState),
+                new ButtonRemoverComponent(this));
     }
 
     @Override

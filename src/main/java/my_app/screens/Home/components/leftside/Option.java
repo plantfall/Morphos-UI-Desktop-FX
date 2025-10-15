@@ -2,9 +2,9 @@ package my_app.screens.Home.components.leftside;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -41,7 +41,9 @@ public class Option extends VBox {
 
         System.out.println(this.type);
 
-        SubItemsContext.leftItemsStateRefreshed.addListener((a, b, val) -> {
+        loadSubItems();
+
+        ComponentsContext.leftItemsStateRefreshed.addListener((_, _, _) -> {
             loadSubItems();
         });
 
@@ -55,16 +57,14 @@ public class Option extends VBox {
     private void loadSubItems() {
         subItemsContainer.getChildren().clear();
 
-        ObservableList<SimpleStringProperty> itemsProperties = context.getItemsByType(type);
+        ObservableList<Node> nodes = ComponentsContext.getItemsByType(type);
 
-        for (int i = 0; i < itemsProperties.size(); i++) {
-            SimpleStringProperty itemProperty = itemsProperties.get(i);
-            String itemId = itemProperty.get();
+        for (int i = 0; i < nodes.size(); i++) {
+            String itemId = nodes.get(i).getId();
 
             HBox subItemBox = createSubItemBox(itemId);
 
             subItemsContainer.getChildren().add(subItemBox);
-
         }
     }
 
@@ -80,11 +80,14 @@ public class Option extends VBox {
         subItemBox.getChildren().add(subLabel);
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
-        // Checa o estado atual NA HORA DA CRIAÇÃO
-        if (ComponentsContext.CurrentNodeIsSelected(itemId)) {
-            subItemBox.setStyle("-fx-background-color: red;");
-            expanded.set(true);
-        }
+        // Estilo inicial:
+        updateSubItemStyle(subItemBox, itemId);
+
+        // Adiciona um listener para que, se o nó for selecionado/deselecionado, o
+        // estilo mude
+        ComponentsContext.nodeSelected.addListener((obs, oldNode, newNode) -> {
+            updateSubItemStyle(subItemBox, itemId);
+        });
 
         subItemBox.setOnMouseClicked(e -> {
             onClickOnSubItem(itemId, this.type, home.canva);
@@ -105,14 +108,24 @@ public class Option extends VBox {
         return subItemBox;
     }
 
+    // Método auxiliar para aplicar/remover o estilo de seleção
+    private void updateSubItemStyle(HBox subItemBox, String itemId) {
+        if (ComponentsContext.nodeSelected.get() != null && ComponentsContext.CurrentNodeIsSelected(itemId)) {
+            subItemBox.setStyle("-fx-background-color: red;");
+            expanded.set(true); // Opcional: Expande o menu se o nó for selecionado
+        } else {
+            subItemBox.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
     void onClickOnSubItem(String itemIdentification, String type,
             CanvaComponent mainCanvaComponent) {
 
         var canvaChildren = mainCanvaComponent.getChildren();
 
-        var op = ComponentsContext.SearchNodeByIdInNodesList(itemIdentification);
+        var op = ComponentsContext.SearchNodeById(itemIdentification);
 
-        op.ifPresent(state -> {
+        op.ifPresent(_ -> {
             var target = ComponentsContext.SearchNodeByIdInMainCanva(itemIdentification, canvaChildren);
             // 2. finded in main canva so, selected
             if (target != null) {

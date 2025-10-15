@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import my_app.components.shared.ButtonRemoverComponent;
 import my_app.components.shared.FontColorPicker;
 import my_app.components.shared.FontSizeComponent;
 import my_app.components.shared.FontWeightComponent;
@@ -36,9 +37,8 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
                 new FontWeightComponent(currentState),
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
-                new FontSizeComponent(currentState)
-
-        );
+                new FontSizeComponent(currentState),
+                new ButtonRemoverComponent(this));
     }
 
     @Override

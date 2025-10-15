@@ -1,17 +1,16 @@
 package my_app.contexts;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import my_app.components.CustomComponent;
@@ -36,34 +35,40 @@ public class ComponentsContext {
 
     private static ComponentsContext instance;
 
-    public static final BooleanProperty stateLoaded = new SimpleBooleanProperty(false);
+    private static ObservableMap<String, ObservableList<Node>> dataMap = FXCollections
+            .observableHashMap();
 
     public static SimpleObjectProperty<Node> nodeSelected = new SimpleObjectProperty<>();
 
-    static SubItemsContext subItemsContext = SubItemsContext.getInstance();
-
-    public static ObservableList<Node> nodes = FXCollections.observableArrayList(new ArrayList<>());
-
     public static SimpleStringProperty headerSelected = new SimpleStringProperty(null);
+
+    public static SimpleBooleanProperty leftItemsStateRefreshed = new SimpleBooleanProperty(false);
+
+    private static CanvaComponent mainCanvaComponent;
 
     public static boolean CurrentNodeIsSelected(String nodeId) {
         return nodeSelected.get().getId().equals(nodeId);
     }
 
     public static void loadJsonState(File file, CanvaComponent canvaComponent, Stage stage) {
-        ObjectMapper om = new ObjectMapper();
         canvaComponent.getChildren().clear();
-        nodes.clear();
-        subItemsContext.clearAllItems();
+
+        mainCanvaComponent = canvaComponent;
 
         String idOfComponentSelected = null;
+        nodeSelected.set(null);
+        headerSelected.set(null);
+        dataMap.clear();
+
+        ObjectMapper om = new ObjectMapper();
+
         if (!file.exists() || file.length() == 0) {
             return;
         }
 
         try {
             var state = om.readValue(file, StateJson_v2.class);
-            canvaComponent.applyData(state.canva);
+            mainCanvaComponent.applyData(state.canva);
 
             if (state.id_of_component_selected != null) {
                 idOfComponentSelected = state.id_of_component_selected;
@@ -72,12 +77,13 @@ public class ComponentsContext {
             for (TextComponentData data : state.text_components) {
                 TextComponent comp = new TextComponent(data.text());
                 comp.applyData(data);
-                nodes.add(comp);
+                // nodes.add(comp);
 
-                subItemsContext.addItem("text", data.identification());
+                // subItemsContext.addItem("text", data.identification());
+                addItem("text", comp);
 
                 if (data.in_canva()) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -86,11 +92,12 @@ public class ComponentsContext {
                 ButtonComponent comp = new ButtonComponent();
 
                 comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("button", data.identification());
+                // nodes.add(comp);
+                // subItemsContext.addItem("button", data.identification());
+                addItem("button", comp);
 
                 if (data.in_canva()) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -100,11 +107,11 @@ public class ComponentsContext {
                 comp.stage = stage;
 
                 comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("image", data.identification());
+                // nodes.add(comp);
 
+                addItem("image", comp);
                 if (data.in_canva()) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
                 }
             }
 
@@ -113,11 +120,12 @@ public class ComponentsContext {
                 InputComponent comp = new InputComponent("");
 
                 comp.applyData(data);
-                nodes.add(comp);
-                subItemsContext.addItem("input", data.identification());
+                // nodes.add(comp);
+
+                addItem("input", comp);
 
                 if (data.in_canva()) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
 
                 }
             }
@@ -126,12 +134,13 @@ public class ComponentsContext {
                 var comp = new CustomComponent();
 
                 comp.applyData(data);
-                nodes.add(comp);
+                // nodes.add(comp);
 
-                subItemsContext.addItem("component", data.identification);
+                // subItemsContext.addItem("component", data.identification);
+                addItem("component", comp);
 
                 if (data.in_canva) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
 
                 }
             }
@@ -140,19 +149,20 @@ public class ComponentsContext {
                 var comp = new ColumnComponent();
 
                 comp.applyData(data);
-                nodes.add(comp);
+                // nodes.add(comp);
 
-                subItemsContext.addItem("column items", data.identification());
+                // subItemsContext.addItem("column items", data.identification());
+                addItem("column items", comp);
 
                 if (data.in_canva()) {
-                    canvaComponent.addElementDragable(comp, false);
+                    mainCanvaComponent.addElementDragable(comp, false);
                 }
             }
 
-            SearchNodeByIdInNodesList(idOfComponentSelected).ifPresent(node -> SelectNode(node));
+            SearchNodeById(idOfComponentSelected).ifPresent(node -> SelectNode(node));
 
-            stateLoaded.set(true);
-            SubItemsContext.refreshSubItems();
+            leftItemsStateRefreshed.set(!leftItemsStateRefreshed.get());
+
             headerSelected.set(state.type_of_component_selected);
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,8 +170,16 @@ public class ComponentsContext {
 
     }
 
+    public static void addItem(String type, Node node) {
+        dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList())
+                .add(node);
+    }
+
+    public static ObservableList<Node> getItemsByType(String type) {
+        return dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList());
+    }
+
     public static void AddComponent(String type, Home home) {
-        SubItemsContext subItemsContext = SubItemsContext.getInstance();
 
         if (type == null || type.isBlank()) {
             return;
@@ -191,28 +209,28 @@ public class ComponentsContext {
         if (node != null) {
 
             String nodeId = node.getId();
-            nodes.add(node);
+            // nodes.add(node);
 
             nodeSelected.set(node);
 
             home.canva.addElementDragable(node, true);
-            subItemsContext.addItem(type.toLowerCase(), nodeId);
-            SubItemsContext.refreshSubItems();
+            addItem(type.toLowerCase(), node);
+            refreshSubItems();
         }
     }
 
     public void addCustomComponent(Node customComponent, CanvaComponent mainCanva) {
-        String nodeId = customComponent.getId();
-        nodes.add(customComponent); // Adiciona à lista mestre
-        subItemsContext.addItem("component", nodeId);
-        SubItemsContext.refreshSubItems();
+        // nodes.add(customComponent); // Adiciona à lista mestre
+        addItem("component", customComponent);
+        refreshSubItems();
     }
 
-    public static Optional<Node> SearchNodeByIdInNodesList(String nodeId) {
-        var op = nodes.stream().filter(it -> it.getId().equals(nodeId))
+    public static Optional<Node> SearchNodeById(String nodeId) {
+        return dataMap.values()
+                .stream()
+                .flatMap(list -> list.stream()) // Achata todas as listas em um único stream
+                .filter(node -> node.getId().equals(nodeId))
                 .findFirst();
-
-        return op;
     }
 
     public static Node SearchNodeByIdInMainCanva(String nodeId, ObservableList<Node> canvaChildren) {
@@ -227,7 +245,7 @@ public class ComponentsContext {
 
     public static void SelectNode(Node node) {
         nodeSelected.set(node);
-        SubItemsContext.refreshSubItems();
+        refreshSubItems();
         System.out.println("Selecionado: " + node);
     }
 
@@ -248,50 +266,103 @@ public class ComponentsContext {
 
     private static StateJson_v2 CreateStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
-        jsonTarget.id_of_component_selected = ComponentsContext.nodeSelected.get().getId();
+        jsonTarget.id_of_component_selected = ComponentsContext.nodeSelected.get() == null ? null
+                : ComponentsContext.nodeSelected.get().getId();
+
         jsonTarget.type_of_component_selected = ComponentsContext.headerSelected.get();
 
         // 1. Salva as propriedades do CanvaComponent
         jsonTarget.canva = canva.getData();
 
-        // 2. Itera sobre a lista de todos os nós (nodes)
-        for (Node node : nodes) {
+        // 2. Itera sobre TODOS os nós (nodes) no dataMap
+        // Para cada lista de nós (os VALUES do dataMap)...
+        for (ObservableList<Node> nodesList : dataMap.values()) {
+            // ...itera sobre cada Node dentro dessa lista.
+            for (Node node : nodesList) {
+                // A LÓGICA DE SERIALIZAÇÃO PERMANECE A MESMA
 
-            if (node instanceof TextComponent component) {
-                // O .getData() deve retornar um TextComponentData que inclui a flag 'in_canva'
-                jsonTarget.text_components.add(component.getData());
-            }
+                if (node instanceof TextComponent component) {
+                    // O .getData() deve retornar um TextComponentData que inclui a flag 'in_canva'
+                    jsonTarget.text_components.add(component.getData());
+                }
 
-            if (node instanceof ButtonComponent component) {
-                jsonTarget.button_components.add(component.getData());
-            }
+                if (node instanceof ButtonComponent component) {
+                    jsonTarget.button_components.add(component.getData());
+                }
 
-            if (node instanceof ImageComponent component) {
-                jsonTarget.image_components.add(component.getData());
-            }
+                if (node instanceof ImageComponent component) {
+                    jsonTarget.image_components.add(component.getData());
+                }
 
-            if (node instanceof InputComponent component) {
-                jsonTarget.input_components.add(component.getData());
-            }
+                if (node instanceof InputComponent component) {
+                    jsonTarget.input_components.add(component.getData());
+                }
 
-            // Se o FlexComponent for uma composição de outros nós, ele deve serializar seus
-            // filhos internamente.
-            // CustomComponent, se for salvo como InnerComponentData.
-            // Verifique se o getData() dele é compatível com InnerComponentData.
-            // **Atenção:** Se ele for uma instância que contém outros componentes,
-            // sua lógica de getData() deve ser recursiva (salvar seus filhos).
-            if (node instanceof CustomComponent component) {
-                // Supondo que getData() retorne InnerComponentData ou StateJson_v2 completo
-                jsonTarget.custom_components.add(component.getData());
-            }
+                // Se o FlexComponent for uma composição de outros nós, ele deve serializar seus
+                // filhos internamente.
+                // CustomComponent, se for salvo como InnerComponentData.
+                // Verifique se o getData() dele é compatível com InnerComponentData.
+                // **Atenção:** Se ele for uma instância que contém outros componentes,
+                // sua lógica de getData() deve ser recursiva (salvar seus filhos).
+                if (node instanceof CustomComponent component) {
+                    // Supondo que getData() retorne InnerComponentData ou StateJson_v2 completo
+                    jsonTarget.custom_components.add(component.getData());
+                }
 
-            if (node instanceof ColumnComponent component) {
-                jsonTarget.column_components.add(component.getData());
-            }
-
-        }
+                if (node instanceof ColumnComponent component) {
+                    jsonTarget.column_components.add(component.getData());
+                }
+            } // Fim do loop interno (iteração sobre Nodes)
+        } // Fim do loop externo (iteração sobre as Listas)
 
         return jsonTarget;
+    }
+
+    public static void refreshSubItems() {
+        leftItemsStateRefreshed.set(!leftItemsStateRefreshed.get());
+    }
+
+    public static void RemoveNode(String nodeId) {
+        // 1. Tenta remover o Node do mainCanva (UI)
+        ObservableList<Node> canvaChildren = mainCanvaComponent.getChildren();
+        boolean removedFromCanva = canvaChildren.removeIf(node -> nodeId.equals(node.getId()));
+
+        // 2. Remove do dataMap (a coleção de dados)
+        boolean removedFromDataMap = removeItemByIdentification(nodeId);
+
+        // 3. Verifica se o Node removido era o selecionado e deseleciona
+        if (nodeSelected.get() != null && nodeId.equals(nodeSelected.get().getId())) {
+            nodeSelected.set(null);
+        }
+
+        // 4. Atualiza a UI lateral SOMENTE se a remoção foi bem-sucedida em algum lugar
+        if (removedFromCanva || removedFromDataMap) {
+            refreshSubItems();
+        }
+    }
+
+    private static boolean removeItemByIdentification(String identification) {
+        // Itera sobre todas as listas de nós no dataMap.
+        for (ObservableList<Node> itemsList : dataMap.values()) {
+
+            // Procura o item a ser removido (a forma mais garantida para ObservableList)
+            Node itemToRemove = null;
+            for (Node item : itemsList) {
+                if (identification.equals(item.getId())) {
+                    itemToRemove = item;
+                    break;
+                }
+            }
+
+            if (itemToRemove != null) {
+                // Remove o item da ObservableList do dataMap
+                itemsList.remove(itemToRemove);
+                // Retorna true assim que o item for removido
+                return true;
+            }
+        }
+        // Retorna false se o item não for encontrado em nenhuma lista
+        return false;
     }
 
     public static ComponentsContext getInstance() {

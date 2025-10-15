@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import my_app.components.LayoutPositionComponent;
+import my_app.components.shared.ButtonRemoverComponent;
 import my_app.components.shared.FontColorPicker;
 import my_app.components.shared.FontSizeComponent;
 import my_app.components.shared.FontWeightComponent;
@@ -70,7 +71,8 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
         String paddings = "%s %s %s %s"
                 .formatted(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left());
 
-        this.setPadding(new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left()));
+        this.setPadding(
+                new Insets(data.padding_top(), data.padding_right(), data.padding_bottom(), data.padding_left()));
 
         node.setStyle(
                 "-fx-background-color:%s;-fx-padding:%s;-fx-font-weight:%s;-fx-background-radius:%s;-fx-border-radius:%s;-fx-text-fill:%s;-fx-font-size: %s;-fx-border-width: %s;"
@@ -100,7 +102,8 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
                 new FontWeightComponent(currentState),
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
-                new FontSizeComponent(currentState));
+                new FontSizeComponent(currentState),
+                new ButtonRemoverComponent(this));
     }
 
     @Override
@@ -145,7 +148,5 @@ public class ButtonComponent extends Button implements ViewContract<ButtonCompon
                 location.fatherId());
 
     }
-
-
 
 }

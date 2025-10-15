@@ -3,8 +3,6 @@ package my_app.screens.Home.components.leftside;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -24,7 +22,6 @@ public class LeftSide extends VBox {
 
         Text title = new Text("Visual Elements");
         List<String> optionsText = List.of("Text", "Button", "Input", "Image", "Component", "Column items");
-        IntegerProperty indexSelecionado = new SimpleIntegerProperty(-1);
 
         List<Option> options = new ArrayList<>();
 
@@ -40,9 +37,7 @@ public class LeftSide extends VBox {
 
                 getChildren().add(spacer);
 
-                optionsText.forEach(
-                                title -> options.add(
-                                                new Option(title, home)));
+                optionsText.forEach(title -> options.add(new Option(title, home)));
 
                 getChildren().addAll(options);
 

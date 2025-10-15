@@ -26,13 +26,34 @@ public class SubItemsContext {
                 .add(new SimpleStringProperty(identification));
     }
 
-    public ObservableList<SimpleStringProperty> getItemsByType(String type) {
-        return dataMap.computeIfAbsent(type, k -> FXCollections.observableArrayList());
+    public void removeItemByIdentification(String identification) {
+        // Itera sobre todos os ObservableList de SimpleStringProperty no dataMap
+        for (ObservableList<SimpleStringProperty> itemsList : dataMap.values()) {
+            // Usa um Iterator para permitir a remoção segura durante a iteração
+            itemsList.removeIf(item -> item.get().equals(identification));
+
+            // A forma mais direta e garantida é:
+            SimpleStringProperty itemToRemove = null;
+            for (SimpleStringProperty item : itemsList) {
+                if (item.get().equals(identification)) {
+                    itemToRemove = item;
+                    break; // Encontrou o item, pode parar a busca nesta lista
+                }
+            }
+
+            if (itemToRemove != null) {
+                // Remove o item e retorna true
+                itemsList.remove(itemToRemove);
+                refreshSubItems();
+            }
+        }
+
     }
 
-    // public ObservableList<SimpleStringProperty> getItemsByType(String type) {
-    // return dataMap.getOrDefault(type, FXCollections.observableArrayList());
-    // }
+    public ObservableList<SimpleStringProperty> getItemsByType(String type) {
+        return dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList());
+    }
+
     public ObservableMap<String, ObservableList<SimpleStringProperty>> getAllData() {
         return dataMap;
     }
