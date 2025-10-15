@@ -9,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import my_app.components.LayoutPositionComponent;
 import my_app.components.shared.HeightComponent;
-import my_app.components.shared.ImageBackgroundComponent;
 import my_app.components.shared.WidthComponent;
 import my_app.data.Commons;
 import my_app.data.ImageComponentData;

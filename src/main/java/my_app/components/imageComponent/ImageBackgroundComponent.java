@@ -1,4 +1,4 @@
-package my_app.components.shared;
+package my_app.components.imageComponent;
 
 import java.io.File;
 
@@ -12,7 +12,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import my_app.components.imageComponent.ImageComponent;
 
 public class ImageBackgroundComponent extends HBox {
     Text title = new Text("Background:");
@@ -61,8 +60,12 @@ public class ImageBackgroundComponent extends HBox {
 
         File file = fileChooser.showOpenDialog(stage);
 
-        node.setImage(new Image(file.getAbsolutePath()));
-        tf.setText("");
+        if (file == null)
+            return;
+
+        final var imagePath = file.toURI().toString();
+        node.setImage(new Image(imagePath));
+        tf.setText(imagePath);
     }
 
     void config() {
