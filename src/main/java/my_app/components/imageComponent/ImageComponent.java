@@ -1,4 +1,4 @@
-package my_app.components;
+package my_app.components.imageComponent;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -6,8 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import my_app.components.LayoutPositionComponent;
 import my_app.components.shared.HeightComponent;
-import my_app.components.shared.PreserveRatioComponent;
+import my_app.components.shared.ImageBackgroundComponent;
 import my_app.components.shared.WidthComponent;
 import my_app.data.Commons;
 import my_app.data.ImageComponentData;
@@ -17,6 +19,10 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
     final int size = 100;
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
+
+    public ObjectProperty<FitMode> fitMode = new SimpleObjectProperty<>(FitMode.CONTAIN);
+
+    public Stage stage;
 
     public ImageComponent() {
         config();
@@ -43,7 +49,10 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
         father.getChildren().setAll(
                 new WidthComponent(this),
                 new HeightComponent(this),
-                new PreserveRatioComponent(this));
+                new PreserveRatioComponent(this),
+                new ImageBackgroundComponent(this)
+        // new FitComponent(this)
+        );
     }
 
     @Override

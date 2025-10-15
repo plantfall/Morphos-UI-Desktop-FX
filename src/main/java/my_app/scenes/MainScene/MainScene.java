@@ -63,7 +63,7 @@ public class MainScene extends Scene {
     }
 
     private static void loadSceneFromJsonFile(File file) {
-        ComponentsContext.loadJsonState(file, home.canva);
+        ComponentsContext.loadJsonState(file, home.canva, stage);
     }
 
     private static void handleShowJavaCode(CanvaComponent canvaComponent) {

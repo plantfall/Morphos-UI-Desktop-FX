@@ -7,9 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.canvaComponent.CanvaComponent;
+import my_app.components.imageComponent.ImageComponent;
 import my_app.components.inputComponents.InputComponent;
 
 public class ShowCodeController {

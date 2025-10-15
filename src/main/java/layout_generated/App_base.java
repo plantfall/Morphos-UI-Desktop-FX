@@ -32,7 +32,7 @@ class Screen extends Pane {
         text1.setLayoutY(40.019531);
         button1.setLayoutX(84.000000);
         button1.setLayoutY(59.000000);
-        final var url = "file:/C:/dev/JAVA/JAVA-FX-PROJECTS/basic-desktop-builder/target/classes/assets/images/mago.jpg";
+        final var url = "https://imgs.search.brave.com/JuxGpr1Vn7_EwuBDAR3ix3CauPJTSQy1q0uU8I7G-b8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM1/NjU2NTI3NC9waG90/by9tb2Rlcm4tYWJz/dHJhY3Qtd2F2eS1i/YWNrZ3JvdW5kLmpw/Zz9zPTYxMng2MTIm/dz0wJms9MjAmYz1O/bzY3SUFmMEIxUDZU/SHhQaVUyekk5elBW/cDZKNndFdWZfOHpF/czNpSEt3PQ";
         imgV1.setFitWidth(400);
         imgV1.setFitHeight(100);
         imgV1.setImage(new Image(url));

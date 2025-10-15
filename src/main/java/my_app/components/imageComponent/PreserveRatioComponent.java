@@ -1,4 +1,4 @@
-package my_app.components.shared;
+package my_app.components.imageComponent;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
@@ -6,7 +6,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.ImageComponent;
 
 public class PreserveRatioComponent extends HBox {
 

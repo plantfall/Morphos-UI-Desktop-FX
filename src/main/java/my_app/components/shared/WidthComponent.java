@@ -6,8 +6,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import my_app.components.ImageComponent;
 import my_app.components.canvaComponent.CanvaComponent;
+import my_app.components.imageComponent.ImageComponent;
 import my_app.data.Commons;
 
 public class WidthComponent extends HBox {

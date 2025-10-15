@@ -13,12 +13,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.stage.Stage;
 import my_app.components.CustomComponent;
-import my_app.components.ImageComponent;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.columnComponent.ColumnComponent;
+import my_app.components.imageComponent.ImageComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
@@ -49,7 +50,7 @@ public class ComponentsContext {
         return nodeSelected.get().getId().equals(nodeId);
     }
 
-    public static void loadJsonState(File file, CanvaComponent canvaComponent) {
+    public static void loadJsonState(File file, CanvaComponent canvaComponent, Stage stage) {
         ObjectMapper om = new ObjectMapper();
         canvaComponent.getChildren().clear();
         nodes.clear();
@@ -96,6 +97,7 @@ public class ComponentsContext {
             // Restaura as imagens
             for (ImageComponentData data : state.image_components) {
                 ImageComponent comp = new ImageComponent();
+                comp.stage = stage;
 
                 comp.applyData(data);
                 nodes.add(comp);
