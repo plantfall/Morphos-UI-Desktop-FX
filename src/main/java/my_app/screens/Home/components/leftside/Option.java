@@ -85,21 +85,19 @@ public class Option extends VBox {
 
         // Adiciona um listener para que, se o nó for selecionado/deselecionado, o
         // estilo mude
-        ComponentsContext.nodeSelected.addListener((obs, oldNode, newNode) -> {
+        ComponentsContext.nodeSelected.addListener((_, _, _) -> {
             updateSubItemStyle(subItemBox, itemId);
         });
 
-        subItemBox.setOnMouseClicked(e -> {
-            onClickOnSubItem(itemId, this.type, home.canva);
-        });
+        subItemBox.setOnMouseClicked(_ -> onClickOnSubItem(itemId, this.type, home.canva));
 
-        subItemBox.setOnMouseEntered(e -> {
+        subItemBox.setOnMouseEntered(_ -> {
             if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: #2D2A6E;");
             }
         });
 
-        subItemBox.setOnMouseExited(e -> {
+        subItemBox.setOnMouseExited(_ -> {
             if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: transparent;");
             }
@@ -130,6 +128,7 @@ public class Option extends VBox {
             // 2. finded in main canva so, selected
             if (target != null) {
                 ComponentsContext.SelectNode(target);
+                CanvaComponent.Shake(target);
             } else {
                 // if not, just add in canva
                 mainCanvaComponent.addElementDragable(op.get(), false);

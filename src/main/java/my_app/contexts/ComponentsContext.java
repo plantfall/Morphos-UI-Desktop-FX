@@ -35,10 +35,13 @@ public class ComponentsContext {
 
     private static ComponentsContext instance;
 
+    public record SelectedComponent(String type, Node node) {
+    }
+
+    public static SimpleObjectProperty<SelectedComponent> nodeSelected = new SimpleObjectProperty<>();
+
     private static ObservableMap<String, ObservableList<Node>> dataMap = FXCollections
             .observableHashMap();
-
-    public static SimpleObjectProperty<Node> nodeSelected = new SimpleObjectProperty<>();
 
     public static SimpleStringProperty headerSelected = new SimpleStringProperty(null);
 
@@ -47,7 +50,14 @@ public class ComponentsContext {
     private static CanvaComponent mainCanvaComponent;
 
     public static boolean CurrentNodeIsSelected(String nodeId) {
-        return nodeSelected.get().getId().equals(nodeId);
+
+        SelectedComponent selected = nodeSelected.get();
+
+        // 1. Verifica se algo está selecionado (selected != null)
+        // 2. Verifica se o Node dentro do SelectedComponent não é nulo (selected.node()
+        // != null)
+        // 3. Compara o ID do Node selecionado com o nodeId fornecido
+        return selected != null && selected.node() != null && selected.node().getId().equals(nodeId);
     }
 
     public static void loadJsonState(File file, CanvaComponent canvaComponent, Stage stage) {
@@ -175,6 +185,43 @@ public class ComponentsContext {
                 .add(node);
     }
 
+    public static String getNodeType(Node targetNode) {
+        if (targetNode == null) {
+            return null;
+        }
+        String nodeId = targetNode.getId();
+
+        // Itera sobre o mapa para encontrar a chave (tipo) que contém o Node.
+        for (var entry : dataMap.entrySet()) {
+            if (entry.getValue().stream().anyMatch(n -> n.getId().equals(nodeId))) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    // --- NOVO MÉTODO SELECTNODE ---
+    public static void SelectNode(Node node) {
+        if (node == null) {
+            nodeSelected.set(null);
+            headerSelected.set(null); // Desseleciona o header também
+        } else {
+            String type = getNodeType(node);
+            if (type != null) {
+                SelectedComponent newSelection = new SelectedComponent(type, node);
+                nodeSelected.set(newSelection);
+                headerSelected.set(type); // Mantemos o headerSelected por compatibilidade com a UI
+                System.out.println("Selecionado: " + node + " (Type: " + type + ")");
+            } else {
+                // Lidar com o caso onde o nó existe mas não está no dataMap
+                System.err.println("Erro: Node encontrado, mas não está registrado no dataMap. ID: " + node.getId());
+                nodeSelected.set(null);
+                headerSelected.set(null);
+            }
+        }
+        refreshSubItems();
+    }
+
     public static ObservableList<Node> getItemsByType(String type) {
         return dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList());
     }
@@ -187,6 +234,8 @@ public class ComponentsContext {
 
         Node node = null;
         var content = "Im new here";
+
+        var typeNormalized = type.trim().toLowerCase();
 
         if (type.equalsIgnoreCase("Button")) {
             node = new ButtonComponent(content);
@@ -208,13 +257,22 @@ public class ComponentsContext {
 
         if (node != null) {
 
-            String nodeId = node.getId();
-            // nodes.add(node);
+            // 1. Adiciona o nó ao dataMap
+            addItem(typeNormalized, node);
 
-            nodeSelected.set(node);
+            // 2. CRIA E ATUALIZA o nodeSelected com o novo objeto SelectedComponent
+            // ESTA É A LINHA CORRIGIDA
 
+            SelectedComponent newSelection = new SelectedComponent(typeNormalized, node);
+            nodeSelected.set(newSelection);
+
+            // 3. Atualiza o headerSelected (para manter a compatibilidade da UI)
+            headerSelected.set(typeNormalized);
+
+            // 4. Adiciona o nó à tela (Canva)
             home.canva.addElementDragable(node, true);
-            addItem(type.toLowerCase(), node);
+
+            // 5. Notifica a UI lateral para atualizar a lista
             refreshSubItems();
         }
     }
@@ -243,11 +301,11 @@ public class ComponentsContext {
         return target;
     }
 
-    public static void SelectNode(Node node) {
-        nodeSelected.set(node);
-        refreshSubItems();
-        System.out.println("Selecionado: " + node);
-    }
+    // public static void SelectNode(Node node) {
+    // nodeSelected.set(node);
+    // refreshSubItems();
+    // System.out.println("Selecionado: " + node);
+    // }
 
     public static void SaveStateInJsonFile_v2(File file, CanvaComponent mainCanvaComponent) {
         try {
@@ -267,7 +325,7 @@ public class ComponentsContext {
     private static StateJson_v2 CreateStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
         jsonTarget.id_of_component_selected = ComponentsContext.nodeSelected.get() == null ? null
-                : ComponentsContext.nodeSelected.get().getId();
+                : ComponentsContext.nodeSelected.getValue().node.getId();
 
         jsonTarget.type_of_component_selected = ComponentsContext.headerSelected.get();
 
@@ -330,9 +388,11 @@ public class ComponentsContext {
         // 2. Remove do dataMap (a coleção de dados)
         boolean removedFromDataMap = removeItemByIdentification(nodeId);
 
-        // 3. Verifica se o Node removido era o selecionado e deseleciona
-        if (nodeSelected.get() != null && nodeId.equals(nodeSelected.get().getId())) {
+        Node currentlySelectedNode = nodeSelected.get() != null ? nodeSelected.get().node() : null;
+
+        if (currentlySelectedNode != null && nodeId.equals(currentlySelectedNode.getId())) {
             nodeSelected.set(null);
+            headerSelected.set(null); // Limpa o header também
         }
 
         // 4. Atualiza a UI lateral SOMENTE se a remoção foi bem-sucedida em algum lugar

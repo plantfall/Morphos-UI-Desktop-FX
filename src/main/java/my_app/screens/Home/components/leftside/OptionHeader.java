@@ -44,39 +44,56 @@ public class OptionHeader extends HBox {
 
         btnAdd.setGraphic(icon);
 
-        setOnMouseClicked(_ -> {
-            setStyle("-fx-background-color:#3B38A0;");
-            ComponentsContext.headerSelected.set(type);
-            expanded.set(!expanded.get());
+        ComponentsContext.nodeSelected.addListener((_, _, newSelected) -> {
+            // Pega o tipo do item recém-selecionado (pode ser null)
+            String newType = newSelected != null ? newSelected.type() : null;
+
+            // Verifica se o tipo do novo item selecionado corresponde ao 'type' deste
+            // OptionHeader
+            if (newType != null && newType.equalsIgnoreCase(type)) {
+                // Aplica a cor de seleção
+                setStyle("-fx-background-color:#3B38A0;");
+            } else if (newSelected == null) {
+                // Se a seleção foi limpa (nodeSelected.set(null)), limpa o estilo
+                if (!isHover()) {
+                    setStyle("-fx-background-color: transparent;");
+                }
+            } else {
+                // Se outro item de outro tipo foi selecionado, limpa o estilo deste
+                if (!isHover()) {
+                    setStyle("-fx-background-color: transparent;");
+                }
+            }
         });
 
-        setOnMouseEntered(e -> {
-            setStyle("-fx-background-color: lightblue;");
-        });
-
-        // ⚠️ CORREÇÃO AQUI
+        // Ajuste em setOnMouseExited para usar o novo estado
         setOnMouseExited(_ -> {
-            // Verifica se o header atual NÃO é o selecionado antes de aplicar o fundo
-            // transparente.
-            if (!ComponentsContext.headerSelected.get().equalsIgnoreCase(type)) {
+            String selectedType = ComponentsContext.nodeSelected.get() != null
+                    ? ComponentsContext.nodeSelected.get().type()
+                    : null;
+
+            if (selectedType == null || !selectedType.equalsIgnoreCase(type)) {
                 setStyle("-fx-background-color: transparent;");
             } else {
                 // Se for o selecionado, volta para a cor de seleção quando o mouse sair.
                 setStyle("-fx-background-color:#3B38A0;");
             }
         });
-        // Listener para garantir que o estilo de seleção seja aplicado quando o estado
-        // mudar
-        ComponentsContext.headerSelected.addListener((_, oldType, newType) -> {
-            if (newType.equalsIgnoreCase(type)) {
-                // Aplica a cor de seleção
-                setStyle("-fx-background-color:#3B38A0;");
-            } else if (oldType.equalsIgnoreCase(type)) {
-                // Remove a cor de seleção do item anterior (se o mouse não estiver sobre ele)
-                if (!isHover()) {
-                    setStyle("-fx-background-color: transparent;");
-                }
-            }
+
+        // Lógica de clique do botão Add Component
+        btnAdd.setOnAction(_ -> {
+            setStyle("-fx-background-color:#3B38A0;");
+            ComponentsContext.AddComponent(type, home);
+            // REMOVEMOS: ComponentsContext.headerSelected.set(type); // Não é mais
+            // necessário se o AddComponent chamar SelectNode
+            expanded.set(true);
+        });
+
+        // Lógica de clique no cabeçalho
+        setOnMouseClicked(_ -> {
+            setStyle("-fx-background-color:#3B38A0;");
+            // REMOVEMOS: ComponentsContext.headerSelected.set(type);
+            expanded.set(!expanded.get());
         });
 
         setPadding(new Insets(5));

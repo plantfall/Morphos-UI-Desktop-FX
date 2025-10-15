@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import my_app.components.shared.HeightComponent;
 import my_app.components.shared.WidthComponent;
 import my_app.contexts.ComponentsContext;
+import my_app.contexts.ComponentsContext.SelectedComponent;
 import my_app.data.CanvaProps;
 import my_app.data.Commons;
 import my_app.data.ViewContract;
@@ -32,8 +33,14 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         setOnMouseClicked(e -> {
             if (e.getTarget() == this) { // só dispara se clicou no fundo do Canva
-                ComponentsContext.nodeSelected.set(this);
+                // 1. Defina o tipo para o Canva (ex: "canva", "main", etc.)
+                String canvaType = "canva"; // Use uma string consistente
 
+                // 2. Crie o novo objeto SelectedComponent
+                SelectedComponent newSelection = new SelectedComponent(canvaType, this);
+
+                // 3. Defina a propriedade com o objeto correto
+                ComponentsContext.nodeSelected.set(newSelection);
                 System.out.println("Canva selecionado");
             }
         });
@@ -90,7 +97,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
     }
 
     // achacoalhar
-    static void Shake(Node node) {
+    public static void Shake(Node node) {
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), 0)),
@@ -228,7 +235,17 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         setId(String.valueOf(System.currentTimeMillis()));
 
-        ComponentsContext.nodeSelected.set(this);
+        // ComponentsContext.nodeSelected.set(this);
+
+        // 1. Defina o tipo para o Canva (ex: "canva", "main", etc.)
+        String canvaType = "canva"; // Use uma string consistente
+
+        // 2. Crie o novo objeto SelectedComponent
+        SelectedComponent newSelection = new SelectedComponent(canvaType, this);
+
+        // 3. Defina a propriedade com o objeto correto
+        ComponentsContext.nodeSelected.set(newSelection);
+
     }
 
     @Override

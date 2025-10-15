@@ -19,12 +19,14 @@ import javafx.scene.text.Text;
 import my_app.App;
 import my_app.components.NodeWrapper;
 import my_app.contexts.ComponentsContext;
+import my_app.contexts.ComponentsContext.SelectedComponent;
 import my_app.data.ViewContract;
 
 public class RightSide extends VBox {
 
     final double width = 250;
-    final ObjectProperty<Node> selectedNode;
+    // 1. ALTERADO: Tipo da propriedade é agora SelectedComponent
+    final ObjectProperty<SelectedComponent> selectedComponentProperty;
 
     Button btnAppearence = new Button("Appearence");
     Button btnLayout = new Button("Layout");
@@ -38,9 +40,10 @@ public class RightSide extends VBox {
     BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
     public RightSide() {
-        ObjectProperty<Node> selectedNode = ComponentsContext.nodeSelected;
+        // 1. ALTERADO: Atribui a propriedade com o tipo correto
+        ObjectProperty<SelectedComponent> selectedCompProp = ComponentsContext.nodeSelected;
 
-        this.selectedNode = selectedNode;
+        this.selectedComponentProperty = selectedCompProp; // Renomeado para clareza
 
         btnAppearence.setOnAction(ev -> appearenceIsSelected.set(true));
         btnLayout.setOnAction(ev -> appearenceIsSelected.set(false));
@@ -71,12 +74,19 @@ public class RightSide extends VBox {
         // NodeWrapper
 
         // quando muda o node
-        selectedNode.addListener((obs, oldNode, newNode) -> {
+        appearenceIsSelected.addListener((obs, old, node) -> mount());
+
+        // 2. ALTERADO: Listener agora recebe SelectedComponent
+        selectedComponentProperty.addListener((obs, oldComp, newComp) -> {
+            // Extrai o Node do SelectedComponent. Será null se a seleção for limpa.
+            Node newNode = (newComp != null) ? newComp.node() : null;
+
             if (newNode instanceof ViewContract renderable) {
                 NodeWrapper nw = new NodeWrapper(renderable);
                 nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
             } else {
-                dynamicContainer.getChildren().setAll(new Text("No configuration available"));
+                // Se newNode for null (desseleção) ou não for ViewContract
+                dynamicContainer.getChildren().setAll(new Text("No component selected or configuration available."));
             }
         });
 
@@ -84,10 +94,15 @@ public class RightSide extends VBox {
     }
 
     void mount() {
-        Node currentNode = selectedNode.get();
+        SelectedComponent currentSelectedComp = selectedComponentProperty.get();
+        Node currentNode = (currentSelectedComp != null) ? currentSelectedComp.node() : null;
+
         if (currentNode instanceof ViewContract renderable) {
             NodeWrapper nw = new NodeWrapper(renderable);
             nw.renderRightSideContainer(dynamicContainer, appearenceIsSelected);
+        } else {
+            // Garante que o container esteja limpo se nada estiver selecionado ao montar
+            dynamicContainer.getChildren().setAll(new Text("Select a component to view settings."));
         }
     }
 
