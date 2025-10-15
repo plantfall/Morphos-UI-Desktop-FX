@@ -29,14 +29,10 @@ public class ImageBackgroundComponent extends HBox {
 
         tf.textProperty().addListener((_, _, newVal) -> {
 
-            if (newVal.isBlank())
+            if (newVal.isBlank() || !newVal.startsWith("http"))
                 return;
 
             try {
-
-                // Se o campo for uma URL completa
-                if (!newVal.startsWith("http"))
-                    return;
 
                 // Carrega a imagem com cache desativado e carregamento síncrono
                 Image image = new Image(newVal, false);
