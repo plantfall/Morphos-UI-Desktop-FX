@@ -20,8 +20,6 @@ public class ButtonRemoverComponent extends HBox {
     }
 
     void config() {
-        // title.setFont(Font.font(14));
-        // title.setFill(Color.WHITE);
-
+        btn.getStyleClass().add("button-30");
     }
 }

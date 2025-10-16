@@ -28,9 +28,12 @@ public class MainScene extends Scene {
         super(createRoot(), 1200, 650);
 
         loadSceneFromJsonFile(new File(FileName));
+
+        getStylesheets().add(getClass().getResource("/global_styles.css").toExternalForm());
     }
 
     private static VBox createRoot() {
+
         Menu menu = new Menu("Options");
         MenuItem itemSalvar = new MenuItem("Save");
         MenuItem itemCarregar = new MenuItem("Load");

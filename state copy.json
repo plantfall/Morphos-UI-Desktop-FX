@@ -1,1 +1,118 @@
-{"id_of_component_selected":"1760553532786","type_of_component_selected":"text","canva":{"padding_top":0,"padding_right":0,"padding_bottom":0,"padding_left":0,"width":800.0,"height":600.0,"bg_type":"color","bgContent":"#d6d2e4ff","identification":"1760383894130","x":0,"y":0},"text_components":[{"type":"text","type":"text","text":"Im new here","layout_x":84.322265625,"layout_y":186.01953125,"fontSize":"16","color":"black","font_weight":"normal","identification":"1760550311776","in_canva":true,"canva_id":"1760383894130"},{"type":"text","type":"text","text":"Im new here","layout_x":89.322265625,"layout_y":107.5,"fontSize":"16","color":"black","font_weight":"normal","identification":"1760553532786","in_canva":true,"canva_id":"1760383894130"}],"button_components":[{"type":"button","type":"button","text":"Im new here","fontSize":"16","fontWeight":"normal","color":"white","borderWidth":"0","borderRadius":"3","bgColor":"#664db3","x":112.0,"y":233.0,"padding_top":10,"padding_right":10,"padding_bottom":10,"padding_left":10,"identification":"1760553536530","in_canva":true,"canva_id":"1760383894130"}],"image_components":[{"url":"file:/C:/Users/3855-2278/Pictures/Saved%20Pictures/coruja.png","width":400.0,"height":300.0,"x":345.0,"y":20.0,"preserve_ratio":true,"identification":"1760384396388","in_canva":true,"canva_id":"1760383894130"}],"input_components":[{"type":"input","type":"input","text":"","placeholder":"digite seu nome","font_weight":"normal","font_size":"13","color":"#4d8080","x":85.0,"y":53.0,"identification":"1760384466182","in_canva":true,"canva_id":"1760383894130"}],"column_components":[],"custom_components":[]}
+{
+  "id_of_component_selected": "1760554131761",
+  "type_of_component_selected": "button",
+  "canva": {
+    "padding_top": 0,
+    "padding_right": 0,
+    "padding_bottom": 0,
+    "padding_left": 0,
+    "width": 800.0,
+    "height": 600.0,
+    "bg_type": "color",
+    "bgContent": "#d6d2e4ff",
+    "identification": "1760383894130",
+    "x": 0,
+    "y": 0
+  },
+  "text_components": [
+    {
+      "type": "text",
+      "type": "text",
+      "text": "Im new here",
+      "layout_x": 84.322265625,
+      "layout_y": 186.01953125,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal",
+      "identification": "1760550311776",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    },
+    {
+      "type": "text",
+      "type": "text",
+      "text": "Im new here",
+      "layout_x": 89.322265625,
+      "layout_y": 107.5,
+      "fontSize": "16",
+      "color": "black",
+      "font_weight": "normal",
+      "identification": "1760553532786",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    }
+  ],
+  "button_components": [
+    {
+      "type": "button",
+      "type": "button",
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 112.0,
+      "y": 233.0,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "padding_left": 10,
+      "identification": "1760553536530",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    },
+    {
+      "type": "button",
+      "type": "button",
+      "text": "Im new here",
+      "fontSize": "16",
+      "fontWeight": "normal",
+      "color": "white",
+      "borderWidth": "0",
+      "borderRadius": "3",
+      "bgColor": "#664db3",
+      "x": 449.0,
+      "y": 346.0,
+      "padding_top": 10,
+      "padding_right": 10,
+      "padding_bottom": 10,
+      "padding_left": 10,
+      "identification": "1760554131761",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    }
+  ],
+  "image_components": [
+    {
+      "url": "file:/C:/Users/3855-2278/Pictures/Saved%20Pictures/coruja.png",
+      "width": 400.0,
+      "height": 300.0,
+      "x": 300.0,
+      "y": 46.0,
+      "preserve_ratio": true,
+      "identification": "1760384396388",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    }
+  ],
+  "input_components": [
+    {
+      "type": "input",
+      "type": "input",
+      "text": "",
+      "placeholder": "digite seu nome",
+      "font_weight": "normal",
+      "font_size": "13",
+      "color": "#4d8080",
+      "x": 85.0,
+      "y": 53.0,
+      "identification": "1760384466182",
+      "in_canva": true,
+      "canva_id": "1760383894130"
+    }
+  ],
+  "column_components": [],
+  "custom_components": []
+}

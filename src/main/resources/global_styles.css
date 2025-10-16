@@ -26,3 +26,26 @@
 #btnLayout:hover {
   -fx-background-color: #004080;
 } */
+
+.button-30 {
+  -fx-translate-y: 20;
+  -fx-alignment: center;
+  -fx-background-color: white; /* Fundo branco explícito */
+
+  -fx-border-color: black; /* Borda preta */
+  -fx-border-width: 1px; /* Espessura da borda */
+  -fx-border-style: solid; /* Estilo da borda */
+  -fx-border-radius: 0; /* Cantos retos */
+
+  -fx-text-fill: black; /* Texto preto explícito */
+  -fx-cursor: hand;
+
+  /* Ajuste a família/tamanho da fonte conforme a necessidade, o estilo parece ser padrão ou sem seriedade*/
+  /* Você pode adicionar -fx-font-weight: bold; se quiser o texto em negrito */
+  -fx-font-family: 'JetBrains Mono'; /* Manter o seu */
+  -fx-font-size: 14px; /* Aumentei ligeiramente o tamanho para corresponder */
+  -fx-font-weight: bold; /* Deixa o texto em negrito como na imagem */
+
+  -fx-padding: 8px 16px 8px 16px; /* Aumentei o padding vertical para dar mais altura */
+  -fx-pref-height: 40px; /* Reduzi a altura pré-definida, o padding deve guiar */
+}
