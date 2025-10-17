@@ -10,3 +10,5 @@ dist
 app_base/app.txt
 *.db
 src/main/java/my_app/GeneratedUI.java
+/draft.txt
+/prefs.json
