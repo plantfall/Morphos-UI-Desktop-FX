@@ -72,7 +72,7 @@ public class ComponentsContext {
 
         ObjectMapper om = new ObjectMapper();
 
-        if (!file.exists() || file.length() == 0) {
+        if (file == null || !file.exists() || file.length() == 0) {
             return;
         }
 
