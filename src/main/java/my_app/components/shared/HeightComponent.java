@@ -37,6 +37,8 @@ public class HeightComponent extends HBox {
 
                 if (node instanceof ImageComponent imgview)
                     imgview.setFitHeight(v);
+                if (node instanceof CanvaComponent c)
+                    c.setPrefHeight(v);
             } catch (NumberFormatException err) {
                 if (node instanceof CanvaComponent) {
                     setPrefHeight(Commons.CanvaHeightDefault);

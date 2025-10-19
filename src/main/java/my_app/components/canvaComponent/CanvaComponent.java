@@ -199,7 +199,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         TextField urlField = new TextField();
         urlField.setPromptText("Paste URl of image");
         Button applyUrl = new Button("Apply URL");
-        applyUrl.setOnAction(e -> {
+        applyUrl.setOnAction(_ -> {
             String url = urlField.getText();
             if (url != null && !url.isBlank()) {
                 setStyle("-fx-background-image: url('" + url + "'); " +

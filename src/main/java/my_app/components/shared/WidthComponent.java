@@ -26,18 +26,20 @@ public class WidthComponent extends HBox {
             tf.setText(String.valueOf(c.getPrefWidth()));
         }
 
-        // dentro teria um NumericInputHandler
         tf.textProperty().addListener((_, _, newVal) -> {
-
             if (newVal.isBlank())
                 return;
 
             try {
                 double v = Double.parseDouble(newVal);
-
-                if (node instanceof ImageComponent imgview)
+                if (node instanceof ImageComponent imgview) {
                     imgview.setFitWidth(v);
+                } else if (node instanceof CanvaComponent c) {
+                    c.setPrefWidth(v);
+                }
+
             } catch (NumberFormatException err) {
+                System.out.println(err.getMessage());
                 if (node instanceof CanvaComponent) {
                     setPrefWidth(Commons.CanvaWidthDefault);
                 }
