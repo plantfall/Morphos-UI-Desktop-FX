@@ -14,28 +14,28 @@ import my_app.screens.Home.Home;
 public class ShowComponentScene extends Scene {
     public Stage stage = new Stage();
 
-    Home home = new Home(true);
+    ComponentsContext componentsContext = new ComponentsContext();
+
+    Home home = new Home(componentsContext, true);
 
     MenuBar mb = new MenuBar();
 
     static BorderPane root = new BorderPane();
 
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
-
     public ShowComponentScene(CanvaComponent mainCanva) {
-        super(root, 760, 300);
+        super(root, 775, 300);
         stage.setScene(this);
 
         Menu menu = new Menu();
         MenuItem is = new MenuItem("Save");
 
-        is.setOnAction(ev -> {
+        is.setOnAction(_ -> {
             // O 'home.canva' é o CanvaComponent com o conteúdo que o usuário desenhou (aqui
             // é o 'contentCanva').
             CanvaComponent contentCanva = home.canva;
             // style-> "-fx-background-color:#1a4d4d;"
             // 1. Cria o CustomComponent
-            CustomComponent newCustomComponent = new CustomComponent();
+            CustomComponent newCustomComponent = new CustomComponent(componentsContext);
             newCustomComponent.setStyle(contentCanva.getStyle());
             newCustomComponent.setPrefHeight(contentCanva.getPrefHeight());
             newCustomComponent.setPrefWidth(contentCanva.getPrefWidth());

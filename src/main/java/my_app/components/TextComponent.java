@@ -10,6 +10,7 @@ import my_app.components.shared.FontColorPicker;
 import my_app.components.shared.FontSizeComponent;
 import my_app.components.shared.FontWeightComponent;
 import my_app.components.shared.TextContentComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.data.TextComponentData;
 import my_app.data.ViewContract;
@@ -17,7 +18,9 @@ import my_app.data.ViewContract;
 public class TextComponent extends Text implements ViewContract<TextComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
 
-    public TextComponent(String content) {
+    ComponentsContext componentsContext;
+
+    public TextComponent(String content, ComponentsContext componentsContext) {
         super(content);
 
         setStyle("-fx-fill:black;-fx-font-size:%s;-fx-font-weight:normal;"
@@ -38,7 +41,7 @@ public class TextComponent extends Text implements ViewContract<TextComponentDat
                 new FontColorPicker(currentState),
                 new TextContentComponent(currentState),
                 new FontSizeComponent(currentState),
-                new ButtonRemoverComponent(this));
+                new ButtonRemoverComponent(this, componentsContext));
     }
 
     @Override

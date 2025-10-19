@@ -13,8 +13,13 @@ import my_app.data.Commons;
 import my_app.screens.Home.Home;
 
 public class MainSceneController {
+    ComponentsContext componentsContext;
 
     public record PrefsData(String last_project_saved_path) {
+    }
+
+    public MainSceneController(ComponentsContext componentsContext) {
+        this.componentsContext = componentsContext;
     }
 
     public void handleClickLoad(Home home, Stage stage) {
@@ -26,7 +31,7 @@ public class MainSceneController {
 
         var uiFile = fc.showOpenDialog(stage);
         if (uiFile != null)
-            ComponentsContext.loadJsonState(uiFile, home.canva, stage);
+            componentsContext.loadJsonState(uiFile, home.canva, stage);
     }
 
     public void loadSceneFromJsonFile(Home home, Stage stage) {
@@ -46,10 +51,10 @@ public class MainSceneController {
 
             var uiFile = new File(path);
 
-            ComponentsContext.loadJsonState(uiFile, home.canva, stage);
+            componentsContext.loadJsonState(uiFile, home.canva, stage);
         } catch (Exception e) {
             e.printStackTrace();
-            ComponentsContext.loadJsonState(null, home.canva, stage);
+            componentsContext.loadJsonState(null, home.canva, stage);
         }
 
     }
@@ -82,7 +87,7 @@ public class MainSceneController {
             Commons.WriteJsonInDisc(fileInCurrentDirectory, pref);
 
             // json bening saved on specfif directory
-            ComponentsContext.SaveStateInJsonFile_v2(file, home.canva);
+            componentsContext.saveStateInJsonFile_v2(file, home.canva);
         }
 
     }

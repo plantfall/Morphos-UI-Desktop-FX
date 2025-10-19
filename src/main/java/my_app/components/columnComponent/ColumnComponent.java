@@ -33,7 +33,9 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
 
     public SimpleIntegerProperty childrenAmountState = new SimpleIntegerProperty(3);
 
-    public ColumnComponent() {
+    ComponentsContext componentsContext;
+
+    public ColumnComponent(ComponentsContext componentsContext) {
         // Configuração inicial como VBox
         setSpacing(5);
         setStyle("-fx-background-color:red;");
@@ -43,6 +45,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
 
         setId(String.valueOf(System.currentTimeMillis()));
         currentState.set(this);
+        this.componentsContext = componentsContext;
     }
 
     @Override
@@ -86,14 +89,14 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
             }
 
             // Busca o nó original pelo ID e faz a DEEP COPY
-            var op = ComponentsContext.SearchNodeById(emptyComponentId);
+            var op = componentsContext.SearchNodeById(emptyComponentId);
 
             op.ifPresent(existingNode -> {
                 if (existingNode instanceof ViewContract existingView) {
                     ComponentData originalData = (ComponentData) existingView.getData();
 
                     // Cria uma NOVA cópia do nó a partir dos dados originais
-                    Node emptyNode = ComponentFactory.createNodeFromData(originalData);
+                    Node emptyNode = ComponentFactory.createNodeFromData(originalData, componentsContext);
                     // ⚠️ PASSO CRUCIAL: Torna o placeholder transparente ao mouse
                     emptyNode.setMouseTransparent(true); // <-- ADICIONAR ESTA LINHA
 
@@ -112,7 +115,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
         String currentChildId = currentChildIdState.get();
 
         // Recriação de CustomComponents (DEEP COPY)
-        var op = ComponentsContext.SearchNodeById(currentChildId);
+        var op = componentsContext.SearchNodeById(currentChildId);
 
         op.ifPresent(existingNode -> {
             // ** Universalização: Usamos ViewContract e a Fábrica **
@@ -124,7 +127,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
                 for (int i = 0; i < amount; i++) {
                     // Criamos uma nova cópia do nó a partir dos dados originais, só pra
                     // visualizacao
-                    Node newCopy = ComponentFactory.createNodeFromData(originalData);
+                    Node newCopy = ComponentFactory.createNodeFromData(originalData, componentsContext);
                     // ⚠️ PASSO CRUCIAL: Torna o placeholder transparente ao mouse
                     newCopy.setMouseTransparent(true); // <-- ADICIONAR ESTA LINHA
 
@@ -143,7 +146,7 @@ public class ColumnComponent extends VBox implements ViewContract<ColumnComponen
                 new ChildHandlerComponent("Child component:", this, currentChildIdState),
                 new ItemsAmountPreviewComponent(this),
                 new ChildHandlerComponent("Component (if empty):", this, onEmptyComponentState),
-                new ButtonRemoverComponent(this));
+                new ButtonRemoverComponent(this, componentsContext));
     }
 
     @Override

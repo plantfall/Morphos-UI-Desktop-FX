@@ -18,9 +18,14 @@ public class OptionHeader extends HBox {
     Label label = new Label();
     Button btnAdd = new Button();
 
+    ComponentsContext componentsContext;
+
     public OptionHeader(
             String type,
-            Home home, BooleanProperty expanded) {
+            Home home, BooleanProperty expanded,
+            ComponentsContext componentsContext) {
+
+        this.componentsContext = componentsContext;
 
         label.setText(type);
         label.setFont(Font.font(18));
@@ -32,8 +37,8 @@ public class OptionHeader extends HBox {
 
         btnAdd.setOnAction(_ -> {
             setStyle("-fx-background-color:#3B38A0;");
-            ComponentsContext.AddComponent(type, home);
-            ComponentsContext.headerSelected.set(type);
+            componentsContext.addComponent(type, home);
+            componentsContext.headerSelected.set(type);
             expanded.set(true);
         });
 
@@ -44,7 +49,7 @@ public class OptionHeader extends HBox {
 
         btnAdd.setGraphic(icon);
 
-        ComponentsContext.nodeSelected.addListener((_, _, newSelected) -> {
+        componentsContext.nodeSelected.addListener((_, _, newSelected) -> {
             // Pega o tipo do item recém-selecionado (pode ser null)
             String newType = newSelected != null ? newSelected.type() : null;
 
@@ -68,8 +73,8 @@ public class OptionHeader extends HBox {
 
         // Ajuste em setOnMouseExited para usar o novo estado
         setOnMouseExited(_ -> {
-            String selectedType = ComponentsContext.nodeSelected.get() != null
-                    ? ComponentsContext.nodeSelected.get().type()
+            String selectedType = componentsContext.nodeSelected.get() != null
+                    ? componentsContext.nodeSelected.get().type()
                     : null;
 
             if (selectedType == null || !selectedType.equalsIgnoreCase(type)) {
@@ -83,7 +88,7 @@ public class OptionHeader extends HBox {
         // Lógica de clique do botão Add Component
         btnAdd.setOnAction(_ -> {
             setStyle("-fx-background-color:#3B38A0;");
-            ComponentsContext.AddComponent(type, home);
+            componentsContext.addComponent(type, home);
             // REMOVEMOS: ComponentsContext.headerSelected.set(type); // Não é mais
             // necessário se o AddComponent chamar SelectNode
             expanded.set(true);

@@ -39,9 +39,9 @@ public class RightSide extends VBox {
 
     BooleanProperty appearenceIsSelected = new SimpleBooleanProperty(true);
 
-    public RightSide() {
+    public RightSide(ComponentsContext componentsContext) {
         // 1. ALTERADO: Atribui a propriedade com o tipo correto
-        ObjectProperty<SelectedComponent> selectedCompProp = ComponentsContext.nodeSelected;
+        ObjectProperty<SelectedComponent> selectedCompProp = componentsContext.nodeSelected;
 
         this.selectedComponentProperty = selectedCompProp; // Renomeado para clareza
 

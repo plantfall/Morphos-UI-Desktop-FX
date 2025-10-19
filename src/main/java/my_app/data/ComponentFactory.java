@@ -7,6 +7,7 @@ import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.columnComponent.ColumnComponent;
 import my_app.components.inputComponents.InputComponent;
+import my_app.contexts.ComponentsContext;
 
 public class ComponentFactory {
 
@@ -16,7 +17,7 @@ public class ComponentFactory {
      * @param data O ComponentData contendo o estado.
      * @return O Node (Componente JavaFX) totalmente configurado.
      */
-    public static Node createNodeFromData(ComponentData data) {
+    public static Node createNodeFromData(ComponentData data, ComponentsContext componentsContext) {
         if (data == null) {
             return null;
         }
@@ -27,34 +28,34 @@ public class ComponentFactory {
         switch (data.type()) {
             case "text":
                 // 1. Cria a instância
-                component = new TextComponent("");
+                component = new TextComponent("", componentsContext);
                 // 2. Aplica os dados (assumindo que TextComponent implementa
                 // applyData<TextComponentData>)
                 ((ViewContract<TextComponentData>) component).applyData((TextComponentData) data);
                 break;
 
             case "component":
-                component = new CustomComponent();
+                component = new CustomComponent(componentsContext);
                 // Assumindo que o applyData do CustomComponent recebe CustomComponentData
                 ((ViewContract<CustomComponentData>) component).applyData((CustomComponentData) data);
                 break;
 
             case "button":
-                component = new ButtonComponent();
+                component = new ButtonComponent(componentsContext);
                 ((ViewContract<ButtonComponentData>) component).applyData((ButtonComponentData) data);
                 break;
 
             case "column items":
                 // Em casos de contêineres, evite recursão desnecessária no Factory.
                 // O ColumnComponent aplica os dados e recria os filhos internamente.
-                component = new ColumnComponent();
+                component = new ColumnComponent(componentsContext);
                 ((ViewContract<ColumnComponentData>) component).applyData((ColumnComponentData) data);
                 break;
 
             case "input":
                 // Em casos de contêineres, evite recursão desnecessária no Factory.
                 // O ColumnComponent aplica os dados e recria os filhos internamente.
-                component = new InputComponent();
+                component = new InputComponent(componentsContext);
                 ((ViewContract<InputComponentData>) component).applyData((InputComponentData) data);
                 break;
 

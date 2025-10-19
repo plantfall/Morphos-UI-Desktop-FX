@@ -11,20 +11,26 @@ import my_app.components.shared.FontColorPicker;
 import my_app.components.shared.FontSizeComponent;
 import my_app.components.shared.FontWeightComponent;
 import my_app.components.shared.TextContentComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.data.InputComponentData;
 import my_app.data.ViewContract;
 
 public class InputComponent extends TextField implements ViewContract<InputComponentData> {
     ObjectProperty<Node> currentState = new SimpleObjectProperty<>();
+    ComponentsContext componentsContext;
 
-    public InputComponent(String content) {
+    public InputComponent(String content, ComponentsContext componentsContext) {
         super(content);
         config();
+
+        this.componentsContext = componentsContext;
     }
 
-    public InputComponent() {
+    public InputComponent(ComponentsContext componentsContext) {
         config();
+
+        this.componentsContext = componentsContext;
     }
 
     void config() {
@@ -60,7 +66,7 @@ public class InputComponent extends TextField implements ViewContract<InputCompo
                 new TextContentComponent(currentState),
                 new FontSizeComponent(currentState),
                 new PromptTextComponent(currentState),
-                new ButtonRemoverComponent(this));
+                new ButtonRemoverComponent(this, componentsContext));
     }
 
     @Override

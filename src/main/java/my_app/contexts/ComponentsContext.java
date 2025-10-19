@@ -33,23 +33,21 @@ import my_app.screens.Home.Home;
 
 public class ComponentsContext {
 
-    private static ComponentsContext instance;
-
     public record SelectedComponent(String type, Node node) {
     }
 
-    public static SimpleObjectProperty<SelectedComponent> nodeSelected = new SimpleObjectProperty<>();
+    public SimpleObjectProperty<SelectedComponent> nodeSelected = new SimpleObjectProperty<>();
 
-    private static ObservableMap<String, ObservableList<Node>> dataMap = FXCollections
+    public ObservableMap<String, ObservableList<Node>> dataMap = FXCollections
             .observableHashMap();
 
-    public static SimpleStringProperty headerSelected = new SimpleStringProperty(null);
+    public SimpleStringProperty headerSelected = new SimpleStringProperty(null);
 
-    public static SimpleBooleanProperty leftItemsStateRefreshed = new SimpleBooleanProperty(false);
+    public SimpleBooleanProperty leftItemsStateRefreshed = new SimpleBooleanProperty(false);
 
-    private static CanvaComponent mainCanvaComponent;
+    private CanvaComponent mainCanvaComponent;
 
-    public static boolean CurrentNodeIsSelected(String nodeId) {
+    public boolean currentNodeIsSelected(String nodeId) {
 
         SelectedComponent selected = nodeSelected.get();
 
@@ -60,7 +58,7 @@ public class ComponentsContext {
         return selected != null && selected.node() != null && selected.node().getId().equals(nodeId);
     }
 
-    public static void loadJsonState(File file, CanvaComponent canvaComponent, Stage stage) {
+    public void loadJsonState(File file, CanvaComponent canvaComponent, Stage stage) {
         canvaComponent.getChildren().clear();
 
         mainCanvaComponent = canvaComponent;
@@ -85,7 +83,7 @@ public class ComponentsContext {
             }
 
             for (TextComponentData data : state.text_components) {
-                TextComponent comp = new TextComponent(data.text());
+                TextComponent comp = new TextComponent(data.text(), this);
                 comp.applyData(data);
                 // nodes.add(comp);
 
@@ -99,7 +97,7 @@ public class ComponentsContext {
 
             // Restaura os botões
             for (ButtonComponentData data : state.button_components) {
-                ButtonComponent comp = new ButtonComponent();
+                ButtonComponent comp = new ButtonComponent(this);
 
                 comp.applyData(data);
                 // nodes.add(comp);
@@ -113,7 +111,7 @@ public class ComponentsContext {
 
             // Restaura as imagens
             for (ImageComponentData data : state.image_components) {
-                ImageComponent comp = new ImageComponent();
+                ImageComponent comp = new ImageComponent(this);
                 comp.stage = stage;
 
                 comp.applyData(data);
@@ -127,7 +125,7 @@ public class ComponentsContext {
 
             // Restaura inputs
             for (InputComponentData data : state.input_components) {
-                InputComponent comp = new InputComponent("");
+                InputComponent comp = new InputComponent("", this);
 
                 comp.applyData(data);
                 // nodes.add(comp);
@@ -141,7 +139,7 @@ public class ComponentsContext {
             }
 
             for (CustomComponentData data : state.custom_components) {
-                var comp = new CustomComponent();
+                var comp = new CustomComponent(this);
 
                 comp.applyData(data);
                 // nodes.add(comp);
@@ -156,7 +154,7 @@ public class ComponentsContext {
             }
 
             for (ColumnComponentData data : state.column_components) {
-                var comp = new ColumnComponent();
+                var comp = new ColumnComponent(this);
 
                 comp.applyData(data);
                 // nodes.add(comp);
@@ -169,7 +167,7 @@ public class ComponentsContext {
                 }
             }
 
-            SearchNodeById(idOfComponentSelected).ifPresent(node -> SelectNode(node));
+            SearchNodeById(idOfComponentSelected).ifPresent(node -> selectNode(node));
 
             leftItemsStateRefreshed.set(!leftItemsStateRefreshed.get());
 
@@ -180,12 +178,12 @@ public class ComponentsContext {
 
     }
 
-    public static void addItem(String type, Node node) {
+    public void addItem(String type, Node node) {
         dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList())
                 .add(node);
     }
 
-    public static String getNodeType(Node targetNode) {
+    public String getNodeType(Node targetNode) {
         if (targetNode == null) {
             return null;
         }
@@ -201,7 +199,7 @@ public class ComponentsContext {
     }
 
     // --- NOVO MÉTODO SELECTNODE ---
-    public static void SelectNode(Node node) {
+    public void selectNode(Node node) {
         if (node == null) {
             nodeSelected.set(null);
             headerSelected.set(null); // Desseleciona o header também
@@ -222,11 +220,11 @@ public class ComponentsContext {
         refreshSubItems();
     }
 
-    public static ObservableList<Node> getItemsByType(String type) {
+    public ObservableList<Node> getItemsByType(String type) {
         return dataMap.computeIfAbsent(type, _ -> FXCollections.observableArrayList());
     }
 
-    public static void AddComponent(String type, Home home) {
+    public void addComponent(String type, Home home) {
 
         if (type == null || type.isBlank()) {
             return;
@@ -238,21 +236,23 @@ public class ComponentsContext {
         var typeNormalized = type.trim().toLowerCase();
 
         if (type.equalsIgnoreCase("Button")) {
-            node = new ButtonComponent(content);
+            node = new ButtonComponent(content, this);
         } else if (type.equalsIgnoreCase("Input")) {
-            node = new InputComponent(content);
+            node = new InputComponent(content, this);
 
         } else if (type.equalsIgnoreCase("Text")) {
-            node = new TextComponent(content);
+            node = new TextComponent(content, this);
 
         } else if (type.equalsIgnoreCase("Image")) {
-            node = new ImageComponent(ComponentsContext.class.getResource("/assets/images/mago.jpg").toExternalForm());
+            node = new ImageComponent(
+                    ComponentsContext.class.getResource("/assets/images/mago.jpg").toExternalForm(),
+                    this);
 
         } else if (type.equalsIgnoreCase("Component")) {
             new ShowComponentScene(home.canva).stage.show();
             return;
         } else if (type.equalsIgnoreCase("Column items")) {
-            node = new ColumnComponent();
+            node = new ColumnComponent(this);
         }
 
         if (node != null) {
@@ -283,7 +283,7 @@ public class ComponentsContext {
         refreshSubItems();
     }
 
-    public static Optional<Node> SearchNodeById(String nodeId) {
+    public Optional<Node> SearchNodeById(String nodeId) {
         return dataMap.values()
                 .stream()
                 .flatMap(list -> list.stream()) // Achata todas as listas em um único stream
@@ -307,10 +307,10 @@ public class ComponentsContext {
     // System.out.println("Selecionado: " + node);
     // }
 
-    public static void SaveStateInJsonFile_v2(File file, CanvaComponent mainCanvaComponent) {
+    public void saveStateInJsonFile_v2(File file, CanvaComponent mainCanvaComponent) {
         try {
             // Gera o StateJson_v2 a partir dos Nodes e do CanvaComponent
-            StateJson_v2 data = CreateStateData(mainCanvaComponent);
+            StateJson_v2 data = createStateData(mainCanvaComponent);
 
             // Usa Commons para escrever os dados no disco
             Commons.WriteJsonInDisc(file, data);
@@ -322,12 +322,12 @@ public class ComponentsContext {
         }
     }
 
-    private static StateJson_v2 CreateStateData(CanvaComponent canva) {
+    private StateJson_v2 createStateData(CanvaComponent canva) {
         StateJson_v2 jsonTarget = new StateJson_v2();
-        jsonTarget.id_of_component_selected = ComponentsContext.nodeSelected.get() == null ? null
-                : ComponentsContext.nodeSelected.getValue().node.getId();
+        jsonTarget.id_of_component_selected = nodeSelected.get() == null ? null
+                : nodeSelected.getValue().node.getId();
 
-        jsonTarget.type_of_component_selected = ComponentsContext.headerSelected.get();
+        jsonTarget.type_of_component_selected = headerSelected.get();
 
         // 1. Salva as propriedades do CanvaComponent
         jsonTarget.canva = canva.getData();
@@ -376,11 +376,11 @@ public class ComponentsContext {
         return jsonTarget;
     }
 
-    public static void refreshSubItems() {
+    public void refreshSubItems() {
         leftItemsStateRefreshed.set(!leftItemsStateRefreshed.get());
     }
 
-    public static void RemoveNode(String nodeId) {
+    public void removeNode(String nodeId) {
         // 1. Tenta remover o Node do mainCanva (UI)
         ObservableList<Node> canvaChildren = mainCanvaComponent.getChildren();
         boolean removedFromCanva = canvaChildren.removeIf(node -> nodeId.equals(node.getId()));
@@ -401,7 +401,7 @@ public class ComponentsContext {
         }
     }
 
-    private static boolean removeItemByIdentification(String identification) {
+    private boolean removeItemByIdentification(String identification) {
         // Itera sobre todas as listas de nós no dataMap.
         for (ObservableList<Node> itemsList : dataMap.values()) {
 
@@ -423,12 +423,5 @@ public class ComponentsContext {
         }
         // Retorna false se o item não for encontrado em nenhuma lista
         return false;
-    }
-
-    public static ComponentsContext getInstance() {
-        if (instance == null) {
-            instance = new ComponentsContext();
-        }
-        return instance;
     }
 }

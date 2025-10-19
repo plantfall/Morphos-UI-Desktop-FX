@@ -16,12 +16,12 @@ import toolkit.Component;
 
 public class MainScene extends Scene {
 
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
-    Home home = new Home(false);
+    ComponentsContext componentsContext = new ComponentsContext();
+    Home home = new Home(componentsContext, false);
     Stage stage = new Stage();
     VBox mainView;
 
-    MainSceneController controller = new MainSceneController();
+    MainSceneController controller = new MainSceneController(componentsContext);
 
     public MainScene() {
         super(new VBox(), 1200, 650);

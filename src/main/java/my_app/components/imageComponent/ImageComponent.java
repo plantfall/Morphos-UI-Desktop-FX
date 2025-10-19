@@ -11,6 +11,7 @@ import my_app.components.LayoutPositionComponent;
 import my_app.components.shared.ButtonRemoverComponent;
 import my_app.components.shared.HeightComponent;
 import my_app.components.shared.WidthComponent;
+import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.data.ImageComponentData;
 import my_app.data.ViewContract;
@@ -24,13 +25,17 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
 
     public Stage stage;
 
-    public ImageComponent() {
+    ComponentsContext componentsContext;
+
+    public ImageComponent(ComponentsContext componentsContext) {
         config();
+        this.componentsContext = componentsContext;
     }
 
-    public ImageComponent(String sourcePath) {
+    public ImageComponent(String sourcePath, ComponentsContext componentsContext) {
         super(new Image(sourcePath, true));
         // 'true' ativa carregamento assíncrono
+        this.componentsContext = componentsContext;
         config();
     }
 
@@ -51,7 +56,7 @@ public class ImageComponent extends ImageView implements ViewContract<ImageCompo
                 new HeightComponent(this),
                 new PreserveRatioComponent(this),
                 new ImageBackgroundComponent(this),
-                new ButtonRemoverComponent(this)
+                new ButtonRemoverComponent(this, componentsContext)
         // new FitComponent(this)
         );
     }

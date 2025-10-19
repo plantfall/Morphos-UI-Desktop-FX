@@ -9,13 +9,13 @@ public class ButtonRemoverComponent extends HBox {
 
     Button btn = new Button("Remove component");
 
-    public ButtonRemoverComponent(Node node) {
+    public ButtonRemoverComponent(Node node, ComponentsContext componentsContext) {
 
         config();
 
         getChildren().add(btn);
 
-        btn.setOnAction(_ -> ComponentsContext.RemoveNode(node.getId()));
+        btn.setOnAction(_ -> componentsContext.removeNode(node.getId()));
 
     }
 

@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import my_app.contexts.ComponentsContext;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
 
@@ -34,7 +33,7 @@ public class App extends Application {
         FONT_BOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Bold.ttf"), 14);
 
         // loadSubItemsOfCustomComponents();
-        ComponentsContext.getInstance();
+        // ComponentsContext.getInstance();
     }
 
     @Override

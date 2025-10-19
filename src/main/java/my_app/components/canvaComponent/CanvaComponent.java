@@ -26,8 +26,10 @@ import my_app.data.ViewContract;
 import my_app.screens.Home.Home.VisualNodeCallback;
 
 public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
+    ComponentsContext componentsContext;
 
-    public CanvaComponent() {
+    public CanvaComponent(ComponentsContext componentsContext) {
+        this.componentsContext = componentsContext;
 
         config();
 
@@ -40,7 +42,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
                 SelectedComponent newSelection = new SelectedComponent(canvaType, this);
 
                 // 3. Defina a propriedade com o objeto correto
-                ComponentsContext.nodeSelected.set(newSelection);
+                componentsContext.nodeSelected.set(newSelection);
                 System.out.println("Canva selecionado");
             }
         });
@@ -77,7 +79,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         enableDrag(node, relX, relY);
 
         node.setOnMouseClicked(e -> {
-            ComponentsContext.SelectNode(node);
+            componentsContext.selectNode(node);
             Shake(node);
         });
 
@@ -111,6 +113,7 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         timeline.play();
     }
 
+    @Deprecated
     public void setOnClickMethodToNode(Node node, VisualNodeCallback callback) {
         // clique = seleciona
         node.setOnMouseClicked(e -> callback.set(node));
@@ -180,11 +183,11 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
         });
 
         // Botão para escolher imagem do sistema
-        Button chooseImgBtn = new Button("Escolher Imagem...");
+        Button chooseImgBtn = new Button("Choose Image...");
         chooseImgBtn.setOnAction(e -> {
             javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
             fc.getExtensionFilters().addAll(
-                    new javafx.stage.FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
+                    new javafx.stage.FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
             var file = fc.showOpenDialog(null);
             if (file != null) {
                 setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
@@ -194,8 +197,8 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         // Campo para URL
         TextField urlField = new TextField();
-        urlField.setPromptText("Cole a URL da imagem");
-        Button applyUrl = new Button("Aplicar URL");
+        urlField.setPromptText("Paste URl of image");
+        Button applyUrl = new Button("Apply URL");
         applyUrl.setOnAction(e -> {
             String url = urlField.getText();
             if (url != null && !url.isBlank()) {
@@ -237,14 +240,13 @@ public class CanvaComponent extends Pane implements ViewContract<CanvaProps> {
 
         // ComponentsContext.nodeSelected.set(this);
 
-        // 1. Defina o tipo para o Canva (ex: "canva", "main", etc.)
         String canvaType = "canva"; // Use uma string consistente
 
-        // 2. Crie o novo objeto SelectedComponent
+        // 2. Cria o novo objeto SelectedComponent
         SelectedComponent newSelection = new SelectedComponent(canvaType, this);
 
-        // 3. Defina a propriedade com o objeto correto
-        ComponentsContext.nodeSelected.set(newSelection);
+        // 3. Define a propriedade com o objeto correto
+        componentsContext.nodeSelected.set(newSelection);
 
     }
 

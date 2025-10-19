@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.imageComponent.ImageComponent;
 import my_app.components.inputComponents.InputComponent;
@@ -26,9 +27,11 @@ import my_app.data.ViewContract;
 
 public class CustomComponent extends Pane implements ViewContract<CustomComponentData> {
 
-    ComponentsContext componentsContext = ComponentsContext.getInstance();
+    ComponentsContext componentsContext;
 
-    public CustomComponent() {
+    public CustomComponent(ComponentsContext componentsContext) {
+        this.componentsContext = componentsContext;
+
         this.setId(System.currentTimeMillis() + "");
     }
 
@@ -139,23 +142,23 @@ public class CustomComponent extends Pane implements ViewContract<CustomComponen
         }
 
         for (ButtonComponentData data_ : data.button_components) {
-            var node = new ButtonComponent(data_.text());
+            var node = new ButtonComponent(data_.text(), componentsContext);
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
         for (TextComponentData data_ : data.text_components) {
-            var node = new TextComponent(data_.text());
+            var node = new TextComponent(data_.text(), componentsContext);
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
 
         for (ImageComponentData data_ : data.image_components) {
-            var node = new ImageComponent(data_.url());
+            var node = new ImageComponent(data_.url(), componentsContext);
             node.applyData(data_);
-            node.setOnMouseClicked((e) -> ComponentsContext.SelectNode(node));
+            node.setOnMouseClicked((e) -> componentsContext.selectNode(node));
             getChildren().add(node);
         }
     }
@@ -176,19 +179,21 @@ public class CustomComponent extends Pane implements ViewContract<CustomComponen
         bgColorPicker.setOnAction(e -> {
             Color c = bgColorPicker.getValue();
 
-            // Commons.UpdateEspecificStyle(getStyle(), "-fx-background-color",
-            // Commons.ColortoHex(c));
+            var updated = Commons.UpdateEspecificStyle(getStyle(), "-fx-background-color",
+                    Commons.ColortoHex(c));
 
-            setStyle("-fx-background-color:%s;".formatted(
-                    Commons.ColortoHex(c)));
+            // setStyle("-fx-background-color:%s;".formatted(
+            // Commons.ColortoHex(c)));
+
         });
 
         // Botão para escolher imagem do sistema
-        Button chooseImgBtn = new Button("Escolher Imagem...");
+        Button chooseImgBtn = new Button("Choose Image...");
         chooseImgBtn.setOnAction(e -> {
-            javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+            final var fc = new FileChooser();
+
             fc.getExtensionFilters().addAll(
-                    new javafx.stage.FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
+                    new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
             var file = fc.showOpenDialog(null);
             if (file != null) {
                 setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
@@ -198,8 +203,8 @@ public class CustomComponent extends Pane implements ViewContract<CustomComponen
 
         // Campo para URL
         TextField urlField = new TextField();
-        urlField.setPromptText("Cole a URL da imagem");
-        Button applyUrl = new Button("Aplicar URL");
+        urlField.setPromptText("Paste Image Url");
+        Button applyUrl = new Button("Apply URL");
         applyUrl.setOnAction(e -> {
             String url = urlField.getText();
             if (url != null && !url.isBlank()) {

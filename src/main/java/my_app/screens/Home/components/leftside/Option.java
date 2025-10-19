@@ -12,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
-import my_app.contexts.SubItemsContext;
 import my_app.screens.Home.Home;
 import toolkit.Component;
 
@@ -26,15 +25,16 @@ public class Option extends VBox {
 
     OptionHeader header;
 
-    SubItemsContext context = SubItemsContext.getInstance();
+    ComponentsContext componentsContext;
 
     Home home;
 
-    public Option(String type, Home home) {
+    public Option(String type, Home home, ComponentsContext componentsContext) {
         this.type = type.toLowerCase().trim();
         this.home = home;
+        this.componentsContext = componentsContext;
 
-        header = new OptionHeader(type, home, expanded);
+        header = new OptionHeader(type, home, expanded, componentsContext);
 
         getChildren().add(header);
         getChildren().add(subItemsContainer);
@@ -43,7 +43,7 @@ public class Option extends VBox {
 
         loadSubItems();
 
-        ComponentsContext.leftItemsStateRefreshed.addListener((_, _, _) -> {
+        componentsContext.leftItemsStateRefreshed.addListener((_, _, _) -> {
             loadSubItems();
         });
 
@@ -57,7 +57,7 @@ public class Option extends VBox {
     private void loadSubItems() {
         subItemsContainer.getChildren().clear();
 
-        ObservableList<Node> nodes = ComponentsContext.getItemsByType(type);
+        ObservableList<Node> nodes = componentsContext.getItemsByType(type);
 
         for (int i = 0; i < nodes.size(); i++) {
             String itemId = nodes.get(i).getId();
@@ -85,20 +85,20 @@ public class Option extends VBox {
 
         // Adiciona um listener para que, se o nó for selecionado/deselecionado, o
         // estilo mude
-        ComponentsContext.nodeSelected.addListener((_, _, _) -> {
+        componentsContext.nodeSelected.addListener((_, _, _) -> {
             updateSubItemStyle(subItemBox, itemId);
         });
 
         subItemBox.setOnMouseClicked(_ -> onClickOnSubItem(itemId, this.type, home.canva));
 
         subItemBox.setOnMouseEntered(_ -> {
-            if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
+            if (!componentsContext.currentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: #2D2A6E;");
             }
         });
 
         subItemBox.setOnMouseExited(_ -> {
-            if (!ComponentsContext.CurrentNodeIsSelected(itemId)) {
+            if (!componentsContext.currentNodeIsSelected(itemId)) {
                 subItemBox.setStyle("-fx-background-color: transparent;");
             }
         });
@@ -108,7 +108,7 @@ public class Option extends VBox {
 
     // Método auxiliar para aplicar/remover o estilo de seleção
     private void updateSubItemStyle(HBox subItemBox, String itemId) {
-        if (ComponentsContext.nodeSelected.get() != null && ComponentsContext.CurrentNodeIsSelected(itemId)) {
+        if (componentsContext.nodeSelected.get() != null && componentsContext.currentNodeIsSelected(itemId)) {
             subItemBox.setStyle("-fx-background-color: red;");
             expanded.set(true); // Opcional: Expande o menu se o nó for selecionado
         } else {
@@ -121,13 +121,13 @@ public class Option extends VBox {
 
         var canvaChildren = mainCanvaComponent.getChildren();
 
-        var op = ComponentsContext.SearchNodeById(itemIdentification);
+        var op = componentsContext.SearchNodeById(itemIdentification);
 
         op.ifPresent(_ -> {
             var target = ComponentsContext.SearchNodeByIdInMainCanva(itemIdentification, canvaChildren);
             // 2. finded in main canva so, selected
             if (target != null) {
-                ComponentsContext.SelectNode(target);
+                componentsContext.selectNode(target);
                 CanvaComponent.Shake(target);
             } else {
                 // if not, just add in canva
