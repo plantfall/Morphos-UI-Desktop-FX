@@ -50,7 +50,8 @@ public class MainScene extends Scene {
         MenuItem itemSaveAs = new MenuItem("Save as");
         MenuItem itemLoad = new MenuItem("Load");
         MenuItem itemShowCode = new MenuItem("Show code");
-        menu.getItems().addAll(itemSalvar, itemSaveAs, itemLoad, itemShowCode);
+        MenuItem itemContribute = new MenuItem("Become a contributor");
+        menu.getItems().addAll(itemSalvar, itemSaveAs, itemLoad, itemShowCode, itemContribute);
 
         itemSalvar.setOnAction(_ -> controller.handleSave(home, stage));
         itemSaveAs.setOnAction(_ -> controller.handleSaveAs(home, stage));
@@ -58,6 +59,8 @@ public class MainScene extends Scene {
         itemLoad.setOnAction(_ -> controller.handleClickLoad(home, stage));
 
         itemShowCode.setOnAction(_ -> handleShowJavaCode(home.canva));
+
+        itemContribute.setOnAction(_ -> controller.handleBecomeContributor());
 
         return menu;
     }

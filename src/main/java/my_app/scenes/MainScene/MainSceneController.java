@@ -1,7 +1,9 @@
 package my_app.scenes.MainScene;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -84,7 +86,7 @@ public class MainSceneController {
 
         fc.setTitle("save project as");
         fc.getExtensionFilters().add(
-                new ExtensionFilter("ui extension", ".json"));
+                new ExtensionFilter("ui extension", "*.json"));
         fc.setInitialFileName("ui.json");
 
         var file = fc.showSaveDialog(stage);
@@ -103,13 +105,24 @@ public class MainSceneController {
             appData = System.getProperty("user.home") + "\\AppData\\Local";
         }
 
-        var appFolder = new File(appData, "BasicDesktopBuilder");
+        var appFolder = new File(appData, Commons.AppName);
         if (!appFolder.exists()) {
             appFolder.mkdirs();
         }
 
         var fileInCurrentDirectory = new File(appFolder, "prefs.json");
         Commons.WriteJsonInDisc(fileInCurrentDirectory, pref);
+    }
+
+    public void handleBecomeContributor() {
+        // https://buymeacoffee.com/plantfall
+
+        try {
+            Desktop.getDesktop().browse(
+                    new URI("https://buymeacoffee.com/plantfall"));
+        } catch (Exception e) {
+            throw new RuntimeException("Was not possible to go to donation");
+        }
     }
 
 }

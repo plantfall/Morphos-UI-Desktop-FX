@@ -13,6 +13,9 @@ import my_app.components.canvaComponent.CanvaComponent;
 
 public class Commons {
 
+    public static String AppName = "Morphos Desktop FX";
+    public static String AppVersion = "v1.0";
+
     public static double CanvaWidthDefault = 800;
     public static double CanvaHeightDefault = 600;
 

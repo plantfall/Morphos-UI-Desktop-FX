@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import my_app.data.Commons;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
 
@@ -53,7 +54,7 @@ public class App extends Application {
                 getClass().getResource("/global_styles.css")
                         .toExternalForm());
 
-        this.primaryStage.setTitle("Basic Desktop Builder");
+        this.primaryStage.setTitle(Commons.AppName + " " + Commons.AppVersion);
         this.primaryStage.setScene(scene);
     }
 
