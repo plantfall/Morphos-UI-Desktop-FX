@@ -1,5 +1,8 @@
 package my_app;
 
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsFilled;
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,13 +23,33 @@ public class App extends Application {
 
     @Override
     public void init() {
-        // 1. Carregamento do AntDesignIcons (necessário para o Font.loadFont)
-        try {
 
-            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Filled.ttf"), 10);
+        // A. Carregamento Explícito das Fontes TTF (Necessário para JavaFX)
+        try {
+            // 1. AntDesign Outlined
             Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Outlined.ttf"), 10);
+            // 2. AntDesign Filled
+            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Filled.ttf"), 10);
         } catch (Exception e) {
-            /* handle */ }
+            System.err.println("Falha ao carregar uma das fontes AntDesign TTF.");
+            e.printStackTrace();
+        }
+
+        // B. FORÇA a inicialização dos Ikon Handlers
+        // Isso contorna a falha do ServiceLoader, forçando a JVM a encontrar o handler.
+        // B. FORÇA a inicialização do Enum Provider (RESOLVE O PROBLEMA DO
+        // SERVICELOADER)
+        // Ao acessar um membro do Enum, a classe é inicializada e o ServiceLoader
+        // do Ikonli tem a chance de se registrar internamente.
+        try {
+            // Acessa um valor estático (o primeiro é suficiente)
+            AntDesignIconsFilled.ACCOUNT_BOOK.getDescription();
+            AntDesignIconsOutlined.ACCOUNT_BOOK.getDescription();
+
+            System.out.println("Enums Ikonli AntDesign inicializados com sucesso.");
+        } catch (Exception e) {
+            System.err.println("Falha ao inicializar Enums AntDesign. Verifique o classpath.");
+        }
 
         FONT_REGULAR = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Regular.ttf"), 14);
         FONT_MEDIUM = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Medium.ttf"), 14);
