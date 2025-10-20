@@ -249,7 +249,7 @@ public class ComponentsContext {
                     this);
 
         } else if (type.equalsIgnoreCase("Component")) {
-            new ShowComponentScene(home.canva).stage.show();
+            new ShowComponentScene(home.canva, this).stage.show();
             return;
         } else if (type.equalsIgnoreCase("Column items")) {
             node = new ColumnComponent(this);

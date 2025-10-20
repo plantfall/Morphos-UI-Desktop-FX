@@ -1,9 +1,9 @@
 package my_app.screens.ShowCode;
 
+import java.util.List;
+
 import javafx.animation.ScaleTransition;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
@@ -15,6 +15,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 public class ShowCode {
     private Stage stage;
     private ShowCodeController controller = new ShowCodeController();
+    VBox root = new VBox();
 
     // por enquanto só os node do canva
     // mas adiante expandir para os componentes gerais também pra
@@ -25,14 +26,23 @@ public class ShowCode {
 
         String importsContent = controller.createImports();
         String codeContent = controller.createRestOfCode(canvaComponent);
+        List<String> customComponentsContent = controller.createComponentsForPreview(canvaComponent.getChildren());
 
         VBox importsColumnContent = columnItem(importsContent, "Imports");
+        root.getChildren().add(importsColumnContent);
 
         VBox.setMargin(importsColumnContent, new Insets(0, 0, 20, 0));
 
         VBox codeColumnContent = columnItem(codeContent, "Code content");
+        root.getChildren().add(codeColumnContent);
 
-        VBox root = new VBox(importsColumnContent, codeColumnContent);
+        for (String text : customComponentsContent) {
+            VBox.setMargin(importsColumnContent, new Insets(0, 0, 20, 0));
+
+            VBox customComponentsColumnContent = columnItem(text, "Code content of Custom Component");
+            root.getChildren().add(customComponentsColumnContent);
+        }
+
         root.setSpacing(10);
         root.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color:#39375B");
 

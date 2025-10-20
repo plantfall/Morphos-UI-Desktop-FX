@@ -22,7 +22,7 @@ public class ShowComponentScene extends Scene {
 
     static BorderPane root = new BorderPane();
 
-    public ShowComponentScene(CanvaComponent mainCanva) {
+    public ShowComponentScene(CanvaComponent mainCanva, ComponentsContext mainComponentsContext) {
         super(root, 775, 300);
         stage.setScene(this);
 
@@ -49,7 +49,8 @@ public class ShowComponentScene extends Scene {
             // 3. Adiciona o nó à lista global e à sidebar.
             // O mainCanvaComponent aqui é usado apenas para a lógica interna (embora o
             // addCustomComponent não o use visualmente).
-            componentsContext.addCustomComponent(newCustomComponent, mainCanva);
+
+            mainComponentsContext.addCustomComponent(newCustomComponent, mainCanva);
 
             System.out.println(
                     "Componente personalizado criado e adicionado ao sistema com ID: " + newCustomComponent.getId());

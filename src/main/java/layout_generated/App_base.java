@@ -3,53 +3,64 @@ package layout_generated;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-class Screen extends Pane {
-    Text text1 = new Text("Bem vindo ao app");
-    Button button1 = new Button("Abrir chamado");
-    ImageView imgV1 = new ImageView();
-    TextField input1 = new TextField("");
+class Component1 extends Pane {
+    Button button1 = new Button("Im new here");
+    Text text1 = new Text("Im new here");
     {
 
         getChildren().addAll(
-                text1,
                 button1,
-                imgV1,
-                input1);
+                text1);
+        setup();
+        styles();
+    }
+
+    void setup() {
+        this.setPrefSize(370, 60);
+        button1.setLayoutX(262.459381);
+        button1.setLayoutY(8.000000);
+        text1.setLayoutX(0.000000);
+        text1.setLayoutY(35.000000);
+    }
+
+    void styles() {
+        setStyle("-fx-background-color:transparent;");
+        button1.setStyle(
+                "-fx-background-color:#664db3;-fx-padding:10 10 10 10;-fx-font-weight:normal;-fx-background-radius:3;-fx-border-radius:3;-fx-text-fill:white;-fx-font-size: 16;-fx-border-width: 0;");
+        text1.setStyle("-fx-fill:black;-fx-font-size:16;-fx-font-weight:normal;");
+    }
+
+}
+
+class Screen extends Pane {
+    Button button1 = new Button("Im new here");
+    Component1 component1 = new Component1();
+    {
+
+        getChildren().addAll(
+                button1,
+                component1);
         setup();
         styles();
     }
 
     void setup() {
         this.setPrefSize(800, 600);
-        text1.setLayoutX(81.322266);
-        text1.setLayoutY(40.019531);
-        button1.setLayoutX(84.000000);
-        button1.setLayoutY(59.000000);
-        final var url = "file:/C:/Users/3855-2278/Pictures/Saved%20Pictures/coruja.png";
-        imgV1.setFitWidth(400);
-        imgV1.setFitHeight(300);
-        imgV1.setImage(new Image(url));
-        imgV1.setLayoutX(343.000000);
-        imgV1.setLayoutY(20.000000);
-        input1.setLayoutX(86.000000);
-        input1.setLayoutY(126.000000);
-        input1.setPromptText("digite seu nome");
+        button1.setLayoutX(97.000000);
+        button1.setLayoutY(51.000000);
+        component1.setLayoutX(112.000000);
+        component1.setLayoutY(143.000000);
     }
 
     void styles() {
         setStyle("-fx-background-color:#d6d2e4ff;");
-        text1.setStyle("-fx-fill:black;-fx-font-size:16;-fx-font-weight:normal;");
         button1.setStyle(
                 "-fx-background-color:#664db3;-fx-padding:10 10 10 10;-fx-font-weight:normal;-fx-background-radius:3;-fx-border-radius:3;-fx-text-fill:white;-fx-font-size: 16;-fx-border-width: 0;");
-        imgV1.setStyle("");
-        input1.setStyle("-fx-text-fill:#4d8080;-fx-font-size:13;-fx-font-weight:normal;");
+        component1.setStyle("-fx-background-color:transparent;");
     }
 
 }
