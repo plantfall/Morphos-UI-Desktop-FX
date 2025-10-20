@@ -52,6 +52,11 @@ public class MainSceneController {
     }
 
     public void handleSave(Home home, Stage stage) {
+        // if (uiJsonFile == null) {
+        // handleSaveAs(home, stage);
+        // return;
+        // }
+
         updateUiJsonFilePathOnAppData(uiJsonFile);
 
         componentsContext.saveStateInJsonFile_v2(uiJsonFile, home.canva);
@@ -60,7 +65,7 @@ public class MainSceneController {
     private File loadUiFileFromAppData() {
         String appData = loadPrefs();
 
-        var appFolder = new File(appData, Commons.AppName);
+        var appFolder = new File(appData, Commons.AppNameAtAppData);
         var prefsJsonFile = new File(appFolder, "prefs.json");
 
         try {
@@ -95,11 +100,12 @@ public class MainSceneController {
     }
 
     private void updateUiJsonFilePathOnAppData(File file) {
+
         var pref = new PrefsData(file.getAbsolutePath());
 
         String appData = loadPrefs();
 
-        var appFolder = new File(appData, Commons.AppName);
+        var appFolder = new File(appData, Commons.AppNameAtAppData);
         if (!appFolder.exists()) {
             appFolder.mkdirs();
         }

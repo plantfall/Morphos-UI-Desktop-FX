@@ -20,6 +20,14 @@ public class App extends Application {
 
     @Override
     public void init() {
+        // 1. Carregamento do AntDesignIcons (necessário para o Font.loadFont)
+        try {
+
+            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Filled.ttf"), 10);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Outlined.ttf"), 10);
+        } catch (Exception e) {
+            /* handle */ }
+
         FONT_REGULAR = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Regular.ttf"), 14);
         FONT_MEDIUM = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Medium.ttf"), 14);
         FONT_SEMIBOLD = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-SemiBold.ttf"), 16);

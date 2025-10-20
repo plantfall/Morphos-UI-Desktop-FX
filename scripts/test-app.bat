@@ -2,10 +2,10 @@
 echo Testing the application...
 
 REM Application configuration
-set "APP_NAME=MyApp"
+set "APP_NAME=morpho_desktop_fx"
 
 REM Check if the application image exists
-if not exist "..\dist\%APP_NAME%" (
+if not exist "dist\%APP_NAME%" (
     echo Application image not found!
     echo Run create-installer.bat first to create the image.
     pause
@@ -24,13 +24,13 @@ if %errorlevel% neq 0 (
 REM Check directory structure
 echo.
 echo Checking directory structure...
-dir "..\dist\%APP_NAME%"
+dir "dist\%APP_NAME%"
 echo.
 
 REM Run the application and capture error log
 echo Starting the application...
 echo Error output will be saved to error.log
-"..\dist\%APP_NAME%\%APP_NAME%.exe" 2> error.log
+"dist\%APP_NAME%\%APP_NAME%.exe" 2> error.log
 
 REM Check for errors
 if %errorlevel% neq 0 (
