@@ -26,7 +26,7 @@ public class ShowComponentScene extends Scene {
         super(root, 775, 300);
         stage.setScene(this);
 
-        Menu menu = new Menu();
+        Menu menu = new Menu("Menu");
         MenuItem is = new MenuItem("Save");
 
         is.setOnAction(_ -> {
