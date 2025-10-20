@@ -4,17 +4,13 @@ import java.util.ArrayList;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.imageComponent.ImageComponent;
 import my_app.components.inputComponents.InputComponent;
-import my_app.components.shared.HeightComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.data.ButtonComponentData;
 import my_app.data.ColumnComponentData;
@@ -188,35 +184,36 @@ public class CustomComponent extends Pane implements ViewContract<CustomComponen
         });
 
         // Botão para escolher imagem do sistema
-        Button chooseImgBtn = new Button("Choose Image...");
-        chooseImgBtn.setOnAction(e -> {
-            final var fc = new FileChooser();
+        // Button chooseImgBtn = new Button("Choose Image...");
+        // chooseImgBtn.setOnAction(e -> {
+        // final var fc = new FileChooser();
 
-            fc.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
-            var file = fc.showOpenDialog(null);
-            if (file != null) {
-                setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
-                        "-fx-background-size: cover; -fx-background-position: center;");
-            }
-        });
+        // fc.getExtensionFilters().addAll(
+        // new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+        // var file = fc.showOpenDialog(null);
+        // if (file != null) {
+        // setStyle("-fx-background-image: url('" + file.toURI().toString() + "'); " +
+        // "-fx-background-size: cover; -fx-background-position: center;");
+        // }
+        // });
 
-        // Campo para URL
-        TextField urlField = new TextField();
-        urlField.setPromptText("Paste Image Url");
-        Button applyUrl = new Button("Apply URL");
-        applyUrl.setOnAction(e -> {
-            String url = urlField.getText();
-            if (url != null && !url.isBlank()) {
-                setStyle("-fx-background-image: url('" + url + "'); " +
-                        "-fx-background-size: cover; -fx-background-position: center;");
-            }
-        });
+        // // Campo para URL
+        // TextField urlField = new TextField();
+        // urlField.setPromptText("Paste Image Url");
+        // Button applyUrl = new Button("Apply URL");
+        // applyUrl.setOnAction(e -> {
+        // String url = urlField.getText();
+        // if (url != null && !url.isBlank()) {
+        // setStyle("-fx-background-image: url('" + url + "'); " +
+        // "-fx-background-size: cover; -fx-background-position: center;");
+        // }
+        // });
 
-        father.getChildren().setAll(bgColorPicker, chooseImgBtn, urlField,
-                applyUrl,
-                new my_app.components.shared.WidthComponent(this),
-                new HeightComponent(this));
+        // father.getChildren().setAll(bgColorPicker,
+        // chooseImgBtn, urlField,
+        // applyUrl,
+        // new my_app.components.shared.WidthComponent(this),
+        // new HeightComponent(this));
     }
 
     @Override

@@ -22,6 +22,8 @@ public class MainSceneController {
         this.componentsContext = componentsContext;
     }
 
+    private File uiJsonFile;
+
     public void handleClickLoad(Home home, Stage stage) {
         var fc = new FileChooser();
 
@@ -30,11 +32,30 @@ public class MainSceneController {
                 new ExtensionFilter("ui extension", "*.json"));
 
         var uiFile = fc.showOpenDialog(stage);
-        if (uiFile != null)
+        if (uiFile != null) {
+            uiJsonFile = uiFile;
             componentsContext.loadJsonState(uiFile, home.canva, stage);
+        }
+
     }
 
     public void loadSceneFromJsonFile(Home home, Stage stage) {
+        try {
+            uiJsonFile = loadUiFileFromAppData();
+            componentsContext.loadJsonState(uiJsonFile, home.canva, stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            componentsContext.loadJsonState(null, home.canva, stage);
+        }
+    }
+
+    public void handleSave(Home home, Stage stage) {
+        updateUiJsonFilePathOnAppData(uiJsonFile);
+
+        componentsContext.saveStateInJsonFile_v2(uiJsonFile, home.canva);
+    }
+
+    private File loadUiFileFromAppData() {
         String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
         if (appData == null) {
             appData = System.getProperty("user.home") + "\\AppData\\Local";
@@ -51,15 +72,14 @@ public class MainSceneController {
 
             var uiFile = new File(path);
 
-            componentsContext.loadJsonState(uiFile, home.canva, stage);
+            return uiFile;
         } catch (Exception e) {
             e.printStackTrace();
-            componentsContext.loadJsonState(null, home.canva, stage);
+            throw new RuntimeException("Was not possible load the file of ui");
         }
-
     }
 
-    public void handleSave(Home home, Stage stage) {
+    public void handleSaveAs(Home home, Stage stage) {
         var fc = new FileChooser();
 
         fc.setTitle("save project as");
@@ -69,27 +89,27 @@ public class MainSceneController {
 
         var file = fc.showSaveDialog(stage);
         if (file != null) {
-            var filePath = file.getAbsolutePath();
-
-            var pref = new PrefsData(filePath);
-
-            String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
-            if (appData == null) {
-                appData = System.getProperty("user.home") + "\\AppData\\Local";
-            }
-
-            var appFolder = new File(appData, "BasicDesktopBuilder");
-            if (!appFolder.exists()) {
-                appFolder.mkdirs();
-            }
-
-            var fileInCurrentDirectory = new File(appFolder, "prefs.json");
-            Commons.WriteJsonInDisc(fileInCurrentDirectory, pref);
-
-            // json bening saved on specfif directory
+            // json bening saved on specfif file
             componentsContext.saveStateInJsonFile_v2(file, home.canva);
         }
 
+    }
+
+    private void updateUiJsonFilePathOnAppData(File file) {
+        var pref = new PrefsData(file.getAbsolutePath());
+
+        String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
+        if (appData == null) {
+            appData = System.getProperty("user.home") + "\\AppData\\Local";
+        }
+
+        var appFolder = new File(appData, "BasicDesktopBuilder");
+        if (!appFolder.exists()) {
+            appFolder.mkdirs();
+        }
+
+        var fileInCurrentDirectory = new File(appFolder, "prefs.json");
+        Commons.WriteJsonInDisc(fileInCurrentDirectory, pref);
     }
 
 }

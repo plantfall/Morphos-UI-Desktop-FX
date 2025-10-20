@@ -47,11 +47,13 @@ public class MainScene extends Scene {
     Menu createMenuOptions() {
         Menu menu = new Menu("Options");
         MenuItem itemSalvar = new MenuItem("Save");
+        MenuItem itemSaveAs = new MenuItem("Save as");
         MenuItem itemLoad = new MenuItem("Load");
         MenuItem itemShowCode = new MenuItem("Show code");
-        menu.getItems().addAll(itemSalvar, itemLoad, itemShowCode);
+        menu.getItems().addAll(itemSalvar, itemSaveAs, itemLoad, itemShowCode);
 
         itemSalvar.setOnAction(_ -> controller.handleSave(home, stage));
+        itemSaveAs.setOnAction(_ -> controller.handleSaveAs(home, stage));
 
         itemLoad.setOnAction(_ -> controller.handleClickLoad(home, stage));
 

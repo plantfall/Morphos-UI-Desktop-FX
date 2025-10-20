@@ -144,12 +144,10 @@ public class ComponentsContext {
                 comp.applyData(data);
                 // nodes.add(comp);
 
-                // subItemsContext.addItem("component", data.identification);
                 addItem("component", comp);
 
                 if (data.in_canva) {
                     mainCanvaComponent.addElementDragable(comp, false);
-
                 }
             }
 
@@ -159,7 +157,6 @@ public class ComponentsContext {
                 comp.applyData(data);
                 // nodes.add(comp);
 
-                // subItemsContext.addItem("column items", data.identification());
                 addItem("column items", comp);
 
                 if (data.in_canva()) {
