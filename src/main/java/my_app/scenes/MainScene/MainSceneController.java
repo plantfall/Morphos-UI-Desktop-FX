@@ -58,12 +58,9 @@ public class MainSceneController {
     }
 
     private File loadUiFileFromAppData() {
-        String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
-        if (appData == null) {
-            appData = System.getProperty("user.home") + "\\AppData\\Local";
-        }
+        String appData = loadPrefs();
 
-        var appFolder = new File(appData, "BasicDesktopBuilder");
+        var appFolder = new File(appData, Commons.AppName);
         var prefsJsonFile = new File(appFolder, "prefs.json");
 
         try {
@@ -100,10 +97,7 @@ public class MainSceneController {
     private void updateUiJsonFilePathOnAppData(File file) {
         var pref = new PrefsData(file.getAbsolutePath());
 
-        String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
-        if (appData == null) {
-            appData = System.getProperty("user.home") + "\\AppData\\Local";
-        }
+        String appData = loadPrefs();
 
         var appFolder = new File(appData, Commons.AppName);
         if (!appFolder.exists()) {
@@ -112,6 +106,14 @@ public class MainSceneController {
 
         var fileInCurrentDirectory = new File(appFolder, "prefs.json");
         Commons.WriteJsonInDisc(fileInCurrentDirectory, pref);
+    }
+
+    private String loadPrefs() {
+        String appData = System.getenv("LOCALAPPDATA"); // C:\Users\<user>\AppData\Local
+        if (appData == null) {
+            appData = System.getProperty("user.home") + "\\AppData\\Local";
+        }
+        return appData;
     }
 
     public void handleBecomeContributor() {
