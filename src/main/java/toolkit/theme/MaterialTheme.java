@@ -23,7 +23,7 @@ public class MaterialTheme {
 
     // Cores de fundo
     private Color backgroundColor = Color.web("#15161A");
-    private Color surfaceColor = Color.web("#FFFFFF");
+    private Color surfaceColor = Color.web("#1E1F23");
     private Color errorColor = Color.web("#B00020");
 
     // Cores de texto
@@ -305,6 +305,10 @@ public class MaterialTheme {
 
     public String getOnBackgroundColorStyle() {
         return getColorString(onBackgroundColor);
+    }
+
+    public String getOnSecondaryColorStyle() {
+        return getColorString(onSecondaryColor);
     }
 
     public String getFocusColorStyle() {

@@ -8,6 +8,7 @@ import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.screens.Home.components.RightSide;
 import my_app.screens.Home.components.leftside.LeftSide;
+import toolkit.theme.MaterialTheme;
 
 public class Home extends BorderPane {
 
@@ -36,12 +37,14 @@ public class Home extends BorderPane {
         editor.setContent(canva);
         editor.setFitToWidth(false);
         editor.setFitToHeight(false);
-        editor.setStyle("-fx-background-color:red;-fx-background: red");
+        editor.setStyle("-fx-background-color:%s;-fx-background: %s"
+                .formatted(MaterialTheme.getInstance().getSurfaceColorStyle(),
+                        MaterialTheme.getInstance().getSurfaceColorStyle()));
 
         // setCenter(this.canva);
         setCenter(editor);
         setRight(new RightSide(componentsContext));
 
-        setStyle("-fx-background-color:red;");
+        setStyle("-fx-background-color:%s;".formatted(MaterialTheme.getInstance().getSurfaceColorStyle()));
     }
 }
