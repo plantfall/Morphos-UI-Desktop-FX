@@ -14,6 +14,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.Home;
 import toolkit.Component;
+import toolkit.theme.Typography;
 
 //--Button (OptionHeader)
 //     -btn1 (subItem)
@@ -71,13 +72,25 @@ public class Option extends VBox {
     @Component
     private HBox createSubItemBox(String itemId) {
         HBox subItemBox = new HBox();
-        Label subLabel = new Label("• " + itemId);
+
+        // 1. Crie o ponto de lista (bullet) separadamente
+        Label bullet = new Label("•");
+        bullet.setFont(Font.font("Arial", 20)); // Força uma fonte padrão para o bullet
+        bullet.setTextFill(Color.LIGHTGRAY);
+        bullet.setPadding(new Insets(0, 4, 0, 0)); // Espaçamento entre bullet e texto
+
+        // 2. Crie o texto (itemId) com a fonte customizada
+        Label subLabel = Typography.caption(itemId);
+        subLabel.setFont(Font.font(20)); // Mantém a fonte customizada
+
         subItemBox.setId(itemId);
 
-        subLabel.setFont(Font.font(12));
+        subItemBox.setId(itemId);
+
+        subLabel.setFont(Font.font(20));
         subLabel.setTextFill(Color.LIGHTGRAY);
 
-        subItemBox.getChildren().add(subLabel);
+        subItemBox.getChildren().addAll(bullet, subLabel);
         subItemBox.setPadding(new Insets(3, 5, 3, 10));
 
         // Estilo inicial:
