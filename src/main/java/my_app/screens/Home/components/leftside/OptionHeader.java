@@ -12,10 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import my_app.App;
 import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.Home;
+import toolkit.theme.MaterialTheme;
 
 public class OptionHeader extends HBox {
     Label label = new Label();
@@ -23,6 +22,7 @@ public class OptionHeader extends HBox {
     Button btnAdd = new Button();
 
     ComponentsContext componentsContext;
+    MaterialTheme theme = MaterialTheme.getInstance();
 
     public OptionHeader(
             String type,
@@ -47,7 +47,7 @@ public class OptionHeader extends HBox {
         });
 
         btnAdd.setOnMouseEntered(_ -> {
-            updateIconColor(Color.web("#7371FC"));
+            updateIconColor(theme.getHoverColor());
         });
         btnAdd.setOnMouseExited(_ -> {
             updateIconColor(Color.WHITE);
@@ -61,7 +61,7 @@ public class OptionHeader extends HBox {
             // OptionHeader
             if (newType != null && newType.equalsIgnoreCase(type)) {
                 // Aplica a cor de seleção
-                setStyle("-fx-background-color:#3B38A0;");
+                setStyle("-fx-background-color:%s;".formatted(theme.getFocusColorStyle()));
             } else if (newSelected == null) {
                 // Se a seleção foi limpa (nodeSelected.set(null)), limpa o estilo
                 if (!isHover()) {
@@ -85,12 +85,13 @@ public class OptionHeader extends HBox {
                 setStyle("-fx-background-color: transparent;");
             } else {
                 // Se for o selecionado, volta para a cor de seleção quando o mouse sair.
-                setStyle("-fx-background-color:#3B38A0;");
+                setStyle("-fx-background-color:%s;".formatted(theme.getFocusColorStyle()));
             }
         });
 
         setOnMouseEntered(_ -> {
-            setStyle("-fx-background-color: #1E1F23;-fx-background-radius:10px;");
+            setStyle("-fx-background-color: %s;-fx-background-radius:10px;"
+                    .formatted(theme.getHoverColorSecondaryStyle()));
         });
 
         // Lógica de clique do botão Add Component
@@ -128,14 +129,14 @@ public class OptionHeader extends HBox {
 
         btnAdd.setGraphic(icon);
 
-        label.setFont(Font.font(18));
-        label.setFont(App.FONT_BOLD);
+        // label.setFont(Font.font(18));
+        // label.setFont(App.FONT_BOLD);
 
         HBox.setHgrow(spacer, Priority.ALWAYS);
     }
 
     void styles() {
         btnAdd.setStyle("-fx-background-color:transparent;");
-        label.setStyle("-fx-text-fill: #F8FAFC;");
+        label.setStyle("-fx-text-fill: #F8FAFC;-fx-font-size:15px;");
     }
 }

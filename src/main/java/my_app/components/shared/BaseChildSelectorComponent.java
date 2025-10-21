@@ -5,12 +5,11 @@ import java.util.Set;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.components.columnComponent.ColumnComponent;
 import my_app.contexts.SubItemsContext;
+import toolkit.theme.Typography;
 
 /**
  * Classe base abstrata para componentes que gerenciam a seleção de um
@@ -20,7 +19,7 @@ import my_app.contexts.SubItemsContext;
  */
 public abstract class BaseChildSelectorComponent extends HBox {
 
-    protected Text title; // Protegido para que subclasses possam mudar o título
+    protected Label title; // Protegido para que subclasses possam mudar o título
     protected ComboBox<String> combo = new ComboBox<>();
     protected SubItemsContext context = SubItemsContext.getInstance();
 
@@ -36,7 +35,7 @@ public abstract class BaseChildSelectorComponent extends HBox {
      *                         ComboBox.
      */
     public BaseChildSelectorComponent(ColumnComponent nodeTarget, String label, String currentSelection) {
-        this.title = new Text(label);
+        this.title = Typography.caption(label);
 
         config();
         populateCombo(nodeTarget);
@@ -85,8 +84,7 @@ public abstract class BaseChildSelectorComponent extends HBox {
     }
 
     private void config() {
-        title.setFont(Font.font(14));
-        title.setFill(Color.WHITE);
+
         setSpacing(10);
     }
 }

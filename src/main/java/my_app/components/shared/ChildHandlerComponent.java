@@ -5,15 +5,16 @@ import java.util.Set;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.components.columnComponent.ColumnComponent;
 import my_app.contexts.SubItemsContext;
+import toolkit.theme.Typography;
 
 public class ChildHandlerComponent extends HBox {
 
-    Text title = new Text("Child component:");
+    Label title = Typography.caption("Child component:");
+
     ComboBox<String> combo = new ComboBox<>();
 
     SubItemsContext context = SubItemsContext.getInstance();
@@ -75,8 +76,7 @@ public class ChildHandlerComponent extends HBox {
     }
 
     void config() {
-        title.setFont(Font.font(14));
-        title.setFill(javafx.scene.paint.Color.WHITE);
+
         setSpacing(10);
     }
 }

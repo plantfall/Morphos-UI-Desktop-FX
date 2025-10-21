@@ -1,16 +1,17 @@
 package my_app.components.shared;
 
 import java.util.List;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.data.Commons;
+import toolkit.theme.Typography;
 
 public class FontWeightComponent extends HBox {
-    Text title = new Text("Font Weight:");
+    Label title = Typography.caption("Font Weight:");
 
     public FontWeightComponent(ObjectProperty<Node> selectedNode) {
 
@@ -60,8 +61,7 @@ public class FontWeightComponent extends HBox {
             "black");
 
     void config() {
-        title.setFont(Font.font(14));
-        title.setFill(javafx.scene.paint.Color.WHITE);
+
         setSpacing(10);
     }
 }

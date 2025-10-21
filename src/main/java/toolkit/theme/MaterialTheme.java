@@ -3,6 +3,8 @@ package toolkit.theme;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import my_app.data.Commons;
 
 /**
  * Sistema de tema global baseado em Material Design
@@ -20,7 +22,7 @@ public class MaterialTheme {
     private Color secondaryVariantColor = Color.web("#FFA000");
 
     // Cores de fundo
-    private Color backgroundColor = Color.web("#FFFFFF");
+    private Color backgroundColor = Color.web("#15161A");
     private Color surfaceColor = Color.web("#FFFFFF");
     private Color errorColor = Color.web("#B00020");
 
@@ -33,8 +35,9 @@ public class MaterialTheme {
 
     // Cores de estado
     private Color disabledColor = Color.web("#BDBDBD");
-    private Color focusColor = Color.web("#1976D2");
-    private Color hoverColor = Color.web("#E3F2FD");
+    private Color focusColor = Color.web("#3B38A0");
+    private Color hoverColor = Color.web("#7371FC");
+    private Color hoverColorSeconday = Color.web("#1E1F23");
 
     // Tipografia
     private FontWeight headingFontWeight = FontWeight.BOLD;
@@ -132,6 +135,10 @@ public class MaterialTheme {
         return hoverColor;
     }
 
+    public Color getHoverColorSecondary() {
+        return hoverColorSeconday;
+    }
+
     // Métodos para obter tipografia
     public FontWeight getHeadingFontWeight() {
         return headingFontWeight;
@@ -210,6 +217,7 @@ public class MaterialTheme {
 
     // Métodos para obter fontes tipográficas
     public Font getH1Font() {
+
         return Font.font(fontFamily, headingFontWeight, h1FontSize);
     }
 
@@ -233,8 +241,8 @@ public class MaterialTheme {
         return Font.font(fontFamily, headingFontWeight, h6FontSize);
     }
 
-    public Font getBodyFont() {
-        return Font.font(fontFamily, bodyFontWeight, bodyFontSize);
+    public Text getSubtitle(String text) {
+        return Typography.subtitle(text);
     }
 
     public Font getCaptionFont() {
@@ -296,24 +304,23 @@ public class MaterialTheme {
     }
 
     public String getOnBackgroundColorStyle() {
-        return String.format("#%02X%02X%02X",
-                (int) (onBackgroundColor.getRed() * 255),
-                (int) (onBackgroundColor.getGreen() * 255),
-                (int) (onBackgroundColor.getBlue() * 255));
+        return getColorString(onBackgroundColor);
     }
 
     public String getFocusColorStyle() {
-        return String.format("#%02X%02X%02X",
-                (int) (focusColor.getRed() * 255),
-                (int) (focusColor.getGreen() * 255),
-                (int) (focusColor.getBlue() * 255));
+        return getColorString(focusColor);
+    }
+
+    public String getHoverColorSecondaryStyle() {
+        return getColorString(hoverColorSeconday);
     }
 
     public String getSurfaceColorStyle() {
-        return String.format("#%02X%02X%02X",
-                (int) (surfaceColor.getRed() * 255),
-                (int) (surfaceColor.getGreen() * 255),
-                (int) (surfaceColor.getBlue() * 255));
+        return getColorString(surfaceColor);
+    }
+
+    private String getColorString(Color color) {
+        return Commons.ColortoHex(color);
     }
 
     /**

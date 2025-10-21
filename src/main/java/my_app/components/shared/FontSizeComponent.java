@@ -2,16 +2,15 @@ package my_app.components.shared;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.data.Commons;
+import toolkit.theme.Typography;
 
 public class FontSizeComponent extends HBox {
 
-    Text title = new Text("Font size:");
+    Label title = Typography.caption("Font size:");
     TextField tf = new TextField();
 
     public FontSizeComponent(ObjectProperty<Node> selectedNode) {
@@ -51,8 +50,7 @@ public class FontSizeComponent extends HBox {
     }
 
     void config() {
-        title.setFont(Font.font(14));
-        title.setFill(Color.WHITE);
+
         setSpacing(10);
     }
 }

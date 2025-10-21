@@ -1,18 +1,16 @@
 package my_app.components.shared;
 
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.components.columnComponent.ColumnComponent;
+import toolkit.theme.Typography;
 
 // ItemsAmountPreviewComponent.java
 
 public class ItemsAmountPreviewComponent extends HBox {
 
-    Text title = new Text("Children amount(preview):");
+    Label title = Typography.caption("Children amount(preview):");
     TextField tf = new TextField();
 
     // A propriedade agora é local, mas precisamos saber quem é o alvo
@@ -59,8 +57,7 @@ public class ItemsAmountPreviewComponent extends HBox {
     }
 
     void config() {
-        title.setFont(Font.font(14));
-        title.setFill(Color.WHITE);
+
         setSpacing(10);
     }
 }

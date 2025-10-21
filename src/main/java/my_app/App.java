@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import my_app.data.Commons;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
-import my_app.scenes.SplashScene.SplashScene;
 
 public class App extends Application {
 
@@ -32,12 +31,17 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle(Commons.AppName + " " + Commons.AppVersion);
 
-        Scene splashScene = new SplashScene(primaryStage);
+        // Scene splashScene = new SplashScene(primaryStage);
         // primaryStage.setScene(splashScene);
 
         Scene mainScene = new MainScene();
         primaryStage.setScene(mainScene);
 
+        mainScene.getStylesheets().addAll(
+                getClass().getResource("/global_styles.css").toExternalForm(),
+                getClass().getResource("/typography.css").toExternalForm());
+
+        // getStylesheets().add(getClass().getResource("/global_styles.css").toExternalForm());
         primaryStage.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {
             javafx.scene.Node node = event.getPickResult().getIntersectedNode();
             if (node != null) {

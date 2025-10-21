@@ -3,20 +3,21 @@ package my_app.components.shared;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.Commons;
+import toolkit.theme.Typography;
 
 public class FontColorPicker extends HBox {
 
     ColorPicker colorPicker = new ColorPicker(Color.WHITE);
-    Text title = new Text("Font Color:");
+
+    Label title = Typography.caption("Font Color:");
 
     public FontColorPicker(ObjectProperty<Node> selectedNode) {
 
@@ -65,8 +66,6 @@ public class FontColorPicker extends HBox {
     }
 
     void config() {
-        title.setFont(Font.font(14));
-        title.setFill(Color.WHITE);
 
         setSpacing(10);
     }

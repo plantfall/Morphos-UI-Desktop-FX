@@ -20,6 +20,6 @@ public class ButtonRemoverComponent extends HBox {
     }
 
     void config() {
-        btn.getStyleClass().add("button-59");
+        // btn.getStyleClass().add("button-59");
     }
 }

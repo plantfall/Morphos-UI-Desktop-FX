@@ -8,10 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -22,6 +18,7 @@ import my_app.App;
 import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.screens.Home.Home;
+import toolkit.theme.MaterialTheme;
 
 public class LeftSide extends VBox {
 
@@ -35,6 +32,8 @@ public class LeftSide extends VBox {
         List<String> optionsText = List.of("Text", "Button", "Input", "Image", "Component");
 
         List<Option> options = new ArrayList<>();
+
+        MaterialTheme theme = MaterialTheme.getInstance();
 
         public LeftSide(Home home, ComponentsContext componentsContext) {
 
@@ -65,17 +64,17 @@ public class LeftSide extends VBox {
                 setMaxHeight(Double.MAX_VALUE);
 
                 setBackground(new Background(
-                                new BackgroundFill(Color.web("#15161A"),
+                                new BackgroundFill(theme.getBackgroundColor(),
                                                 CornerRadii.EMPTY, Insets.EMPTY)));
 
                 // Borda apenas no lado direito
-                setBorder(new Border(
-                                new BorderStroke(
-                                                Color.GRAY, // cor da borda
-                                                BorderStrokeStyle.SOLID, // estilo
-                                                null, // sem cantos arredondados
-                                                new BorderWidths(0, 1, 0, 0) // top, right, bottom, left
-                                )));
+                // setBorder(new Border(
+                // new BorderStroke(
+                // Color.GRAY, // cor da borda
+                // BorderStrokeStyle.SOLID, // estilo
+                // null, // sem cantos arredondados
+                // new BorderWidths(0, 1, 0, 0) // top, right, bottom, left
+                // )));
 
                 // Espaçamento horizontal entre conteúdo e borda
                 setPadding(new Insets(10, 10, 0, 10)); // top, right, bottom, left

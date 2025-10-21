@@ -3,8 +3,6 @@ package toolkit.theme;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Labeled;
-import javafx.scene.control.TextInputControl;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -59,16 +57,6 @@ public class ThemeStyler {
     /**
      * Aplica estilo de corpo ao componente
      */
-    public static <T extends Node> T body(T node) {
-        if (node instanceof Labeled) {
-            ((Labeled) node).setFont(theme.getBodyFont());
-            ((Labeled) node).setTextFill(theme.getOnBackgroundColor());
-        } else if (node instanceof Text) {
-            ((Text) node).setFont(theme.getBodyFont());
-            ((Text) node).setFill(theme.getOnBackgroundColor());
-        }
-        return node;
-    }
 
     /**
      * Aplica estilo de legenda ao componente
@@ -199,29 +187,6 @@ public class ThemeStyler {
             ((Labeled) node).setTextFill(theme.getDisabledColor());
         } else if (node instanceof Text) {
             ((Text) node).setFill(theme.getDisabledColor());
-        }
-        return node;
-    }
-
-    /**
-     * Aplica estilo de campo de texto ao componente
-     */
-    public static <T extends Node> T textField(T node) {
-        if (node instanceof TextInputControl) {
-            TextInputControl textInput = (TextInputControl) node;
-            textInput.setFont(theme.getBodyFont());
-            textInput.setStyle(String.format(
-                    "-fx-font-size: %fpx; " +
-                            "-fx-border-radius: %fpx; " +
-                            "-fx-border-width: %fpx; " +
-                            "-fx-border-color: %s; " +
-                            "-fx-focus-color: %s; " +
-                            "-fx-faint-focus-color: transparent;",
-                    theme.getBodyFontSize(),
-                    theme.getBorderRadius(),
-                    theme.getBorderWidth(),
-                    theme.getPrimaryColorStyle(),
-                    theme.getFocusColorStyle()));
         }
         return node;
     }

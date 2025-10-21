@@ -1,19 +1,21 @@
 package my_app.scenes.MainScene;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.Home;
 import my_app.screens.ShowCode.ShowCode;
 import toolkit.Component;
+import toolkit.theme.MaterialTheme;
+import toolkit.theme.Typography;
 
 public class MainScene extends Scene {
 
@@ -24,6 +26,8 @@ public class MainScene extends Scene {
     Stage stage = new Stage();
     VBox mainView;
 
+    MaterialTheme theme = MaterialTheme.getInstance();
+
     MainSceneController controller = new MainSceneController(componentsContext);
 
     public MainScene() {
@@ -33,8 +37,6 @@ public class MainScene extends Scene {
         styles();
 
         controller.loadSceneFromJsonFile(home, stage);
-
-        getStylesheets().add(getClass().getResource("/global_styles.css").toExternalForm());
     }
 
     void setup() {
@@ -48,16 +50,15 @@ public class MainScene extends Scene {
     }
 
     void styles() {
-        menuBar.setStyle("-fx-background-color:#15161A;");
-
-        mainView.setStyle("-fx-background-color:#15161A;");
+        menuBar.setStyle("-fx-background-color:%s;".formatted(theme.getBackgroundColorStyle()));
+        mainView.setStyle("-fx-background-color:%s;".formatted(theme.getBackgroundColorStyle()));
     }
 
     @Component
     Menu createMenuOptions() {
 
         Menu menu = new Menu();
-        Text menuText = new Text("Option");
+        Label menuText = Typography.caption("Option");
         menu.setGraphic(menuText);
 
         MenuItem itemSalvar = new MenuItem("Save");

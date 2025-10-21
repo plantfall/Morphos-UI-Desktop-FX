@@ -2,23 +2,19 @@ package my_app.components.shared;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
+import toolkit.theme.Typography;
 
 public class TextContentComponent extends HBox {
 
-    Text text = new Text("Text content:");
+    Label text = Typography.caption("Text content:");
     TextField tf = new TextField();
 
     public TextContentComponent(ObjectProperty<Node> selectedNode) {
-
-        text.setFont(Font.font(14));
-        text.setFill(Color.WHITE);
 
         setSpacing(10);
 
