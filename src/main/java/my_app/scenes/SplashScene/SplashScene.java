@@ -68,7 +68,8 @@ public class SplashScene extends Scene {
         scale.setToX(1);
         scale.setToY(1);
 
-        scale.setCycleCount(2);
+        scale.setCycleCount(3);
+        scale.setAutoReverse(true);
         scale.play();
 
         scale.setOnFinished(_ -> {
