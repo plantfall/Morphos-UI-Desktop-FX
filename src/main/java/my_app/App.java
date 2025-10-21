@@ -1,20 +1,15 @@
 package my_app;
 
-import org.kordamp.ikonli.antdesignicons.AntDesignIconsFilled;
-import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import my_app.data.Commons;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
+import my_app.scenes.SplashScene.SplashScene;
 
 public class App extends Application {
-
-    Stage primaryStage;
 
     public static Font FONT_REGULAR;
     public static Font FONT_MEDIUM;
@@ -23,33 +18,6 @@ public class App extends Application {
 
     @Override
     public void init() {
-
-        // A. Carregamento Explícito das Fontes TTF (Necessário para JavaFX)
-        try {
-            // 1. AntDesign Outlined
-            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Outlined.ttf"), 10);
-            // 2. AntDesign Filled
-            Font.loadFont(getClass().getResourceAsStream("/fonts/AntDesign-Icons-Filled.ttf"), 10);
-        } catch (Exception e) {
-            System.err.println("Falha ao carregar uma das fontes AntDesign TTF.");
-            e.printStackTrace();
-        }
-
-        // B. FORÇA a inicialização dos Ikon Handlers
-        // Isso contorna a falha do ServiceLoader, forçando a JVM a encontrar o handler.
-        // B. FORÇA a inicialização do Enum Provider (RESOLVE O PROBLEMA DO
-        // SERVICELOADER)
-        // Ao acessar um membro do Enum, a classe é inicializada e o ServiceLoader
-        // do Ikonli tem a chance de se registrar internamente.
-        try {
-            // Acessa um valor estático (o primeiro é suficiente)
-            AntDesignIconsFilled.ACCOUNT_BOOK.getDescription();
-            AntDesignIconsOutlined.ACCOUNT_BOOK.getDescription();
-
-            System.out.println("Enums Ikonli AntDesign inicializados com sucesso.");
-        } catch (Exception e) {
-            System.err.println("Falha ao inicializar Enums AntDesign. Verifique o classpath.");
-        }
 
         FONT_REGULAR = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Regular.ttf"), 14);
         FONT_MEDIUM = Font.loadFont(getClass().getResourceAsStream("/fonts/Nunito-Medium.ttf"), 14);
@@ -62,7 +30,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
+        primaryStage.setTitle(Commons.AppName + " " + Commons.AppVersion);
+
+        Scene splashScene = new SplashScene(primaryStage);
+        primaryStage.setScene(splashScene);
 
         Scene mainScene = new MainScene();
 
@@ -71,22 +42,8 @@ public class App extends Application {
 
         // Botão muda para DataScene
         // componentData.setOnAction(e -> primaryStage.setScene(dataScene));
-        setup(mainScene); // seta ícone, título etc.
-        this.primaryStage.show();
-    }
 
-    void setup(Scene scene) {
-        // icon on window
-        primaryStage.getIcons().add(new Image(
-                getClass().getResourceAsStream("/assets/app_ico_window_32_32.png")));
-
-        // styles
-        scene.getStylesheets().add(
-                getClass().getResource("/global_styles.css")
-                        .toExternalForm());
-
-        this.primaryStage.setTitle(Commons.AppName + " " + Commons.AppVersion);
-        this.primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
