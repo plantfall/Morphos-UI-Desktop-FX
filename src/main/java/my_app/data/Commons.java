@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import my_app.components.canvaComponent.CanvaComponent;
 
@@ -23,7 +25,7 @@ public class Commons {
     public static String FontWeightDefault = "normal";
     public static String ItemTextFontSizeDefault = "14";
 
-    public static String CanvaBgColorDefault = "#d6d2e4ff";
+    public static String CanvaBgColorDefault = "#1E1F23";
     public static String ButtonBgColorDefault = "#664db3";
     public static String ButtonPaddingDefault = "10";
     public static String ButtonFontWeightDefault = "normal";
@@ -32,6 +34,16 @@ public class Commons {
     public static String ButtonTextColorDefault = "white";
     public static String ButtonRadiusDefault = "3";
     public static String ButtonRadiusWidth = "0";
+
+    /**
+     * @param path corresponds to path inside resources directory
+     * @return
+     */
+    public static ImageView CreateImageView(String path) {
+
+        final var img = new Image(Commons.class.getResourceAsStream(path));
+        return new ImageView(img);
+    }
 
     public static String UpdateEspecificStyle(
             String currentStyle,

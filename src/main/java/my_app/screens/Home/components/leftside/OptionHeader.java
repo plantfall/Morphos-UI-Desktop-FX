@@ -5,9 +5,12 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import my_app.App;
@@ -16,6 +19,7 @@ import my_app.screens.Home.Home;
 
 public class OptionHeader extends HBox {
     Label label = new Label();
+    Region spacer = new Region();
     Button btnAdd = new Button();
 
     ComponentsContext componentsContext;
@@ -28,26 +32,26 @@ public class OptionHeader extends HBox {
         this.componentsContext = componentsContext;
 
         label.setText(type);
-        label.setFont(Font.font(18));
-        label.setStyle("-fx-text-fill: #F8FAFC;");
-        label.setFont(App.FONT_BOLD);
 
         getChildren().add(label);
+        getChildren().add(spacer);
         getChildren().add(btnAdd);
 
+        setup();
+        styles();
+
         btnAdd.setOnAction(_ -> {
-            setStyle("-fx-background-color:#3B38A0;");
             componentsContext.addComponent(type, home);
             componentsContext.headerSelected.set(type);
             expanded.set(true);
         });
 
-        var icon = FontIcon.of(
-                AntDesignIconsOutlined.PLUS_CIRCLE,
-                12,
-                Color.BLACK);
-
-        btnAdd.setGraphic(icon);
+        btnAdd.setOnMouseEntered(_ -> {
+            updateIconColor(Color.web("#7371FC"));
+        });
+        btnAdd.setOnMouseExited(_ -> {
+            updateIconColor(Color.WHITE);
+        });
 
         componentsContext.nodeSelected.addListener((_, _, newSelected) -> {
             // Pega o tipo do item recém-selecionado (pode ser null)
@@ -85,9 +89,12 @@ public class OptionHeader extends HBox {
             }
         });
 
+        setOnMouseEntered(_ -> {
+            setStyle("-fx-background-color: #1E1F23;-fx-background-radius:10px;");
+        });
+
         // Lógica de clique do botão Add Component
         btnAdd.setOnAction(_ -> {
-            setStyle("-fx-background-color:#3B38A0;");
             componentsContext.addComponent(type, home);
             // REMOVEMOS: ComponentsContext.headerSelected.set(type); // Não é mais
             // necessário se o AddComponent chamar SelectNode
@@ -95,12 +102,40 @@ public class OptionHeader extends HBox {
         });
 
         // Lógica de clique no cabeçalho
-        setOnMouseClicked(_ -> {
-            setStyle("-fx-background-color:#3B38A0;");
-            // REMOVEMOS: ComponentsContext.headerSelected.set(type);
-            expanded.set(!expanded.get());
-        });
+        setOnMouseClicked(_ -> expanded.set(!expanded.get()));
 
-        setPadding(new Insets(5));
+    }
+
+    private void updateIconColor(Color color) {
+        var icon = FontIcon.of(
+                AntDesignIconsOutlined.PLUS,
+                19,
+                color);
+
+        btnAdd.setGraphic(icon);
+    }
+
+    void setup() {
+        this.setSpacing(5);
+        this.setMaxWidth(150);
+        this.setPadding(new Insets(5));
+        this.setAlignment(Pos.CENTER_LEFT);
+
+        var icon = FontIcon.of(
+                AntDesignIconsOutlined.PLUS,
+                19,
+                Color.WHITE);
+
+        btnAdd.setGraphic(icon);
+
+        label.setFont(Font.font(18));
+        label.setFont(App.FONT_BOLD);
+
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+    }
+
+    void styles() {
+        btnAdd.setStyle("-fx-background-color:transparent;");
+        label.setStyle("-fx-text-fill: #F8FAFC;");
     }
 }

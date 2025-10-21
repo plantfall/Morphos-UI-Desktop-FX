@@ -7,6 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
@@ -17,6 +18,8 @@ import toolkit.Component;
 public class MainScene extends Scene {
 
     ComponentsContext componentsContext = new ComponentsContext();
+
+    MenuBar menuBar = new MenuBar();
     Home home = new Home(componentsContext, false);
     Stage stage = new Stage();
     VBox mainView;
@@ -27,6 +30,7 @@ public class MainScene extends Scene {
         super(new VBox(), 1200, 650);
 
         setup();
+        styles();
 
         controller.loadSceneFromJsonFile(home, stage);
 
@@ -34,18 +38,28 @@ public class MainScene extends Scene {
     }
 
     void setup() {
-        MenuBar menuBar = new MenuBar(createMenuOptions());
+        menuBar = new MenuBar(createMenuOptions());
         mainView = new VBox(menuBar, home);
 
-        HBox.setHgrow(mainView.getChildren().get(1), Priority.ALWAYS);
-        VBox.setVgrow(mainView.getChildren().get(1), Priority.ALWAYS);
+        HBox.setHgrow(home, Priority.ALWAYS);
+        VBox.setVgrow(home, Priority.ALWAYS);
 
         setRoot(mainView);
     }
 
+    void styles() {
+        menuBar.setStyle("-fx-background-color:#15161A;");
+
+        mainView.setStyle("-fx-background-color:#15161A;");
+    }
+
     @Component
     Menu createMenuOptions() {
-        Menu menu = new Menu("Options");
+
+        Menu menu = new Menu();
+        Text menuText = new Text("Option");
+        menu.setGraphic(menuText);
+
         MenuItem itemSalvar = new MenuItem("Save");
         MenuItem itemSaveAs = new MenuItem("Save as");
         MenuItem itemLoad = new MenuItem("Load");
@@ -61,6 +75,8 @@ public class MainScene extends Scene {
         itemShowCode.setOnAction(_ -> handleShowJavaCode(home.canva));
 
         itemContribute.setOnAction(_ -> controller.handleBecomeContributor());
+
+        menuText.setStyle("-fx-fill:white;");
 
         return menu;
     }

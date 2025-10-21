@@ -36,12 +36,12 @@ public class Home extends BorderPane {
         editor.setContent(canva);
         editor.setFitToWidth(false);
         editor.setFitToHeight(false);
+        editor.setStyle("-fx-background-color:red;-fx-background: red");
 
         // setCenter(this.canva);
         setCenter(editor);
         setRight(new RightSide(componentsContext));
 
-        // setStyle("-fx-background-color:red");
-
+        setStyle("-fx-background-color:red;");
     }
 }

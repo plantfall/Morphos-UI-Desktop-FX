@@ -33,16 +33,27 @@ public class App extends Application {
         primaryStage.setTitle(Commons.AppName + " " + Commons.AppVersion);
 
         Scene splashScene = new SplashScene(primaryStage);
-        primaryStage.setScene(splashScene);
+        // primaryStage.setScene(splashScene);
 
         Scene mainScene = new MainScene();
+        primaryStage.setScene(mainScene);
+
+        primaryStage.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {
+            javafx.scene.Node node = event.getPickResult().getIntersectedNode();
+            if (node != null) {
+                System.out.println("Clique em: " + node.getClass().getSimpleName());
+                // node.setStyle("-fx-effect: dropshadow(gaussian, red, 10, 0, 0, 0);");
+
+                if (node.getId() != null)
+                    System.out.println("ID: " + node.getId());
+            }
+        });
 
         // Cria a DataScene passando a referência da mainScene e do primaryStage
         DataScene dataScene = new DataScene(primaryStage, mainScene);
 
         // Botão muda para DataScene
         // componentData.setOnAction(e -> primaryStage.setScene(dataScene));
-
         primaryStage.show();
     }
 
