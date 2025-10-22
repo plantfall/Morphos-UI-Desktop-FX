@@ -20,9 +20,9 @@
   -fx-text-fill: #ffffff;
   -fx-fill: #ffffff;
 }
-.text-secondary-color {
-  -fx-text-fill: #ffffff;
-  -fx-fill: #ffffff;
+.text-secondary {
+  -fx-text-fill: #bcccdc;
+  -fx-fill: #bcccdc;
 }
 .text-error-color {
   -fx-text-fill: #ffffff;

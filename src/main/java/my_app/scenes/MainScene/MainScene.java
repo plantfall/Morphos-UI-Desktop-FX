@@ -14,6 +14,7 @@ import my_app.contexts.ComponentsContext;
 import my_app.data.Commons;
 import my_app.screens.Home.Home;
 import my_app.screens.ShowCode.ShowCode;
+import my_app.themes.ThemeManager;
 import my_app.themes.Typography;
 import toolkit.Component;
 import toolkit.theme.MaterialTheme;
@@ -48,7 +49,7 @@ public class MainScene extends Scene {
         VBox.setVgrow(home, Priority.ALWAYS);
 
         setRoot(mainView);
-
+        ThemeManager.Instance().addScene(this);
         Commons.UseDefaultStyles(this);
     }
 

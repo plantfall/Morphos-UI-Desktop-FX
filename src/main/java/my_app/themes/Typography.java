@@ -25,6 +25,12 @@ public class Typography {
         return text;
     }
 
+    public static Label BodySecondary(String content) {
+        var text = new Label(content);
+        text.getStyleClass().addAll("body-typo", "text-secondary");
+        return text;
+    }
+
     public static Label caption(String content) {
         var text = new Label(content);
         text.setStyle("-fx-font-smoothing-type: gray;"); // 🔹 Suaviza o texto
