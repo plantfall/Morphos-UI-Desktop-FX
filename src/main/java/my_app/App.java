@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import my_app.data.Commons;
 import my_app.scenes.DataScene.DataScene;
 import my_app.scenes.MainScene.MainScene;
+import my_app.themes.ThemeManager;
 
 public class App extends Application {
 
@@ -14,6 +15,8 @@ public class App extends Application {
     public static Font FONT_MEDIUM;
     public static Font FONT_SEMIBOLD;
     public static Font FONT_BOLD;
+
+    private final ThemeManager themeManager = ThemeManager.Instance();
 
     @Override
     public void init() {
@@ -37,9 +40,7 @@ public class App extends Application {
         Scene mainScene = new MainScene();
         primaryStage.setScene(mainScene);
 
-        mainScene.getStylesheets().addAll(
-                getClass().getResource("/global_styles.css").toExternalForm(),
-                getClass().getResource("/typography.css").toExternalForm());
+        themeManager.addScene(mainScene);
 
         // getStylesheets().add(getClass().getResource("/global_styles.css").toExternalForm());
         primaryStage.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {

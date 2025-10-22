@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
-import toolkit.theme.Typography;
+import my_app.themes.Typography;
 
 public class TextContentComponent extends HBox {
 

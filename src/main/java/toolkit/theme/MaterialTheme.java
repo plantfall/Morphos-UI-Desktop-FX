@@ -5,11 +5,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import my_app.data.Commons;
+import my_app.themes.Typography;
 
 /**
  * Sistema de tema global baseado em Material Design
  * Permite definir estilos programaticamente sem depender de arquivos CSS
  */
+
+@Deprecated
 public class MaterialTheme {
 
     // Singleton instance
@@ -17,7 +20,7 @@ public class MaterialTheme {
 
     // Cores do tema
     private Color primaryColor = Color.web("#1976D2");
-    private Color primaryVariantColor = Color.web("#1565C0");
+    private Color primaryVariantColor = Color.web("#1565c0ff");
     private Color secondaryColor = Color.web("#FFC107");
     private Color secondaryVariantColor = Color.web("#FFA000");
 

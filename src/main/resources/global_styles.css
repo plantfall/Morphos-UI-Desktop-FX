@@ -1,56 +1,8 @@
 .button {
-  -fx-text-fill: white;
   -fx-cursor: hand;
+  -fx-background-radius: 8px;
 }
 
 .button:hover {
   -fx-opacity: 0.85;
-}
-
-#btnAppearence {
-  -fx-background-color: #3b38a0;
-  -fx-padding: 5 12 5 12;
-  -fx-text-fill: white;
-}
-
-#btnLayout {
-  -fx-background-color: #003161;
-  -fx-padding: 5 12 5 12;
-  -fx-text-fill: white;
-}
-
-/* #btnAppearence:hover {
-  -fx-background-color: #001070;
-}
-
-#btnLayout:hover {
-  -fx-background-color: #004080;
-} */
-
-.button-59 {
-  -fx-translate-y: 20;
-  -fx-alignment: center;
-  -fx-background-color: white; /* Fundo branco explícito */
-
-  -fx-border-color: black; /* Borda preta */
-  -fx-border-width: 1px; /* Espessura da borda */
-  -fx-border-style: solid; /* Estilo da borda */
-  -fx-border-radius: 0; /* Cantos retos */
-
-  -fx-text-fill: black; /* Texto preto explícito */
-
-  /* Ajuste a família/tamanho da fonte conforme a necessidade, o estilo parece ser padrão ou sem seriedade*/
-  /* Você pode adicionar -fx-font-weight: bold; se quiser o texto em negrito */
-  -fx-font-family: 'JetBrains Mono'; /* Manter o seu */
-  -fx-font-size: 14px; /* Aumentei ligeiramente o tamanho para corresponder */
-  -fx-font-weight: bold; /* Deixa o texto em negrito como na imagem */
-
-  -fx-padding: 8px 16px 8px 16px; /* Aumentei o padding vertical para dar mais altura */
-  -fx-pref-height: 40px; /* Reduzi a altura pré-definida, o padding deve guiar */
-}
-
-/* Garante que qualquer nó de texto dentro de um botão não intercepte eventos de mouse */
-.button-30 .text,
-.button-30 .label {
-  -fx-mouse-transparent: true;
 }

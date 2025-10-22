@@ -26,20 +26,27 @@ public class Home extends BorderPane {
 
         ScrollPane editor = new ScrollPane();
 
+        editor.setContent(canva);
+        editor.setFitToWidth(false);
+        editor.setFitToHeight(false);
+
+        editor.setStyle("-fx-background-color:%s;-fx-background: %s"
+                .formatted(MaterialTheme.getInstance().getSurfaceColorStyle(),
+                        MaterialTheme.getInstance().getSurfaceColorStyle()));
+
         if (openComponentScene) {
             canva.setPrefSize(370, 250);
             var style = canva.getStyle();
             var updated = Commons.UpdateEspecificStyle(style, "-fx-background-color", "transparent");
 
+            editor.setStyle("""
+                        -fx-background-color: transparent;
+                        -fx-background: transparent;
+                    """);
+
             canva.setStyle(updated);
         }
         // scrollPane mostra o canva com barras se for maior que a janela
-        editor.setContent(canva);
-        editor.setFitToWidth(false);
-        editor.setFitToHeight(false);
-        editor.setStyle("-fx-background-color:%s;-fx-background: %s"
-                .formatted(MaterialTheme.getInstance().getSurfaceColorStyle(),
-                        MaterialTheme.getInstance().getSurfaceColorStyle()));
 
         // setCenter(this.canva);
         setCenter(editor);

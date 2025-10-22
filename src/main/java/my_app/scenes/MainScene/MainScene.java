@@ -11,11 +11,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
+import my_app.data.Commons;
 import my_app.screens.Home.Home;
 import my_app.screens.ShowCode.ShowCode;
+import my_app.themes.Typography;
 import toolkit.Component;
 import toolkit.theme.MaterialTheme;
-import toolkit.theme.Typography;
 
 public class MainScene extends Scene {
 
@@ -47,6 +48,8 @@ public class MainScene extends Scene {
         VBox.setVgrow(home, Priority.ALWAYS);
 
         setRoot(mainView);
+
+        Commons.UseDefaultStyles(this);
     }
 
     void styles() {

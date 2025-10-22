@@ -1,42 +1,44 @@
 .root {
-  -fx-font-family: 'HYWenHei-85W'; /*Genshin Impact*/
+  /* -fx-font-family: 'HYWenHei-85W'; Genshin Impact */
   -fx-font-size: 12px;
 }
 
+/*'HYWenHei-85W'; Genshin Impact */
+/*'Monster Friend Back Pro'; /*Undertale */
+/*'Montserrat'; /*Montserrat Regular */
+
 .label-typo {
-  -fx-font-family: 'HYWenHei-85W'; /*Genshin Impact*/
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 20px;
-  -fx-text-fill: #ffffff;
-  -fx-fill: #ffffff;
 }
 
 .text-field-typo {
-  -fx-font-family: 'Monster Friend Back Pro'; /*Undertale*/
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 14px;
 }
 
 .caption-label-typo {
-  -fx-font-family: 'HYWenHei-85W'; /*Genshin Impact*/
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 12px;
-  -fx-text-fill: #ffffff;
-  -fx-fill: #ffffff;
 }
 
 .title-typo {
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 28px;
   -fx-font-weight: bold;
 }
 
 .subtitle-typo {
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 20px;
 }
 
 .body-typo {
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 16px;
-  -fx-text-fill: #ffffff;
-  -fx-fill: #ffffff;
 }
 
 .caption-typo {
+  -fx-font-family: 'Montserrat';
   -fx-font-size: 12px;
 }

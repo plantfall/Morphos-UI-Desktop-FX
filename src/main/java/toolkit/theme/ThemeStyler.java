@@ -8,6 +8,7 @@ import javafx.scene.text.Text;
 /**
  * Utilitário para aplicar estilos do tema aos componentes
  */
+@Deprecated
 public class ThemeStyler {
 
     private static final MaterialTheme theme = MaterialTheme.getInstance();

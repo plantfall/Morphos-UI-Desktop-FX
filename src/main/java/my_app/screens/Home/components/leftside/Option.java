@@ -13,8 +13,8 @@ import javafx.scene.text.Font;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.contexts.ComponentsContext;
 import my_app.screens.Home.Home;
+import my_app.themes.Typography;
 import toolkit.Component;
-import toolkit.theme.Typography;
 
 //--Button (OptionHeader)
 //     -btn1 (subItem)

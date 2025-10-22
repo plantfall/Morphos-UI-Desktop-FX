@@ -22,7 +22,7 @@ public class ShowCode {
     // ver como vou encaix-alos no codigo gerado
     public ShowCode(CanvaComponent canvaComponent) {
         stage = new Stage();
-        stage.setTitle("Nova Janela");
+        stage.setTitle("Showing code");
 
         String importsContent = controller.createImports();
         String codeContent = controller.createRestOfCode(canvaComponent);

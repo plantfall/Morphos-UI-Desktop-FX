@@ -8,7 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import my_app.data.Commons;
-import toolkit.theme.Typography;
+import my_app.themes.Typography;
 
 public class FontWeightComponent extends HBox {
     Label title = Typography.caption("Font Weight:");

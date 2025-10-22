@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import my_app.components.canvaComponent.CanvaComponent;
 import my_app.components.imageComponent.ImageComponent;
 import my_app.data.Commons;
-import toolkit.theme.Typography;
+import my_app.themes.Typography;
 
 public class WidthComponent extends HBox {
 

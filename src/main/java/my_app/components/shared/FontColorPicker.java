@@ -11,7 +11,7 @@ import my_app.components.TextComponent;
 import my_app.components.buttonComponent.ButtonComponent;
 import my_app.components.inputComponents.InputComponent;
 import my_app.data.Commons;
-import toolkit.theme.Typography;
+import my_app.themes.Typography;
 
 public class FontColorPicker extends HBox {
 

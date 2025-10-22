@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -16,7 +17,7 @@ import my_app.components.canvaComponent.CanvaComponent;
 public class Commons {
 
     public static String AppName = "Morphos Desktop FX";
-    public static String AppNameAtAppData = "morpho_desktop_fx";
+    public static String AppNameAtAppData = "morphos_desktop_fx";
     public static String AppVersion = "v1.0";
 
     public static double CanvaWidthDefault = 800;
@@ -34,6 +35,12 @@ public class Commons {
     public static String ButtonTextColorDefault = "white";
     public static String ButtonRadiusDefault = "3";
     public static String ButtonRadiusWidth = "0";
+
+    public static void UseDefaultStyles(Scene scene) {
+        scene.getStylesheets().addAll(
+                Commons.class.getResource("/global_styles.css").toExternalForm(),
+                Commons.class.getResource("/typography.css").toExternalForm());
+    }
 
     /**
      * @param path corresponds to path inside resources directory

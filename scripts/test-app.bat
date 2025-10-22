@@ -2,7 +2,7 @@
 echo Testing the application...
 
 REM Application configuration
-set "APP_NAME=morpho_desktop_fx"
+set "APP_NAME=morphos_desktop_fx"
 
 REM Check if the application image exists
 if not exist "dist\%APP_NAME%" (

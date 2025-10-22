@@ -1,5 +1,8 @@
 package my_app.screens.Home.components;
 
+import static my_app.components.shared.UiComponents.ButtonPrimary;
+import static my_app.components.shared.UiComponents.ButtonSecondary;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -19,8 +22,8 @@ import my_app.components.NodeWrapper;
 import my_app.contexts.ComponentsContext;
 import my_app.contexts.ComponentsContext.SelectedComponent;
 import my_app.data.ViewContract;
+import my_app.themes.Typography;
 import toolkit.theme.MaterialTheme;
-import toolkit.theme.Typography;
 
 public class RightSide extends VBox {
 
@@ -28,8 +31,8 @@ public class RightSide extends VBox {
     // 1. ALTERADO: Tipo da propriedade é agora SelectedComponent
     final ObjectProperty<SelectedComponent> selectedComponentProperty;
 
-    Button btnAppearence = new Button("Appearence");
-    Button btnLayout = new Button("Layout");
+    Button btnAppearence = ButtonPrimary("Appearance");
+    Button btnLayout = ButtonSecondary("Layout");
     HBox top = new HBox(btnAppearence, btnLayout);
     HBox topWrapper = new HBox(top); // wrapper só para não se esticar
 
@@ -116,16 +119,6 @@ public class RightSide extends VBox {
 
         HBox.setHgrow(top, Priority.NEVER);
         top.setMaxWidth(Region.USE_COMPUTED_SIZE); // largura baseada nos filhos
-
-        top.setStyle("-fx-background-color:#003161;-fx-background-radius: 7px;");
-
-        appearenceIsSelected.addListener((_, _, newVal) -> {
-            if (newVal) {
-                top.setStyle("-fx-background-color:#003161;-fx-background-radius: 7px;");
-            } else {
-                top.setStyle("-fx-background-color:#3B38A0;-fx-background-radius: 7px;");
-            }
-        });
 
         setMaxHeight(Double.MAX_VALUE);
         setBackground(new Background(
